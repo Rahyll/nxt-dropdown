@@ -8,6 +8,9 @@ import { NtxSelectOption } from '../ntx-select/ntx-select.component';
   styleUrls: ['./ntx-select-demo.component.scss']
 })
 export class NtxSelectDemoComponent implements OnInit {
+  // Tab management
+  activeTab: 'demo' | 'guide' = 'demo';
+
   // Template-driven form values
   selectedValue: any = null;
   selectedMultipleValues: any[] = [];
@@ -99,13 +102,13 @@ export class NtxSelectDemoComponent implements OnInit {
   // Virtual scroll options (1000+ items)
   virtualScrollOptions: NtxSelectOption[] = Array.from({ length: 1000 }, (_, i) => ({
     value: `virtual${i + 1}`,
-    label: `Virtual Item ${i + 1}`
+    label: `Virtual Option ${i + 1}`
   }));
 
   // Search performance options (500 items)
   searchPerformanceOptions: NtxSelectOption[] = Array.from({ length: 500 }, (_, i) => ({
     value: `search${i + 1}`,
-    label: `Searchable Item ${i + 1}`
+    label: `Search Option ${i + 1}`
   }));
 
   constructor(private fb: FormBuilder) {
@@ -118,10 +121,12 @@ export class NtxSelectDemoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Subscribe to form changes
-    this.reactiveForm.valueChanges.subscribe(values => {
-      console.log('Reactive form values:', values);
-    });
+    // Initialize any additional setup
+  }
+
+  // Tab management method
+  setActiveTab(tab: 'demo' | 'guide'): void {
+    this.activeTab = tab;
   }
 
   onSelectionChange(value: any): void {
@@ -130,11 +135,10 @@ export class NtxSelectDemoComponent implements OnInit {
 
   onSubmit(): void {
     if (this.reactiveForm.valid) {
-      console.log('Form submitted:', this.reactiveForm.value);
       alert('Form submitted successfully!');
+      console.log('Form values:', this.reactiveForm.value);
     } else {
-      console.log('Form is invalid');
-      alert('Please fill all required fields!');
+      alert('Please fill in all required fields.');
     }
   }
 
@@ -161,8 +165,8 @@ export class NtxSelectDemoComponent implements OnInit {
   fillForm(): void {
     this.reactiveForm.patchValue({
       singleSelect: 'option1',
-      multipleSelect: ['option2', 'option4'],
-      multipleSelectWithConfirmation: ['option5', 'option6'],
+      multipleSelect: ['option1', 'option2'],
+      multipleSelectWithConfirmation: ['option3', 'option4'],
       country: 'us'
     });
   }
@@ -178,7 +182,6 @@ export class NtxSelectDemoComponent implements OnInit {
   removeDynamicOption(): void {
     if (this.dynamicOptions.length > 1) {
       this.dynamicOptions.pop();
-      // Clear selection if it was the removed option
       if (this.dynamicValue && !this.dynamicOptions.find(opt => opt.value === this.dynamicValue)) {
         this.dynamicValue = null;
       }

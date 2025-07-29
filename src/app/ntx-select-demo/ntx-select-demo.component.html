@@ -1,364 +1,746 @@
 <div class="demo-container">
   <h1>NTX Select Component - Comprehensive Demo</h1>
   
-  <!-- Basic Demos Section -->
-  <div class="demo-section">
-    <h2>🎯 Basic Demos</h2>
-    
-    <div class="demo-grid">
-      <div class="demo-card">
-        <h3>Single Selection</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="selectedValue"
-            [options]="options"
-            placeholder="Select an option"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ selectedValue || 'None' }}</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Multiple Selection</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="selectedMultipleValues"
-            [options]="options"
-            [multiple]="true"
-            placeholder="Select multiple options"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ selectedMultipleValues.length }} items</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>With Confirmation</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="selectedMultipleValuesWithConfirmation"
-            [options]="options"
-            [multiple]="true"
-            [confirmation]="true"
-            placeholder="Select with confirmation"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ selectedMultipleValuesWithConfirmation.length }} items</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Required Field</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="requiredValue"
-            [options]="options"
-            [required]="true"
-            placeholder="Required field"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Valid: {{ requiredValue ? 'Yes' : 'No' }}</p>
-      </div>
-    </div>
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'demo'"
+      (click)="setActiveTab('demo')">
+      🎯 Demo
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'guide'"
+      (click)="setActiveTab('guide')">
+      📖 Guide
+    </button>
   </div>
 
-  <!-- Advanced Demos Section -->
-  <div class="demo-section">
-    <h2>🚀 Advanced Demos</h2>
-    
-    <div class="demo-grid">
-      <div class="demo-card">
-        <h3>Large Dataset</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="largeDatasetValue"
-            [options]="largeDatasetOptions"
-            [multiple]="true"
-            placeholder="Select from 50+ options"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ largeDatasetValue.length }} items</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>With Disabled Options</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="disabledOptionsValue"
-            [options]="optionsWithDisabled"
-            placeholder="Some options disabled"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ disabledOptionsValue || 'None' }}</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Country Selection</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="countryValue"
-            [options]="countryOptions"
-            placeholder="Select your country"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Country: {{ countryValue || 'None' }}</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Category Selection</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="categoryValue"
-            [options]="categoryOptions"
-            [multiple]="true"
-            placeholder="Select categories"
-            (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
-        </div>
-        <p class="result">Categories: {{ categoryValue.length }} selected</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Form Integration Demos -->
-  <div class="demo-section">
-    <h2>📝 Form Integration</h2>
-    
-    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()" class="form-demo">
-      <div class="form-row">
-        <div class="form-field">
-          <label>Single Selection (Required)</label>
+  <!-- Demo Tab Content -->
+  <div class="tab-content" *ngIf="activeTab === 'demo'">
+    <!-- Basic Demos Section -->
+    <div class="demo-section">
+      <h2>🎯 Basic Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Single Selection</h3>
           <div class="select-wrapper">
             <ntx-select
-              formControlName="singleSelect"
+              [(ngModel)]="selectedValue"
               [options]="options"
-              placeholder="Select an option (required)"
+              placeholder="Select an option"
               (selectionChange)="onSelectionChange($event)">
             </ntx-select>
           </div>
+          <p class="result">Selected: {{ selectedValue || 'None' }}</p>
         </div>
 
-        <div class="form-field">
-          <label>Multiple Selection (Required)</label>
+        <div class="demo-card">
+          <h3>Multiple Selection</h3>
           <div class="select-wrapper">
             <ntx-select
-              formControlName="multipleSelect"
+              [(ngModel)]="selectedMultipleValues"
               [options]="options"
               [multiple]="true"
-              placeholder="Select multiple options (required)"
+              placeholder="Select multiple options"
               (selectionChange)="onSelectionChange($event)">
             </ntx-select>
           </div>
+          <p class="result">Selected: {{ selectedMultipleValues.length }} items</p>
         </div>
-      </div>
 
-      <div class="form-row">
-        <div class="form-field">
-          <label>With Confirmation (Required)</label>
+        <div class="demo-card">
+          <h3>With Confirmation</h3>
           <div class="select-wrapper">
             <ntx-select
-              formControlName="multipleSelectWithConfirmation"
+              [(ngModel)]="selectedMultipleValuesWithConfirmation"
               [options]="options"
               [multiple]="true"
               [confirmation]="true"
-              placeholder="Select with confirmation (required)"
+              placeholder="Select with confirmation"
               (selectionChange)="onSelectionChange($event)">
             </ntx-select>
           </div>
+          <p class="result">Selected: {{ selectedMultipleValuesWithConfirmation.length }} items</p>
         </div>
 
-        <div class="form-field">
-          <label>Country (Required)</label>
+        <div class="demo-card">
+          <h3>Required Field</h3>
           <div class="select-wrapper">
             <ntx-select
-              formControlName="country"
-              [options]="countryOptions"
-              placeholder="Select your country (required)"
+              [(ngModel)]="requiredValue"
+              [options]="options"
+              [required]="true"
+              placeholder="Required field"
               (selectionChange)="onSelectionChange($event)">
+            </ntx-select>
+          </div>
+          <p class="result">Valid: {{ requiredValue ? 'Yes' : 'No' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Demos Section -->
+    <div class="demo-section">
+      <h2>🚀 Advanced Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Large Dataset</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="largeDatasetValue"
+              [options]="largeDatasetOptions"
+              [multiple]="true"
+              placeholder="Select from 50+ options"
+              (selectionChange)="onSelectionChange($event)">
+            </ntx-select>
+          </div>
+          <p class="result">Selected: {{ largeDatasetValue.length }} items</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>With Disabled Options</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="disabledOptionsValue"
+              [options]="optionsWithDisabled"
+              placeholder="Some options disabled"
+              (selectionChange)="onSelectionChange($event)">
+            </ntx-select>
+          </div>
+          <p class="result">Selected: {{ disabledOptionsValue || 'None' }}</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Country Selection</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="countryValue"
+              [options]="countryOptions"
+              placeholder="Select your country"
+              (selectionChange)="onSelectionChange($event)">
+            </ntx-select>
+          </div>
+          <p class="result">Country: {{ countryValue || 'None' }}</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Category Selection</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="categoryValue"
+              [options]="categoryOptions"
+              [multiple]="true"
+              placeholder="Select categories"
+              (selectionChange)="onSelectionChange($event)">
+            </ntx-select>
+          </div>
+          <p class="result">Categories: {{ categoryValue.length }} selected</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Integration Demos -->
+    <div class="demo-section">
+      <h2>📝 Form Integration</h2>
+      
+      <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()" class="form-demo">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Single Selection (Required)</label>
+            <div class="select-wrapper">
+              <ntx-select
+                formControlName="singleSelect"
+                [options]="options"
+                placeholder="Select an option (required)"
+                (selectionChange)="onSelectionChange($event)">
+              </ntx-select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Multiple Selection (Required)</label>
+            <div class="select-wrapper">
+              <ntx-select
+                formControlName="multipleSelect"
+                [options]="options"
+                [multiple]="true"
+                placeholder="Select multiple options (required)"
+                (selectionChange)="onSelectionChange($event)">
+              </ntx-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>With Confirmation (Required)</label>
+            <div class="select-wrapper">
+              <ntx-select
+                formControlName="multipleSelectWithConfirmation"
+                [options]="options"
+                [multiple]="true"
+                [confirmation]="true"
+                placeholder="Select with confirmation (required)"
+                (selectionChange)="onSelectionChange($event)">
+              </ntx-select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Country (Required)</label>
+            <div class="select-wrapper">
+              <ntx-select
+                formControlName="country"
+                [options]="countryOptions"
+                placeholder="Select your country (required)"
+                (selectionChange)="onSelectionChange($event)">
+              </ntx-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid">
+            Submit Form
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            Reset Form
+          </button>
+          <button type="button" class="btn btn-info" (click)="fillForm()">
+            Fill Form
+          </button>
+        </div>
+      </form>
+
+      <div class="form-status">
+        <h4>Form Status</h4>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">Valid:</span>
+            <span class="status-value" [class.valid]="reactiveForm.valid" [class.invalid]="!reactiveForm.valid">
+              {{ reactiveForm.valid ? '✓' : '✗' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Dirty:</span>
+            <span class="status-value" [class.valid]="reactiveForm.dirty" [class.invalid]="!reactiveForm.dirty">
+              {{ reactiveForm.dirty ? '✓' : '✗' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Touched:</span>
+            <span class="status-value" [class.valid]="reactiveForm.touched" [class.invalid]="!reactiveForm.touched">
+              {{ reactiveForm.touched ? '✓' : '✗' }}
+            </span>
+          </div>
+        </div>
+        <div class="form-values">
+          <h5>Form Values:</h5>
+          <pre>{{ reactiveForm.value | json }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- State Demos Section -->
+    <div class="demo-section">
+      <h2>🎛️ State Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Disabled State</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [options]="options"
+              [disabled]="true"
+              placeholder="Disabled select">
+            </ntx-select>
+          </div>
+          <p class="result">This select is disabled</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Empty Options</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="emptyOptionsValue"
+              [options]="[]"
+              placeholder="No options available">
+            </ntx-select>
+          </div>
+          <p class="result">No options to select from</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Pre-selected Values</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="preSelectedValue"
+              [options]="options"
+              [multiple]="true"
+              placeholder="Pre-selected options">
+            </ntx-select>
+          </div>
+          <p class="result">Pre-selected: {{ preSelectedValue.length }} items</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Dynamic Options</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="dynamicValue"
+              [options]="dynamicOptions"
+              placeholder="Dynamic options">
+            </ntx-select>
+          </div>
+          <div class="dynamic-controls">
+            <button class="btn btn-sm" (click)="addDynamicOption()">Add Option</button>
+            <button class="btn btn-sm" (click)="removeDynamicOption()">Remove Option</button>
+          </div>
+          <p class="result">Options: {{ dynamicOptions.length }}, Selected: {{ dynamicValue || 'None' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Responsive Demos Section -->
+    <div class="demo-section">
+      <h2>📱 Responsive Demos</h2>
+      
+      <div class="responsive-demo">
+        <div class="demo-card full-width">
+          <h3>Full Width Select</h3>
+          <div class="select-wrapper full-width">
+            <ntx-select
+              [(ngModel)]="responsiveValue"
+              [options]="options"
+              [multiple]="true"
+              placeholder="This select adapts to container width">
+            </ntx-select>
+          </div>
+          <p class="result">Responsive design demo</p>
+        </div>
+      </div>
+
+      <div class="demo-grid responsive-grid">
+        <div class="demo-card">
+          <h3>Compact Select</h3>
+          <div class="select-wrapper compact">
+            <ntx-select
+              [(ngModel)]="compactValue"
+              [options]="options.slice(0, 5)"
+              placeholder="Compact">
+            </ntx-select>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Wide Select</h3>
+          <div class="select-wrapper wide">
+            <ntx-select
+              [(ngModel)]="wideValue"
+              [options]="options"
+              placeholder="Wide select">
             </ntx-select>
           </div>
         </div>
       </div>
-
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid">
-          Submit Form
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="resetForm()">
-          Reset Form
-        </button>
-        <button type="button" class="btn btn-info" (click)="fillForm()">
-          Fill Form
-        </button>
-      </div>
-    </form>
-
-    <div class="form-status">
-      <h4>Form Status</h4>
-      <div class="status-grid">
-        <div class="status-item">
-          <span class="status-label">Valid:</span>
-          <span class="status-value" [class.valid]="reactiveForm.valid" [class.invalid]="!reactiveForm.valid">
-            {{ reactiveForm.valid ? '✓' : '✗' }}
-          </span>
-        </div>
-        <div class="status-item">
-          <span class="status-label">Dirty:</span>
-          <span class="status-value" [class.valid]="reactiveForm.dirty" [class.invalid]="!reactiveForm.dirty">
-            {{ reactiveForm.dirty ? '✓' : '✗' }}
-          </span>
-        </div>
-        <div class="status-item">
-          <span class="status-label">Touched:</span>
-          <span class="status-value" [class.valid]="reactiveForm.touched" [class.invalid]="!reactiveForm.touched">
-            {{ reactiveForm.touched ? '✓' : '✗' }}
-          </span>
-        </div>
-      </div>
-      <div class="form-values">
-        <h5>Form Values:</h5>
-        <pre>{{ reactiveForm.value | json }}</pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- State Demos Section -->
-  <div class="demo-section">
-    <h2>🎛️ State Demos</h2>
-    
-    <div class="demo-grid">
-      <div class="demo-card">
-        <h3>Disabled State</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [options]="options"
-            [disabled]="true"
-            placeholder="Disabled select">
-          </ntx-select>
-        </div>
-        <p class="result">This select is disabled</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Empty Options</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="emptyOptionsValue"
-            [options]="[]"
-            placeholder="No options available">
-          </ntx-select>
-        </div>
-        <p class="result">No options to select from</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Pre-selected Values</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="preSelectedValue"
-            [options]="options"
-            [multiple]="true"
-            placeholder="Pre-selected options">
-          </ntx-select>
-        </div>
-        <p class="result">Pre-selected: {{ preSelectedValue.length }} items</p>
-      </div>
-
-      <div class="demo-card">
-        <h3>Dynamic Options</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="dynamicValue"
-            [options]="dynamicOptions"
-            placeholder="Dynamic options">
-          </ntx-select>
-        </div>
-        <div class="dynamic-controls">
-          <button class="btn btn-sm" (click)="addDynamicOption()">Add Option</button>
-          <button class="btn btn-sm" (click)="removeDynamicOption()">Remove Option</button>
-        </div>
-        <p class="result">Options: {{ dynamicOptions.length }}, Selected: {{ dynamicValue || 'None' }}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Responsive Demos Section -->
-  <div class="demo-section">
-    <h2>📱 Responsive Demos</h2>
-    
-    <div class="responsive-demo">
-      <div class="demo-card full-width">
-        <h3>Full Width Select</h3>
-        <div class="select-wrapper full-width">
-          <ntx-select
-            [(ngModel)]="responsiveValue"
-            [options]="options"
-            [multiple]="true"
-            placeholder="This select adapts to container width">
-          </ntx-select>
-        </div>
-        <p class="result">Responsive design demo</p>
-      </div>
     </div>
 
-    <div class="demo-grid responsive-grid">
-      <div class="demo-card">
-        <h3>Compact Select</h3>
-        <div class="select-wrapper compact">
-          <ntx-select
-            [(ngModel)]="compactValue"
-            [options]="options.slice(0, 5)"
-            placeholder="Compact">
-          </ntx-select>
+    <!-- Performance Demos Section -->
+    <div class="demo-section">
+      <h2>⚡ Performance Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Virtual Scrolling (1000+ items)</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="virtualScrollValue"
+              [options]="virtualScrollOptions"
+              placeholder="Select from 1000+ items">
+            </ntx-select>
+          </div>
+          <p class="result">Selected: {{ virtualScrollValue || 'None' }}</p>
         </div>
-      </div>
 
-      <div class="demo-card">
-        <h3>Wide Select</h3>
-        <div class="select-wrapper wide">
-          <ntx-select
-            [(ngModel)]="wideValue"
-            [options]="options"
-            placeholder="Wide select">
-          </ntx-select>
+        <div class="demo-card">
+          <h3>Search Performance</h3>
+          <div class="select-wrapper">
+            <ntx-select
+              [(ngModel)]="searchPerformanceValue"
+              [options]="searchPerformanceOptions"
+              [multiple]="true"
+              placeholder="Search through 500 items">
+            </ntx-select>
+          </div>
+          <p class="result">Selected: {{ searchPerformanceValue.length }} items</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Performance Demos Section -->
-  <div class="demo-section">
-    <h2>⚡ Performance Demos</h2>
-    
-    <div class="demo-grid">
-      <div class="demo-card">
-        <h3>Virtual Scrolling (1000+ items)</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="virtualScrollValue"
-            [options]="virtualScrollOptions"
-            placeholder="Select from 1000+ items">
-          </ntx-select>
-        </div>
-        <p class="result">Selected: {{ virtualScrollValue || 'None' }}</p>
+  <!-- Guide Tab Content -->
+  <div class="tab-content guide-content" *ngIf="activeTab === 'guide'">
+    <div class="guide-section">
+      <h2>📖 NTX Select Component Guide</h2>
+      
+      <div class="guide-intro">
+        <p>The NTX Select component is a powerful, customizable dropdown/select component built for Angular applications. It provides advanced features like multiple selection, confirmation mode, search functionality, and excellent performance with large datasets.</p>
       </div>
 
-      <div class="demo-card">
-        <h3>Search Performance</h3>
-        <div class="select-wrapper">
-          <ntx-select
-            [(ngModel)]="searchPerformanceValue"
-            [options]="searchPerformanceOptions"
-            [multiple]="true"
-            placeholder="Search through 500 items">
-          </ntx-select>
+      <!-- Installation & Setup -->
+      <div class="guide-subsection">
+        <h3>🚀 Installation & Setup</h3>
+        
+        <div class="code-block">
+          <h4>1. Import the Module</h4>
+          <pre><code>import {{ '{' }} NtxSelectModule {{ '}' }} from './ntx-select/ntx-select.module';
+
+@NgModule({{ '{' }}
+  imports: [
+    NtxSelectModule,
+    // ... other imports
+  ]
+{{ '}' }})
+export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         </div>
-        <p class="result">Selected: {{ searchPerformanceValue.length }} items</p>
+
+        <div class="code-block">
+          <h4>2. Basic Usage</h4>
+          <pre><code>&lt;ntx-select
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  placeholder="Select an option"&gt;
+&lt;/ntx-select&gt;</code></pre>
+        </div>
+      </div>
+
+      <!-- Input Properties -->
+      <div class="guide-subsection">
+        <h3>⚙️ Input Properties</h3>
+        
+        <div class="property-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>options</code></td>
+                <td><code>NtxSelectOption[]</code></td>
+                <td><code>[]</code></td>
+                <td>Array of options to display in the dropdown</td>
+              </tr>
+              <tr>
+                <td><code>placeholder</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Placeholder text when no option is selected</td>
+              </tr>
+              <tr>
+                <td><code>multiple</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Enable multiple selection mode</td>
+              </tr>
+              <tr>
+                <td><code>confirmation</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Show Apply/Cancel buttons for multiple selection</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Mark the field as required for validation</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Disable the select component</td>
+              </tr>
+              <tr>
+                <td><code>searchable</code></td>
+                <td><code>boolean</code></td>
+                <td><code>true</code></td>
+                <td>Enable search functionality within options</td>
+              </tr>
+              <tr>
+                <td><code>clearable</code></td>
+                <td><code>boolean</code></td>
+                <td><code>true</code></td>
+                <td>Show clear button to reset selection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Output Events -->
+      <div class="guide-subsection">
+        <h3>📡 Output Events</h3>
+        
+        <div class="property-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>selectionChange</code></td>
+                <td><code>EventEmitter&lt;any&gt;</code></td>
+                <td>Emitted when selection changes (single value or array for multiple)</td>
+              </tr>
+              <tr>
+                <td><code>optionSelect</code></td>
+                <td><code>EventEmitter&lt;NtxSelectOption&gt;</code></td>
+                <td>Emitted when an individual option is selected</td>
+              </tr>
+              <tr>
+                <td><code>optionDeselect</code></td>
+                <td><code>EventEmitter&lt;NtxSelectOption&gt;</code></td>
+                <td>Emitted when an individual option is deselected</td>
+              </tr>
+              <tr>
+                <td><code>dropdownOpen</code></td>
+                <td><code>EventEmitter&lt;void&gt;</code></td>
+                <td>Emitted when dropdown opens</td>
+              </tr>
+              <tr>
+                <td><code>dropdownClose</code></td>
+                <td><code>EventEmitter&lt;void&gt;</code></td>
+                <td>Emitted when dropdown closes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Data Structure -->
+      <div class="guide-subsection">
+        <h3>📊 Data Structure</h3>
+        
+        <div class="code-block">
+          <h4>NtxSelectOption Interface</h4>
+          <pre><code>interface NtxSelectOption {{ '{' }}
+  value: any;           // The value of the option
+  label: string;        // Display text for the option
+  disabled?: boolean;   // Whether the option is disabled
+  group?: string;       // Group label for grouped options
+  icon?: string;        // Icon class or URL
+  description?: string; // Additional description text
+{{ '}' }}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <h4>Example Options Array</h4>
+          <pre><code>const options: NtxSelectOption[] = [
+  {{ '{' }} value: 'option1', label: 'Option 1' {{ '}' }},
+  {{ '{' }} value: 'option2', label: 'Option 2', disabled: true {{ '}' }},
+  {{ '{' }} value: 'option3', label: 'Option 3', group: 'Group A' {{ '}' }},
+  {{ '{' }} value: 'option4', label: 'Option 4', icon: 'fas fa-star' {{ '}' }}
+];</code></pre>
+        </div>
+      </div>
+
+      <!-- Usage Examples -->
+      <div class="guide-subsection">
+        <h3>💡 Usage Examples</h3>
+        
+        <div class="example-grid">
+          <div class="example-card">
+            <h4>Single Selection</h4>
+            <pre><code>&lt;ntx-select
+  [(ngModel)]="selectedCountry"
+  [options]="countryOptions"
+  placeholder="Select your country"
+  (selectionChange)="onCountryChange($event)"&gt;
+&lt;/ntx-select&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Multiple Selection</h4>
+            <pre><code>&lt;ntx-select
+  [(ngModel)]="selectedCategories"
+  [options]="categoryOptions"
+  [multiple]="true"
+  placeholder="Select categories"
+  (selectionChange)="onCategoriesChange($event)"&gt;
+&lt;/ntx-select&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>With Confirmation</h4>
+            <pre><code>&lt;ntx-select
+  [(ngModel)]="selectedItems"
+  [options]="itemOptions"
+  [multiple]="true"
+  [confirmation]="true"
+  placeholder="Select items (Apply to confirm)"&gt;
+&lt;/ntx-select&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Reactive Form Integration</h4>
+            <pre><code>&lt;form [formGroup]="myForm"&gt;
+  &lt;ntx-select
+    formControlName="mySelect"
+    [options]="options"
+    [required]="true"
+    placeholder="Required field"&gt;
+  &lt;/ntx-select&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Styling & Customization -->
+      <div class="guide-subsection">
+        <h3>🎨 Styling & Customization</h3>
+        
+        <div class="code-block">
+          <h4>CSS Custom Properties</h4>
+          <pre><code>:root {{ '{' }}
+  --ntx-select-border-color: #ccc;
+  --ntx-select-border-radius: 4px;
+  --ntx-select-background: #fff;
+  --ntx-select-text-color: #333;
+  --ntx-select-hover-color: #f5f5f5;
+  --ntx-select-selected-color: #007bff;
+  --ntx-select-disabled-color: #e9ecef;
+  --ntx-select-error-color: #dc3545;
+  --ntx-select-success-color: #28a745;
+{{ '}' }}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <h4>Custom CSS Classes</h4>
+          <pre><code>.ntx-select {{ '{' }}
+  /* Custom styles for the select container */
+{{ '}' }}
+
+.ntx-select-dropdown {{ '{' }}
+  /* Custom styles for the dropdown */
+{{ '}' }}
+
+.ntx-select-option {{ '{' }}
+  /* Custom styles for individual options */
+{{ '}' }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Best Practices -->
+      <div class="guide-subsection">
+        <h3>✅ Best Practices</h3>
+        
+        <div class="best-practices">
+          <div class="practice-item">
+            <h4>🎯 Performance</h4>
+            <ul>
+              <li>Use virtual scrolling for datasets with 100+ items</li>
+              <li>Implement proper change detection strategies</li>
+              <li>Consider lazy loading for very large datasets</li>
+              <li>Use OnPush change detection when possible</li>
+            </ul>
+          </div>
+
+          <div class="practice-item">
+            <h4>♿ Accessibility</h4>
+            <ul>
+              <li>Always provide meaningful placeholder text</li>
+              <li>Use proper ARIA labels and roles</li>
+              <li>Ensure keyboard navigation works correctly</li>
+              <li>Provide clear error messages for required fields</li>
+            </ul>
+          </div>
+
+          <div class="practice-item">
+            <h4>📱 Responsive Design</h4>
+            <ul>
+              <li>Test on various screen sizes</li>
+              <li>Use appropriate container widths</li>
+              <li>Consider mobile touch interactions</li>
+              <li>Implement proper overflow handling</li>
+            </ul>
+          </div>
+
+          <div class="practice-item">
+            <h4>🔧 Form Integration</h4>
+            <ul>
+              <li>Use reactive forms for complex validation</li>
+              <li>Implement proper error handling</li>
+              <li>Provide clear user feedback</li>
+              <li>Handle form state changes appropriately</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Troubleshooting -->
+      <div class="guide-subsection">
+        <h3>🔧 Troubleshooting</h3>
+        
+        <div class="troubleshooting">
+          <div class="issue-item">
+            <h4>❓ Common Issues</h4>
+            <div class="issue">
+              <strong>Issue:</strong> Options not displaying
+              <br><strong>Solution:</strong> Ensure options array is properly formatted and not empty
+            </div>
+            <div class="issue">
+              <strong>Issue:</strong> Two-way binding not working
+              <br><strong>Solution:</strong> Make sure to import FormsModule and use [(ngModel)]
+            </div>
+            <div class="issue">
+              <strong>Issue:</strong> Performance issues with large datasets
+              <br><strong>Solution:</strong> Implement virtual scrolling or pagination
+            </div>
+            <div class="issue">
+              <strong>Issue:</strong> Styling conflicts
+              <br><strong>Solution:</strong> Use CSS custom properties or component-specific selectors
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Reference -->
+      <div class="guide-subsection">
+        <h3>📚 API Reference</h3>
+        
+        <div class="api-reference">
+          <p>For detailed API documentation, method signatures, and advanced usage patterns, please refer to the component's TypeScript definitions and inline documentation.</p>
+          
+          <div class="code-block">
+            <h4>Component Methods</h4>
+            <pre><code>class NtxSelectComponent {{ '{' }}
+  // Public methods
+  open(): void;           // Open the dropdown
+  close(): void;          // Close the dropdown
+  clear(): void;          // Clear current selection
+  focus(): void;          // Focus the select element
+  blur(): void;           // Remove focus from select element
+  
+  // Internal methods
+  private filterOptions(): void;
+  private updateSelection(): void;
+  private validateSelection(): boolean;
+{{ '}' }}</code></pre>
+          </div>
+        </div>
       </div>
     </div>
   </div>
