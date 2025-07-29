@@ -1,10 +1,10 @@
-<div class="ntx-select-container" 
+<div class="nxt-dropdown-container" 
      [class.disabled]="isDisabled"
      [class.open]="isOpen"
      [class.required]="required"
      [class.multiple]="multiple">
   
-  <div class="ntx-select-trigger" 
+  <div class="nxt-dropdown-trigger" 
        (click)="toggleDropdown()"
        (keydown)="onKeyDown($event)"
        tabindex="0"
@@ -13,49 +13,49 @@
        [attr.aria-haspopup]="true"
        [attr.aria-label]="placeholder">
     
-         <div class="ntx-select-value">
-       <div class="ntx-select-placeholder" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length === 0">
+         <div class="nxt-dropdown-value">
+       <div class="nxt-dropdown-placeholder" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length === 0">
          {{ placeholder }}
        </div>
        
-       <div class="ntx-select-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
-         <div class="ntx-select-single" *ngIf="!multiple">
+       <div class="nxt-dropdown-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
+         <div class="nxt-dropdown-single" *ngIf="!multiple">
            {{ getDisplayText() }}
          </div>
          
-         <div class="ntx-select-multiple" *ngIf="multiple">
-           <div class="ntx-select-chips" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length <= 2">
-             <span class="ntx-select-chip" 
+         <div class="nxt-dropdown-multiple" *ngIf="multiple">
+           <div class="nxt-dropdown-chips" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length <= 2">
+             <span class="nxt-dropdown-chip" 
                    *ngFor="let option of (confirmation && multiple ? pendingOptions : selectedOptions)"
                    [class.removable]="!confirmation"
                    (click)="!confirmation && removeOption($event, option)">
                {{ option.label }}
-               <span class="ntx-select-chip-remove" *ngIf="!confirmation">×</span>
+               <span class="nxt-dropdown-chip-remove" *ngIf="!confirmation">×</span>
              </span>
            </div>
-           <div class="ntx-select-summary" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 2">
+           <div class="nxt-dropdown-summary" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 2">
              {{ confirmation && multiple ? getPendingDisplayText() : getDisplayText() }}
            </div>
          </div>
        </div>
      </div>
     
-    <div class="ntx-select-arrow">
+    <div class="nxt-dropdown-arrow">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
         <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
   </div>
   
-  <div class="ntx-select-dropdown" 
+  <div class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
        [class]="panelClass">
     
     <!-- Search Input -->
-    <div class="ntx-select-search" *ngIf="searchable && showSearchInput">
-      <div class="ntx-select-search-container">
+    <div class="nxt-dropdown-search" *ngIf="searchable && showSearchInput">
+      <div class="nxt-dropdown-search-container">
         <input type="text"
-               class="ntx-select-search-input"
+               class="nxt-dropdown-search-input"
                [placeholder]="searchPlaceholder"
                [value]="searchText"
                (input)="onSearchInput($event)"
@@ -63,7 +63,7 @@
                autocomplete="off"
                spellcheck="false">
         <button type="button" 
-                class="ntx-select-search-clear"
+                class="nxt-dropdown-search-clear"
                 *ngIf="searchText"
                 (click)="clearSearch()"
                 aria-label="Clear search">
@@ -74,9 +74,9 @@
       </div>
     </div>
 
-    <div class="ntx-select-options">
+    <div class="nxt-dropdown-options">
       <!-- Select All Option (only for multiple selection) -->
-      <div class="ntx-select-option ntx-select-all-option"
+      <div class="nxt-dropdown-option nxt-dropdown-all-option"
            *ngIf="multiple && filteredOptions.length > 0"
            [class.selected]="isAllSelected()"
            [class.partially-selected]="isPartiallySelected()"
@@ -84,9 +84,9 @@
            role="option"
            [attr.aria-selected]="isAllSelected()">
         
-        <div class="ntx-select-option-content">
-          <div class="ntx-select-option-checkbox">
-            <div class="ntx-select-checkbox" 
+        <div class="nxt-dropdown-option-content">
+          <div class="nxt-dropdown-option-checkbox">
+            <div class="nxt-dropdown-checkbox" 
                  [class.checked]="isAllSelected()"
                  [class.partially]="isPartiallySelected()">
               <svg *ngIf="isAllSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -98,17 +98,17 @@
             </div>
           </div>
           
-          <div class="ntx-select-option-label">
+          <div class="nxt-dropdown-option-label">
             <strong>Select All</strong>
           </div>
         </div>
       </div>
 
       <!-- Divider after Select All -->
-      <div class="ntx-select-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
+      <div class="nxt-dropdown-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
       
       <!-- Regular Options -->
-      <div class="ntx-select-option"
+      <div class="nxt-dropdown-option"
            *ngFor="let option of filteredOptions; trackBy: trackByValue"
            [class.selected]="isOptionSelected(option)"
            [class.disabled]="option.disabled"
@@ -116,22 +116,22 @@
            role="option"
            [attr.aria-selected]="isOptionSelected(option)">
         
-        <div class="ntx-select-option-content">
-          <div class="ntx-select-option-checkbox" *ngIf="multiple">
-            <div class="ntx-select-checkbox" [class.checked]="isOptionSelected(option)">
+        <div class="nxt-dropdown-option-content">
+          <div class="nxt-dropdown-option-checkbox" *ngIf="multiple">
+            <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
               <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
                 <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
           
-          <div class="ntx-select-option-label">
+          <div class="nxt-dropdown-option-label">
             {{ option.label }}
           </div>
         </div>
       </div>
       
-      <div class="ntx-select-no-options" *ngIf="filteredOptions.length === 0">
+      <div class="nxt-dropdown-no-options" *ngIf="filteredOptions.length === 0">
         <div *ngIf="searchable && searchText && searchText.length >= minSearchLength">
           No options found for "{{ searchText }}"
         </div>
@@ -142,15 +142,15 @@
     </div>
 
     <!-- Confirmation Footer -->
-    <div class="ntx-select-footer" *ngIf="confirmation && multiple">
-      <div class="ntx-select-footer-buttons">
+    <div class="nxt-dropdown-footer" *ngIf="confirmation && multiple">
+      <div class="nxt-dropdown-footer-buttons">
         <button type="button" 
-                class="ntx-select-btn ntx-select-btn-cancel"
+                class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
                 (click)="cancelSelection()">
           Cancel
         </button>
         <button type="button" 
-                class="ntx-select-btn ntx-select-btn-apply"
+                class="nxt-dropdown-btn nxt-dropdown-btn-apply"
                 (click)="applySelection()">
           Apply
         </button>
@@ -158,7 +158,7 @@
     </div>
   </div>
   
-  <div class="ntx-select-error" *ngIf="required && !value">
+  <div class="nxt-dropdown-error" *ngIf="required && !value">
     This field is required
   </div>
 </div> 

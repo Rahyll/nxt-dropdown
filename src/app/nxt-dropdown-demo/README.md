@@ -1,6 +1,6 @@
-# NTX Select Component - Comprehensive Demo Guide
+# NXT Dropdown Component - Comprehensive Demo Guide
 
-This demo showcases all the different types and capabilities of the NTX Select component. The component is designed to be flexible, accessible, and performant for various use cases.
+This demo showcases all the different types and capabilities of the NXT Dropdown component. The component is designed to be flexible, accessible, and performant for various use cases.
 
 ## 🎯 Demo Categories
 

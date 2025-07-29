@@ -408,8 +408,8 @@
     box-sizing: border-box;
     position: relative;
 
-    // Ensure ntx-select doesn't overflow
-    ntx-select {
+    // Ensure nxt-dropdown doesn't overflow
+    nxt-dropdown {
       width: 100%;
       max-width: 100%;
       display: block;
@@ -622,7 +622,7 @@
         padding-bottom: 8px;
       }
 
-      ntx-select {
+      nxt-dropdown {
         width: 100%;
         margin-bottom: 12px;
       }

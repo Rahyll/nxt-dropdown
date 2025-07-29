@@ -1,4 +1,4 @@
-# NTX Select Component
+# NXT Dropdown Component
 
 A custom Angular select component with Control Value Accessor implementation that integrates seamlessly with Angular's form system.
 
@@ -33,89 +33,89 @@ The component is already included in your Angular project. Make sure you have th
 ### Basic Usage
 
 ```html
-<ntx-select
+<nxt-dropdown
   [options]="options"
   placeholder="Select an option">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Template-Driven Forms
 
 ```html
-<ntx-select
+<nxt-dropdown
   [(ngModel)]="selectedValue"
   [options]="options"
   placeholder="Select an option">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Reactive Forms
 
 ```html
 <form [formGroup]="form">
-  <ntx-select
+  <nxt-dropdown
     formControlName="selectField"
     [options]="options"
     placeholder="Select an option">
-  </ntx-select>
+  </nxt-dropdown>
 </form>
 ```
 
 ### Multiple Selection
 
 ```html
-<ntx-select
+<nxt-dropdown
   [(ngModel)]="selectedValues"
   [options]="options"
   [multiple]="true"
   placeholder="Select multiple options">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Required Field
 
 ```html
-<ntx-select
+<nxt-dropdown
   [(ngModel)]="selectedValue"
   [options]="options"
   [required]="true"
   placeholder="Required field">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Disabled State
 
 ```html
-<ntx-select
+<nxt-dropdown
   [options]="options"
   [disabled]="true"
   placeholder="Disabled select">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Search Functionality
 
 ```html
-<ntx-select
+<nxt-dropdown
   [(ngModel)]="selectedValue"
   [options]="options"
   [searchable]="true"
   searchPlaceholder="Type to search..."
   [minSearchLength]="2"
   placeholder="Searchable select">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ### Confirmation Mode
 
 ```html
-<ntx-select
+<nxt-dropdown
   [(ngModel)]="selectedValues"
   [options]="options"
   [multiple]="true"
   [confirmation]="true"
   placeholder="Select with confirmation">
-</ntx-select>
+</nxt-dropdown>
 ```
 
 ## Input Properties
@@ -153,17 +153,17 @@ interface NtxSelectOption {
 
 ```typescript
 import { Component } from '@angular/core';
-import { NtxSelectOption } from './ntx-select/ntx-select.component';
+import { NtxSelectOption } from './nxt-dropdown/nxt-dropdown.component';
 
 @Component({
   selector: 'app-example',
   template: `
-    <ntx-select
+    <nxt-dropdown
       [(ngModel)]="selectedCountry"
       [options]="countries"
       placeholder="Select your country"
       (selectionChange)="onCountryChange($event)">
-    </ntx-select>
+    </nxt-dropdown>
   `
 })
 export class ExampleComponent {
@@ -186,8 +186,8 @@ export class ExampleComponent {
 
 The component uses Angular Material's styling system. You can customize the appearance by overriding the CSS classes:
 
-- `.ntx-select-field` - Main container
-- `.ntx-select-panel` - Dropdown panel
+- `.nxt-dropdown-field` - Main container
+- `.nxt-dropdown-panel` - Dropdown panel
 
 ## Browser Support
 

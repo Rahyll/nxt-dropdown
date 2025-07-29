@@ -5,12 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HelloComponent } from './hello.component';
 import { MaterialModule } from './material.module';
-import { NtxSelectComponent } from './ntx-select/ntx-select.component';
-import { NtxSelectDemoComponent } from './ntx-select-demo/ntx-select-demo.component';
+import { NxtDropdownComponent } from './nxt-dropdown/nxt-dropdown.component';
+import { NxtDropdownDemoComponent } from './nxt-dropdown-demo/nxt-dropdown-demo.component';
 
 @NgModule({
   imports: [BrowserModule, FormsModule, ReactiveFormsModule, MaterialModule],
-  declarations: [AppComponent, HelloComponent, NtxSelectComponent, NtxSelectDemoComponent],
+  declarations: [AppComponent, HelloComponent, NxtDropdownComponent, NxtDropdownDemoComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NtxSelectComponent, NtxSelectOption } from './ntx-select.component';
+import { NtxSelectComponent, NtxSelectOption } from './nxt-dropdown.component';
 
 describe('NtxSelectComponent', () => {
   let component: NtxSelectComponent;
@@ -418,7 +418,7 @@ describe('NtxSelectComponent', () => {
       component.value = null;
       fixture.detectChanges();
       
-      const errorElement = fixture.debugElement.query(By.css('.ntx-select-error'));
+      const errorElement = fixture.debugElement.query(By.css('.nxt-dropdown-error'));
       expect(errorElement).toBeTruthy();
       expect(errorElement.nativeElement.textContent).toContain('This field is required');
     });
@@ -428,7 +428,7 @@ describe('NtxSelectComponent', () => {
       component.value = 'option1';
       fixture.detectChanges();
       
-      const errorElement = fixture.debugElement.query(By.css('.ntx-select-error'));
+      const errorElement = fixture.debugElement.query(By.css('.nxt-dropdown-error'));
       expect(errorElement).toBeFalsy();
     });
   });
@@ -438,7 +438,7 @@ describe('NtxSelectComponent', () => {
       component.disabled = true;
       fixture.detectChanges();
       
-      const container = fixture.debugElement.query(By.css('.ntx-select-container'));
+      const container = fixture.debugElement.query(By.css('.nxt-dropdown-container'));
       expect(container.nativeElement.classList.contains('disabled')).toBeTrue();
     });
 
@@ -492,7 +492,7 @@ describe('NtxSelectComponent', () => {
 
   describe('Accessibility', () => {
     it('should have correct ARIA attributes', () => {
-      const trigger = fixture.debugElement.query(By.css('.ntx-select-trigger'));
+      const trigger = fixture.debugElement.query(By.css('.nxt-dropdown-trigger'));
       
       expect(trigger.nativeElement.getAttribute('role')).toBe('combobox');
       expect(trigger.nativeElement.getAttribute('aria-expanded')).toBe('false');
@@ -503,7 +503,7 @@ describe('NtxSelectComponent', () => {
       component.toggleDropdown();
       fixture.detectChanges();
       
-      const trigger = fixture.debugElement.query(By.css('.ntx-select-trigger'));
+      const trigger = fixture.debugElement.query(By.css('.nxt-dropdown-trigger'));
       expect(trigger.nativeElement.getAttribute('aria-expanded')).toBe('true');
     });
 
@@ -511,7 +511,7 @@ describe('NtxSelectComponent', () => {
       component.toggleDropdown();
       fixture.detectChanges();
       
-      const options = fixture.debugElement.queryAll(By.css('.ntx-select-option'));
+      const options = fixture.debugElement.queryAll(By.css('.nxt-dropdown-option'));
       expect(options[0].nativeElement.getAttribute('role')).toBe('option');
     });
   });

@@ -1,5 +1,5 @@
 <div class="demo-container">
-  <h1>NTX Select Component - Comprehensive Demo</h1>
+  <h1>NXT Dropdown Component - Comprehensive Demo</h1>
   
   <!-- Tab Navigation -->
   <div class="tab-navigation">
@@ -27,12 +27,12 @@
         <div class="demo-card">
           <h3>Single Selection</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="selectedValue"
               [options]="options"
               placeholder="Select an option"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ selectedValue || 'None' }}</p>
         </div>
@@ -40,13 +40,13 @@
         <div class="demo-card">
           <h3>Multiple Selection</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="selectedMultipleValues"
               [options]="options"
               [multiple]="true"
               placeholder="Select multiple options"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ selectedMultipleValues.length }} items</p>
         </div>
@@ -54,14 +54,14 @@
         <div class="demo-card">
           <h3>With Confirmation</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="selectedMultipleValuesWithConfirmation"
               [options]="options"
               [multiple]="true"
               [confirmation]="true"
               placeholder="Select with confirmation"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ selectedMultipleValuesWithConfirmation.length }} items</p>
         </div>
@@ -69,13 +69,13 @@
         <div class="demo-card">
           <h3>Required Field</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="requiredValue"
               [options]="options"
               [required]="true"
               placeholder="Required field"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Valid: {{ requiredValue ? 'Yes' : 'No' }}</p>
         </div>
@@ -90,13 +90,13 @@
         <div class="demo-card">
           <h3>Large Dataset</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="largeDatasetValue"
               [options]="largeDatasetOptions"
               [multiple]="true"
               placeholder="Select from 50+ options"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ largeDatasetValue.length }} items</p>
         </div>
@@ -104,12 +104,12 @@
         <div class="demo-card">
           <h3>With Disabled Options</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="disabledOptionsValue"
               [options]="optionsWithDisabled"
               placeholder="Some options disabled"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ disabledOptionsValue || 'None' }}</p>
         </div>
@@ -117,12 +117,12 @@
         <div class="demo-card">
           <h3>Country Selection</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="countryValue"
               [options]="countryOptions"
               placeholder="Select your country"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Country: {{ countryValue || 'None' }}</p>
         </div>
@@ -130,13 +130,13 @@
         <div class="demo-card">
           <h3>Category Selection</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="categoryValue"
               [options]="categoryOptions"
               [multiple]="true"
               placeholder="Select categories"
               (selectionChange)="onSelectionChange($event)">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Categories: {{ categoryValue.length }} selected</p>
         </div>
@@ -152,25 +152,25 @@
           <div class="form-field">
             <label>Single Selection (Required)</label>
             <div class="select-wrapper">
-              <ntx-select
+              <nxt-dropdown
                 formControlName="singleSelect"
                 [options]="options"
                 placeholder="Select an option (required)"
                 (selectionChange)="onSelectionChange($event)">
-              </ntx-select>
+              </nxt-dropdown>
             </div>
           </div>
 
           <div class="form-field">
             <label>Multiple Selection (Required)</label>
             <div class="select-wrapper">
-              <ntx-select
+              <nxt-dropdown
                 formControlName="multipleSelect"
                 [options]="options"
                 [multiple]="true"
                 placeholder="Select multiple options (required)"
                 (selectionChange)="onSelectionChange($event)">
-              </ntx-select>
+              </nxt-dropdown>
             </div>
           </div>
         </div>
@@ -179,26 +179,26 @@
           <div class="form-field">
             <label>With Confirmation (Required)</label>
             <div class="select-wrapper">
-              <ntx-select
+              <nxt-dropdown
                 formControlName="multipleSelectWithConfirmation"
                 [options]="options"
                 [multiple]="true"
                 [confirmation]="true"
                 placeholder="Select with confirmation (required)"
                 (selectionChange)="onSelectionChange($event)">
-              </ntx-select>
+              </nxt-dropdown>
             </div>
           </div>
 
           <div class="form-field">
             <label>Country (Required)</label>
             <div class="select-wrapper">
-              <ntx-select
+              <nxt-dropdown
                 formControlName="country"
                 [options]="countryOptions"
                 placeholder="Select your country (required)"
                 (selectionChange)="onSelectionChange($event)">
-              </ntx-select>
+              </nxt-dropdown>
             </div>
           </div>
         </div>
@@ -253,11 +253,11 @@
         <div class="demo-card">
           <h3>Disabled State</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [options]="options"
               [disabled]="true"
               placeholder="Disabled select">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">This select is disabled</p>
         </div>
@@ -265,11 +265,11 @@
         <div class="demo-card">
           <h3>Empty Options</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="emptyOptionsValue"
               [options]="[]"
               placeholder="No options available">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">No options to select from</p>
         </div>
@@ -277,12 +277,12 @@
         <div class="demo-card">
           <h3>Pre-selected Values</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="preSelectedValue"
               [options]="options"
               [multiple]="true"
               placeholder="Pre-selected options">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Pre-selected: {{ preSelectedValue.length }} items</p>
         </div>
@@ -290,11 +290,11 @@
         <div class="demo-card">
           <h3>Dynamic Options</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="dynamicValue"
               [options]="dynamicOptions"
               placeholder="Dynamic options">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <div class="dynamic-controls">
             <button class="btn btn-sm" (click)="addDynamicOption()">Add Option</button>
@@ -313,12 +313,12 @@
         <div class="demo-card full-width">
           <h3>Full Width Select</h3>
           <div class="select-wrapper full-width">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="responsiveValue"
               [options]="options"
               [multiple]="true"
               placeholder="This select adapts to container width">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Responsive design demo</p>
         </div>
@@ -328,22 +328,22 @@
         <div class="demo-card">
           <h3>Compact Select</h3>
           <div class="select-wrapper compact">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="compactValue"
               [options]="options.slice(0, 5)"
               placeholder="Compact">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
         </div>
 
         <div class="demo-card">
           <h3>Wide Select</h3>
           <div class="select-wrapper wide">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="wideValue"
               [options]="options"
               placeholder="Wide select">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
         </div>
       </div>
@@ -357,20 +357,20 @@
       <div class="demo-row">
         <div class="demo-item">
           <label>Searchable Single Select</label>
-          <ntx-select 
+          <nxt-dropdown 
             [options]="countryOptions"
             placeholder="Search for a country..."
             [searchable]="true"
             searchPlaceholder="Type to search countries..."
             [(ngModel)]="searchableSingleValue"
             (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
+          </nxt-dropdown>
           <div class="demo-value">Selected: {{ searchableSingleValue || 'None' }}</div>
         </div>
         
         <div class="demo-item">
           <label>Searchable Multiple Select</label>
-          <ntx-select 
+          <nxt-dropdown 
             [options]="categoryOptions"
             placeholder="Search and select categories..."
             [multiple]="true"
@@ -378,7 +378,7 @@
             searchPlaceholder="Type to search categories..."
             [(ngModel)]="searchableMultipleValue"
             (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
+          </nxt-dropdown>
           <div class="demo-value">Selected: {{ searchableMultipleValue?.length ? searchableMultipleValue.join(', ') : 'None' }}</div>
         </div>
       </div>
@@ -386,7 +386,7 @@
       <div class="demo-row">
         <div class="demo-item">
           <label>Search with Minimum Length</label>
-          <ntx-select 
+          <nxt-dropdown 
             [options]="largeDatasetOptions"
             placeholder="Search with min 2 characters..."
             [searchable]="true"
@@ -394,13 +394,13 @@
             searchPlaceholder="Type at least 2 characters..."
             [(ngModel)]="searchMinLengthValue"
             (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
+          </nxt-dropdown>
           <div class="demo-value">Selected: {{ searchMinLengthValue || 'None' }}</div>
         </div>
         
         <div class="demo-item">
           <label>Searchable with Confirmation</label>
-          <ntx-select 
+          <nxt-dropdown 
             [options]="searchPerformanceOptions"
             placeholder="Search and confirm selection..."
             [multiple]="true"
@@ -409,7 +409,7 @@
             searchPlaceholder="Search from 500 options..."
             [(ngModel)]="searchableConfirmationValue"
             (selectionChange)="onSelectionChange($event)">
-          </ntx-select>
+          </nxt-dropdown>
           <div class="demo-value">Selected: {{ searchableConfirmationValue?.length ? searchableConfirmationValue.length + ' items' : 'None' }}</div>
         </div>
       </div>
@@ -423,11 +423,11 @@
         <div class="demo-card">
           <h3>Virtual Scrolling (1000+ items)</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="virtualScrollValue"
               [options]="virtualScrollOptions"
               placeholder="Select from 1000+ items">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ virtualScrollValue || 'None' }}</p>
         </div>
@@ -435,12 +435,12 @@
         <div class="demo-card">
           <h3>Search Performance</h3>
           <div class="select-wrapper">
-            <ntx-select
+            <nxt-dropdown
               [(ngModel)]="searchPerformanceValue"
               [options]="searchPerformanceOptions"
               [multiple]="true"
               placeholder="Search through 500 items">
-            </ntx-select>
+            </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ searchPerformanceValue.length }} items</p>
         </div>
@@ -451,10 +451,10 @@
   <!-- Guide Tab Content -->
   <div class="tab-content guide-content" *ngIf="activeTab === 'guide'">
     <div class="guide-section">
-      <h2>📖 NTX Select Component Guide</h2>
+      <h2>📖 NXT Dropdown Component Guide</h2>
       
       <div class="guide-intro">
-        <p>The NTX Select component is a powerful, customizable dropdown/select component built for Angular applications. It provides advanced features like multiple selection, confirmation mode, search functionality, and excellent performance with large datasets.</p>
+        <p>The NXT Dropdown component is a powerful, customizable dropdown/select component built for Angular applications. It provides advanced features like multiple selection, confirmation mode, search functionality, and excellent performance with large datasets.</p>
       </div>
 
       <!-- Installation & Setup -->
@@ -463,11 +463,11 @@
         
         <div class="code-block">
           <h4>1. Import the Module</h4>
-          <pre><code>import {{ '{' }} NtxSelectModule {{ '}' }} from './ntx-select/ntx-select.module';
+          <pre><code>import {{ '{' }} NxtDropdownModule {{ '}' }} from './nxt-dropdown/nxt-dropdown.module';
 
-@NgModule({{ '{' }}
+  &#64;NgModule({{ '{' }}
   imports: [
-    NtxSelectModule,
+    NxtDropdownModule,
     // ... other imports
   ]
 {{ '}' }})
@@ -476,11 +476,11 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
 
         <div class="code-block">
           <h4>2. Basic Usage</h4>
-          <pre><code>&lt;ntx-select
+          <pre><code>&lt;nxt-dropdown
   [(ngModel)]="selectedValue"
   [options]="options"
   placeholder="Select an option"&gt;
-&lt;/ntx-select&gt;</code></pre>
+&lt;/nxt-dropdown&gt;</code></pre>
         </div>
       </div>
 
@@ -501,7 +501,7 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
             <tbody>
               <tr>
                 <td><code>options</code></td>
-                <td><code>NtxSelectOption[]</code></td>
+                <td><code>NxtDropdownOption[]</code></td>
                 <td><code>[]</code></td>
                 <td>Array of options to display in the dropdown</td>
               </tr>
@@ -573,12 +573,12 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
               </tr>
               <tr>
                 <td><code>optionSelect</code></td>
-                <td><code>EventEmitter&lt;NtxSelectOption&gt;</code></td>
+                <td><code>EventEmitter&lt;NxtDropdownOption&gt;</code></td>
                 <td>Emitted when an individual option is selected</td>
               </tr>
               <tr>
                 <td><code>optionDeselect</code></td>
-                <td><code>EventEmitter&lt;NtxSelectOption&gt;</code></td>
+                <td><code>EventEmitter&lt;NxtDropdownOption&gt;</code></td>
                 <td>Emitted when an individual option is deselected</td>
               </tr>
               <tr>
@@ -601,8 +601,8 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         <h3>📊 Data Structure</h3>
         
         <div class="code-block">
-          <h4>NtxSelectOption Interface</h4>
-          <pre><code>interface NtxSelectOption {{ '{' }}
+          <h4>NxtDropdownOption Interface</h4>
+          <pre><code>interface NxtDropdownOption {{ '{' }}
   value: any;           // The value of the option
   label: string;        // Display text for the option
   disabled?: boolean;   // Whether the option is disabled
@@ -614,7 +614,7 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
 
         <div class="code-block">
           <h4>Example Options Array</h4>
-          <pre><code>const options: NtxSelectOption[] = [
+          <pre><code>const options: NxtDropdownOption[] = [
   {{ '{' }} value: 'option1', label: 'Option 1' {{ '}' }},
   {{ '{' }} value: 'option2', label: 'Option 2', disabled: true {{ '}' }},
   {{ '{' }} value: 'option3', label: 'Option 3', group: 'Group A' {{ '}' }},
@@ -630,45 +630,45 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         <div class="example-grid">
           <div class="example-card">
             <h4>Single Selection</h4>
-            <pre><code>&lt;ntx-select
+            <pre><code>&lt;nxt-dropdown
   [(ngModel)]="selectedCountry"
   [options]="countryOptions"
   placeholder="Select your country"
   (selectionChange)="onCountryChange($event)"&gt;
-&lt;/ntx-select&gt;</code></pre>
+&lt;/nxt-dropdown&gt;</code></pre>
           </div>
 
           <div class="example-card">
             <h4>Multiple Selection</h4>
-            <pre><code>&lt;ntx-select
+            <pre><code>&lt;nxt-dropdown
   [(ngModel)]="selectedCategories"
   [options]="categoryOptions"
   [multiple]="true"
   placeholder="Select categories"
   (selectionChange)="onCategoriesChange($event)"&gt;
-&lt;/ntx-select&gt;</code></pre>
+&lt;/nxt-dropdown&gt;</code></pre>
           </div>
 
           <div class="example-card">
             <h4>With Confirmation</h4>
-            <pre><code>&lt;ntx-select
+            <pre><code>&lt;nxt-dropdown
   [(ngModel)]="selectedItems"
   [options]="itemOptions"
   [multiple]="true"
   [confirmation]="true"
   placeholder="Select items (Apply to confirm)"&gt;
-&lt;/ntx-select&gt;</code></pre>
+&lt;/nxt-dropdown&gt;</code></pre>
           </div>
 
           <div class="example-card">
             <h4>Reactive Form Integration</h4>
             <pre><code>&lt;form [formGroup]="myForm"&gt;
-  &lt;ntx-select
+  &lt;nxt-dropdown
     formControlName="mySelect"
     [options]="options"
     [required]="true"
     placeholder="Required field"&gt;
-  &lt;/ntx-select&gt;
+  &lt;/nxt-dropdown&gt;
 &lt;/form&gt;</code></pre>
           </div>
         </div>
@@ -681,29 +681,29 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         <div class="code-block">
           <h4>CSS Custom Properties</h4>
           <pre><code>:root {{ '{' }}
-  --ntx-select-border-color: #ccc;
-  --ntx-select-border-radius: 4px;
-  --ntx-select-background: #fff;
-  --ntx-select-text-color: #333;
-  --ntx-select-hover-color: #f5f5f5;
-  --ntx-select-selected-color: #007bff;
-  --ntx-select-disabled-color: #e9ecef;
-  --ntx-select-error-color: #dc3545;
-  --ntx-select-success-color: #28a745;
+  --nxt-dropdown-border-color: #ccc;
+  --nxt-dropdown-border-radius: 4px;
+  --nxt-dropdown-background: #fff;
+  --nxt-dropdown-text-color: #333;
+  --nxt-dropdown-hover-color: #f5f5f5;
+  --nxt-dropdown-selected-color: #007bff;
+  --nxt-dropdown-disabled-color: #e9ecef;
+  --nxt-dropdown-error-color: #dc3545;
+  --nxt-dropdown-success-color: #28a745;
 {{ '}' }}</code></pre>
         </div>
 
         <div class="code-block">
           <h4>Custom CSS Classes</h4>
-          <pre><code>.ntx-select {{ '{' }}
+          <pre><code>.nxt-dropdown {{ '{' }}
   /* Custom styles for the select container */
 {{ '}' }}
 
-.ntx-select-dropdown {{ '{' }}
+.nxt-dropdown-dropdown {{ '{' }}
   /* Custom styles for the dropdown */
 {{ '}' }}
 
-.ntx-select-option {{ '{' }}
+.nxt-dropdown-option {{ '{' }}
   /* Custom styles for individual options */
 {{ '}' }}</code></pre>
         </div>
@@ -792,7 +792,7 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
           
           <div class="code-block">
             <h4>Component Methods</h4>
-            <pre><code>class NtxSelectComponent {{ '{' }}
+            <pre><code>class NxtDropdownComponent {{ '{' }}
   // Public methods
   open(): void;           // Open the dropdown
   close(): void;          // Close the dropdown

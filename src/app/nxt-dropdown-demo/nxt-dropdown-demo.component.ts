@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NtxSelectOption } from '../ntx-select/ntx-select.component';
+import { NxtDropdownOption } from '../nxt-dropdown/nxt-dropdown.component';
 
 @Component({
-  selector: 'app-ntx-select-demo',
-  templateUrl: './ntx-select-demo.component.html',
-  styleUrls: ['./ntx-select-demo.component.scss']
+  selector: 'app-nxt-dropdown-demo',
+  templateUrl: './nxt-dropdown-demo.component.html',
+  styleUrls: ['./nxt-dropdown-demo.component.scss']
 })
-export class NtxSelectDemoComponent implements OnInit {
+export class NxtDropdownDemoComponent implements OnInit {
   // Tab management
   activeTab: 'demo' | 'guide' = 'demo';
 
@@ -27,7 +27,7 @@ export class NtxSelectDemoComponent implements OnInit {
   emptyOptionsValue: any = null;
   preSelectedValue: any[] = ['option1', 'option3'];
   dynamicValue: any = null;
-  dynamicOptions: NtxSelectOption[] = [
+  dynamicOptions: NxtDropdownOption[] = [
     { value: 'dynamic1', label: 'Dynamic Option 1' },
     { value: 'dynamic2', label: 'Dynamic Option 2' }
   ];
@@ -51,7 +51,7 @@ export class NtxSelectDemoComponent implements OnInit {
   reactiveForm: FormGroup;
 
   // Sample options
-  options: NtxSelectOption[] = [
+  options: NxtDropdownOption[] = [
     { value: 'option1', label: 'Option 1' },
     { value: 'option2', label: 'Option 2' },
     { value: 'option3', label: 'Option 3', disabled: true },
@@ -65,13 +65,13 @@ export class NtxSelectDemoComponent implements OnInit {
   ];
 
   // Large dataset options
-  largeDatasetOptions: NtxSelectOption[] = Array.from({ length: 50 }, (_, i) => ({
+  largeDatasetOptions: NxtDropdownOption[] = Array.from({ length: 50 }, (_, i) => ({
     value: `large${i + 1}`,
     label: `Large Dataset Option ${i + 1}`
   }));
 
   // Options with disabled items
-  optionsWithDisabled: NtxSelectOption[] = [
+  optionsWithDisabled: NxtDropdownOption[] = [
     { value: 'enabled1', label: 'Enabled Option 1' },
     { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
     { value: 'enabled2', label: 'Enabled Option 2' },
@@ -80,7 +80,7 @@ export class NtxSelectDemoComponent implements OnInit {
   ];
 
   // Country options
-  countryOptions: NtxSelectOption[] = [
+  countryOptions: NxtDropdownOption[] = [
     { value: 'us', label: 'United States' },
     { value: 'uk', label: 'United Kingdom' },
     { value: 'ca', label: 'Canada' },
@@ -94,7 +94,7 @@ export class NtxSelectDemoComponent implements OnInit {
   ];
 
   // Category options
-  categoryOptions: NtxSelectOption[] = [
+  categoryOptions: NxtDropdownOption[] = [
     { value: 'tech', label: 'Technology' },
     { value: 'health', label: 'Healthcare' },
     { value: 'finance', label: 'Finance' },
@@ -106,13 +106,13 @@ export class NtxSelectDemoComponent implements OnInit {
   ];
 
   // Virtual scroll options (1000+ items)
-  virtualScrollOptions: NtxSelectOption[] = Array.from({ length: 1000 }, (_, i) => ({
+  virtualScrollOptions: NxtDropdownOption[] = Array.from({ length: 1000 }, (_, i) => ({
     value: `virtual${i + 1}`,
     label: `Virtual Option ${i + 1}`
   }));
 
   // Search performance options (500 items)
-  searchPerformanceOptions: NtxSelectOption[] = Array.from({ length: 500 }, (_, i) => ({
+  searchPerformanceOptions: NxtDropdownOption[] = Array.from({ length: 500 }, (_, i) => ({
     value: `search${i + 1}`,
     label: `Search Option ${i + 1}`
   }));

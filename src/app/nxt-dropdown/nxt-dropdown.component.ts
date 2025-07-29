@@ -1,26 +1,26 @@
 import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-export interface NtxSelectOption {
+  export interface NxtDropdownOption {
   value: any;
   label: string;
   disabled?: boolean;
 }
 
 @Component({
-  selector: 'ntx-select',
-  templateUrl: './ntx-select.component.html',
-  styleUrls: ['./ntx-select.component.scss'],
+  selector: 'nxt-dropdown',
+  templateUrl: './nxt-dropdown.component.html',
+  styleUrls: ['./nxt-dropdown.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NtxSelectComponent),
+      useExisting: forwardRef(() => NxtDropdownComponent),
       multi: true
     }
   ]
 })
-export class NtxSelectComponent implements ControlValueAccessor, OnInit {
-  @Input() options: NtxSelectOption[] = [];
+export class NxtDropdownComponent implements ControlValueAccessor, OnInit {
+  @Input() options: NxtDropdownOption[] = [];
   @Input() placeholder: string = 'Select an option';
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
@@ -35,12 +35,12 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   value: any;
   isDisabled: boolean = false;
   isOpen: boolean = false;
-  selectedOptions: NtxSelectOption[] = [];
-  pendingOptions: NtxSelectOption[] = []; // For confirmation mode
+  selectedOptions: NxtDropdownOption[] = [];
+  pendingOptions: NxtDropdownOption[] = []; // For confirmation mode
   
   // Search functionality
   searchText: string = '';
-  filteredOptions: NtxSelectOption[] = [];
+  filteredOptions: NxtDropdownOption[] = [];
   showSearchInput: boolean = false;
 
   // ControlValueAccessor implementation
@@ -150,7 +150,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  selectOption(option: NtxSelectOption): void {
+  selectOption(option: NxtDropdownOption): void {
     if (option.disabled) return;
 
     if (this.multiple) {
@@ -210,7 +210,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  private togglePendingSelection(option: NtxSelectOption): void {
+  private togglePendingSelection(option: NxtDropdownOption): void {
     const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
     
     if (index > -1) {
@@ -244,7 +244,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     return selectedCount > 0 && selectedCount < availableOptions.length;
   }
 
-  private selectSingleOption(option: NtxSelectOption): void {
+  private selectSingleOption(option: NxtDropdownOption): void {
     this.value = option.value;
     this.selectedOptions = [option];
     this.onChange(this.value);
@@ -253,7 +253,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     this.closeDropdown();
   }
 
-  private toggleMultipleSelection(option: NtxSelectOption): void {
+  private toggleMultipleSelection(option: NxtDropdownOption): void {
     const index = this.selectedOptions.findIndex(opt => opt.value === option.value);
     
     if (index > -1) {
@@ -315,14 +315,14 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     return this.pendingOptions[0].label;
   }
 
-  isOptionSelected(option: NtxSelectOption): boolean {
+  isOptionSelected(option: NxtDropdownOption): boolean {
     if (this.confirmation && this.multiple) {
       return this.pendingOptions.some(selected => selected.value === option.value);
     }
     return this.selectedOptions.some(selected => selected.value === option.value);
   }
 
-  removeOption(event: Event, option: NtxSelectOption): void {
+  removeOption(event: Event, option: NxtDropdownOption): void {
     event.stopPropagation();
     
     if (this.confirmation && this.multiple) {
@@ -364,7 +364,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  trackByValue(index: number, option: NtxSelectOption): any {
+  trackByValue(index: number, option: NxtDropdownOption): any {
     return option.value;
   }
 
