@@ -505,10 +505,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.onTouched();
     this.selectionChange.emit(this.value);
     
-    // Close dropdown after selection in multiple mode (unless confirmation is enabled)
-    if (!this._confirmation) {
-      this.closeDropdown();
-    }
+    // Keep dropdown open for multiple selection to allow continuous selection
+    // Only close for single selection or when confirmation is enabled
   }
 
   private updateSelectedOptions(): void {
