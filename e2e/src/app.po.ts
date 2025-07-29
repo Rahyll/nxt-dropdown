@@ -13,6 +13,73 @@ export class AppPage {
     return element(by.css('h1')).getText() as Promise<string>;
   }
 
+  // Tab Navigation
+  getDemoTabButton() {
+    return element(by.css('.tab-button:first-child'));
+  }
+
+  getGuideTabButton() {
+    return element(by.css('.tab-button:last-child'));
+  }
+
+  getActiveTab(): Promise<string> {
+    return element(by.css('.tab-button.active')).getText() as Promise<string>;
+  }
+
+  clickDemoTab() {
+    return this.getDemoTabButton().click();
+  }
+
+  clickGuideTab() {
+    return this.getGuideTabButton().click();
+  }
+
+  // Tab Content
+  getDemoTabContent() {
+    return element(by.css('.tab-content:not(.guide-content)'));
+  }
+
+  getGuideTabContent() {
+    return element(by.css('.tab-content.guide-content'));
+  }
+
+  // Guide Content Elements
+  getGuideSection() {
+    return element(by.css('.guide-section'));
+  }
+
+  getGuideIntro() {
+    return element(by.css('.guide-intro'));
+  }
+
+  getGuideSubsections() {
+    return element.all(by.css('.guide-subsection'));
+  }
+
+  getCodeBlocks() {
+    return element.all(by.css('.code-block'));
+  }
+
+  getPropertyTables() {
+    return element.all(by.css('.property-table'));
+  }
+
+  getExampleCards() {
+    return element.all(by.css('.example-card'));
+  }
+
+  getBestPractices() {
+    return element.all(by.css('.practice-item'));
+  }
+
+  getTroubleshootingSection() {
+    return element(by.css('.troubleshooting'));
+  }
+
+  getApiReference() {
+    return element(by.css('.api-reference'));
+  }
+
   getDemoSections() {
     return element.all(by.css('.demo-section'));
   }

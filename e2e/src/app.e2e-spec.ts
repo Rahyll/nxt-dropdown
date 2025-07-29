@@ -27,6 +27,101 @@ describe('NTX Select Demo App', () => {
     });
   });
 
+  describe('Tab Navigation', () => {
+    beforeEach(() => {
+      page.navigateTo();
+    });
+
+    it('should display tab navigation', () => {
+      const demoTab = page.getDemoTabButton();
+      const guideTab = page.getGuideTabButton();
+      
+      expect(demoTab.isPresent()).toBeTruthy();
+      expect(guideTab.isPresent()).toBeTruthy();
+    });
+
+    it('should have demo tab active by default', async () => {
+      const activeTab = await page.getActiveTab();
+      expect(activeTab).toContain('Demo');
+    });
+
+    it('should switch to guide tab when clicked', async () => {
+      await page.clickGuideTab();
+      const activeTab = await page.getActiveTab();
+      expect(activeTab).toContain('Guide');
+    });
+
+    it('should switch back to demo tab when clicked', async () => {
+      await page.clickGuideTab();
+      await page.clickDemoTab();
+      const activeTab = await page.getActiveTab();
+      expect(activeTab).toContain('Demo');
+    });
+
+    it('should show demo content when demo tab is active', () => {
+      const demoContent = page.getDemoTabContent();
+      expect(demoContent.isPresent()).toBeTruthy();
+    });
+
+    it('should show guide content when guide tab is active', async () => {
+      await page.clickGuideTab();
+      const guideContent = page.getGuideTabContent();
+      expect(guideContent.isPresent()).toBeTruthy();
+    });
+  });
+
+  describe('Guide Content', () => {
+    beforeEach(async () => {
+      page.navigateTo();
+      await page.clickGuideTab();
+    });
+
+    it('should display guide section', () => {
+      const guideSection = page.getGuideSection();
+      expect(guideSection.isPresent()).toBeTruthy();
+    });
+
+    it('should display guide introduction', () => {
+      const guideIntro = page.getGuideIntro();
+      expect(guideIntro.isPresent()).toBeTruthy();
+    });
+
+    it('should display multiple guide subsections', () => {
+      const subsections = page.getGuideSubsections();
+      expect(subsections.count()).toBeGreaterThan(5);
+    });
+
+    it('should display code blocks', () => {
+      const codeBlocks = page.getCodeBlocks();
+      expect(codeBlocks.count()).toBeGreaterThan(0);
+    });
+
+    it('should display property tables', () => {
+      const propertyTables = page.getPropertyTables();
+      expect(propertyTables.count()).toBeGreaterThan(0);
+    });
+
+    it('should display example cards', () => {
+      const exampleCards = page.getExampleCards();
+      expect(exampleCards.count()).toBeGreaterThan(0);
+    });
+
+    it('should display best practices section', () => {
+      const bestPractices = page.getBestPractices();
+      expect(bestPractices.count()).toBeGreaterThan(0);
+    });
+
+    it('should display troubleshooting section', () => {
+      const troubleshooting = page.getTroubleshootingSection();
+      expect(troubleshooting.isPresent()).toBeTruthy();
+    });
+
+    it('should display API reference section', () => {
+      const apiReference = page.getApiReference();
+      expect(apiReference.isPresent()).toBeTruthy();
+    });
+  });
+
   describe('Basic Demos', () => {
     beforeEach(() => {
       page.navigateTo();
