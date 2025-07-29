@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
 
   h1 {
     color: #1976d2;
@@ -49,6 +49,21 @@
           border-left-color: #4caf50;
           color: #2e7d32;
           font-size: 0.85rem;
+        }
+      }
+
+      .confirmation-mode-indicator {
+        margin-bottom: 8px;
+
+        .indicator-badge {
+          display: inline-block;
+          background-color: #fff3cd;
+          color: #856404;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 500;
+          border: 1px solid #ffeaa7;
         }
       }
     }
@@ -110,14 +125,13 @@
 
       p {
         margin: 5px 0;
-        font-family: 'Courier New', monospace;
+        font-family: Courier New, monospace;
         font-size: 0.9rem;
       }
     }
   }
 }
 
-// Responsive design
 @media (max-width: 600px) {
   .demo-container {
     padding: 10px;
@@ -132,7 +146,7 @@
       .form-actions {
         flex-direction: column;
 
-        button {
+        .btn {
           width: 100%;
         }
       }

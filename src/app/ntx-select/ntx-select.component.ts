@@ -25,6 +25,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
   @Input() multiple: boolean = false;
+  @Input() confirmation: boolean = false;
   @Input() panelClass: string = '';
   @Output() selectionChange = new EventEmitter<any>();
 
@@ -32,6 +33,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   isDisabled: boolean = false;
   isOpen: boolean = false;
   selectedOptions: NtxSelectOption[] = [];
+  pendingOptions: NtxSelectOption[] = []; // For confirmation mode
 
   // ControlValueAccessor implementation
   private onChange = (value: any) => {};
@@ -42,6 +44,9 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   ngOnInit() {
     this.isDisabled = this.disabled;
     this.updateSelectedOptions();
+    if (this.confirmation && this.multiple) {
+      this.pendingOptions = [...this.selectedOptions];
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -85,7 +90,11 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     if (option.disabled) return;
 
     if (this.multiple) {
-      this.toggleMultipleSelection(option);
+      if (this.confirmation) {
+        this.togglePendingSelection(option);
+      } else {
+        this.toggleMultipleSelection(option);
+      }
     } else {
       this.selectSingleOption(option);
     }
@@ -94,6 +103,14 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   selectAll(): void {
     if (!this.multiple) return;
 
+    if (this.confirmation) {
+      this.togglePendingSelectAll();
+    } else {
+      this.toggleSelectAll();
+    }
+  }
+
+  private toggleSelectAll(): void {
     const availableOptions = this.options.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
       this.selectedOptions.some(selected => selected.value === option.value)
@@ -114,13 +131,40 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     this.selectionChange.emit(this.value);
   }
 
+  private togglePendingSelectAll(): void {
+    const availableOptions = this.options.filter(option => !option.disabled);
+    const allSelected = availableOptions.every(option => 
+      this.pendingOptions.some(selected => selected.value === option.value)
+    );
+
+    if (allSelected) {
+      // Deselect all
+      this.pendingOptions = [];
+    } else {
+      // Select all available options
+      this.pendingOptions = [...availableOptions];
+    }
+  }
+
+  private togglePendingSelection(option: NtxSelectOption): void {
+    const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
+    
+    if (index > -1) {
+      this.pendingOptions.splice(index, 1);
+    } else {
+      this.pendingOptions.push(option);
+    }
+  }
+
   isAllSelected(): boolean {
     if (!this.multiple) return false;
     
     const availableOptions = this.options.filter(option => !option.disabled);
+    const optionsToCheck = this.confirmation ? this.pendingOptions : this.selectedOptions;
+    
     return availableOptions.length > 0 && 
            availableOptions.every(option => 
-             this.selectedOptions.some(selected => selected.value === option.value)
+             optionsToCheck.some(selected => selected.value === option.value)
            );
   }
 
@@ -128,8 +172,9 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     if (!this.multiple) return false;
     
     const availableOptions = this.options.filter(option => !option.disabled);
+    const optionsToCheck = this.confirmation ? this.pendingOptions : this.selectedOptions;
     const selectedCount = availableOptions.filter(option => 
-      this.selectedOptions.some(selected => selected.value === option.value)
+      optionsToCheck.some(selected => selected.value === option.value)
     ).length;
     
     return selectedCount > 0 && selectedCount < availableOptions.length;
@@ -191,13 +236,41 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     return this.selectedOptions[0].label;
   }
 
+  getPendingDisplayText(): string {
+    if (this.pendingOptions.length === 0) {
+      return this.placeholder;
+    }
+
+    if (this.multiple) {
+      if (this.pendingOptions.length === 1) {
+        return this.pendingOptions[0].label;
+      }
+      return `${this.pendingOptions.length} items selected`;
+    }
+
+    return this.pendingOptions[0].label;
+  }
+
   isOptionSelected(option: NtxSelectOption): boolean {
+    if (this.confirmation && this.multiple) {
+      return this.pendingOptions.some(selected => selected.value === option.value);
+    }
     return this.selectedOptions.some(selected => selected.value === option.value);
   }
 
   removeOption(event: Event, option: NtxSelectOption): void {
     event.stopPropagation();
-    this.selectOption(option);
+    
+    if (this.confirmation && this.multiple) {
+      // In confirmation mode, remove from pending options
+      const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
+      if (index > -1) {
+        this.pendingOptions.splice(index, 1);
+      }
+    } else {
+      // Normal mode, toggle the option
+      this.selectOption(option);
+    }
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -229,5 +302,24 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
 
   trackByValue(index: number, option: NtxSelectOption): any {
     return option.value;
+  }
+
+  applySelection(): void {
+    if (!this.confirmation || !this.multiple) return;
+
+    this.selectedOptions = [...this.pendingOptions];
+    this.value = this.selectedOptions.map(opt => opt.value);
+    this.onChange(this.value);
+    this.onTouched();
+    this.selectionChange.emit(this.value);
+    this.closeDropdown();
+  }
+
+  cancelSelection(): void {
+    if (!this.confirmation || !this.multiple) return;
+
+    // Reset pending options to match current selected options
+    this.pendingOptions = [...this.selectedOptions];
+    this.closeDropdown();
   }
 } 

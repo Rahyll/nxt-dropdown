@@ -29,6 +29,23 @@
     </div>
 
     <div class="form-group">
+      <h3>Multiple Selection with Confirmation</h3>
+      <div class="confirmation-mode-indicator">
+        <span class="indicator-badge">Confirmation Mode Active</span>
+      </div>
+      <ntx-select
+        [(ngModel)]="selectedMultipleValuesWithConfirmation"
+        [options]="options"
+        [multiple]="true"
+        [confirmation]="true"
+        placeholder="Select multiple options (with confirmation)"
+        (selectionChange)="onSelectionChange($event)">
+      </ntx-select>
+      <p>Selected values: {{ selectedMultipleValuesWithConfirmation | json }}</p>
+      <p class="feature-note">💡 <strong>Tip:</strong> In confirmation mode, your selections are only applied when you click "Apply". Use "Cancel" to discard changes. Chips cannot be removed individually in confirmation mode!</p>
+    </div>
+
+    <div class="form-group">
       <h3>Required Field</h3>
       <ntx-select
         [(ngModel)]="selectedValue"
@@ -61,6 +78,18 @@
           [options]="options"
           [multiple]="true"
           placeholder="Select multiple options (required)"
+          (selectionChange)="onSelectionChange($event)">
+        </ntx-select>
+      </div>
+
+      <div class="form-group">
+        <h3>Multiple Selection with Confirmation (Required)</h3>
+        <ntx-select
+          formControlName="multipleSelectWithConfirmation"
+          [options]="options"
+          [multiple]="true"
+          [confirmation]="true"
+          placeholder="Select multiple options with confirmation (required)"
           (selectionChange)="onSelectionChange($event)">
         </ntx-select>
       </div>

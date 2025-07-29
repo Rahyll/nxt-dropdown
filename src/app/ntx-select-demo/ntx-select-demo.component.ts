@@ -11,6 +11,7 @@ export class NtxSelectDemoComponent implements OnInit {
   // Template-driven form value
   selectedValue: any = null;
   selectedMultipleValues: any[] = [];
+  selectedMultipleValuesWithConfirmation: any[] = [];
 
   // Reactive form
   reactiveForm: FormGroup;
@@ -43,6 +44,7 @@ export class NtxSelectDemoComponent implements OnInit {
     this.reactiveForm = this.fb.group({
       singleSelect: ['', Validators.required],
       multipleSelect: [[], Validators.required],
+      multipleSelectWithConfirmation: [[], Validators.required],
       country: ['', Validators.required]
     });
   }
@@ -70,5 +72,6 @@ export class NtxSelectDemoComponent implements OnInit {
     this.reactiveForm.reset();
     this.selectedValue = null;
     this.selectedMultipleValues = [];
+    this.selectedMultipleValuesWithConfirmation = [];
   }
 } 

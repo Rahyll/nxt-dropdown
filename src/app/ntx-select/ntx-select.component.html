@@ -13,31 +13,32 @@
        [attr.aria-haspopup]="true"
        [attr.aria-label]="placeholder">
     
-    <div class="ntx-select-value">
-      <div class="ntx-select-placeholder" *ngIf="selectedOptions.length === 0">
-        {{ placeholder }}
-      </div>
-      
-      <div class="ntx-select-selected" *ngIf="selectedOptions.length > 0">
-        <div class="ntx-select-single" *ngIf="!multiple">
-          {{ getDisplayText() }}
-        </div>
-        
-        <div class="ntx-select-multiple" *ngIf="multiple">
-          <div class="ntx-select-chips" *ngIf="selectedOptions.length <= 2">
-            <span class="ntx-select-chip" 
-                  *ngFor="let option of selectedOptions"
-                  (click)="removeOption($event, option)">
-              {{ option.label }}
-              <span class="ntx-select-chip-remove">×</span>
-            </span>
-          </div>
-          <div class="ntx-select-summary" *ngIf="selectedOptions.length > 2">
-            {{ getDisplayText() }}
-          </div>
-        </div>
-      </div>
-    </div>
+         <div class="ntx-select-value">
+       <div class="ntx-select-placeholder" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length === 0">
+         {{ placeholder }}
+       </div>
+       
+       <div class="ntx-select-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
+         <div class="ntx-select-single" *ngIf="!multiple">
+           {{ getDisplayText() }}
+         </div>
+         
+         <div class="ntx-select-multiple" *ngIf="multiple">
+           <div class="ntx-select-chips" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length <= 2">
+             <span class="ntx-select-chip" 
+                   *ngFor="let option of (confirmation && multiple ? pendingOptions : selectedOptions)"
+                   [class.removable]="!confirmation"
+                   (click)="!confirmation && removeOption($event, option)">
+               {{ option.label }}
+               <span class="ntx-select-chip-remove" *ngIf="!confirmation">×</span>
+             </span>
+           </div>
+           <div class="ntx-select-summary" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 2">
+             {{ confirmation && multiple ? getPendingDisplayText() : getDisplayText() }}
+           </div>
+         </div>
+       </div>
+     </div>
     
     <div class="ntx-select-arrow">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -109,6 +110,22 @@
       
       <div class="ntx-select-no-options" *ngIf="options.length === 0">
         No options available
+      </div>
+    </div>
+
+    <!-- Confirmation Footer -->
+    <div class="ntx-select-footer" *ngIf="confirmation && multiple">
+      <div class="ntx-select-footer-buttons">
+        <button type="button" 
+                class="ntx-select-btn ntx-select-btn-cancel"
+                (click)="cancelSelection()">
+          Cancel
+        </button>
+        <button type="button" 
+                class="ntx-select-btn ntx-select-btn-apply"
+                (click)="applySelection()">
+          Apply
+        </button>
       </div>
     </div>
   </div>

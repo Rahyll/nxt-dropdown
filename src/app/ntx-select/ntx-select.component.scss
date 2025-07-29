@@ -86,11 +86,19 @@
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
-  cursor: pointer;
   transition: background-color 0.2s ease;
 
-  &:hover {
-    background-color: #bbdefb;
+  &.removable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: #bbdefb;
+    }
+  }
+
+  &:not(.removable) {
+    cursor: default;
+    padding-right: 8px; // Remove extra padding when no remove button
   }
 }
 
@@ -244,6 +252,56 @@
   margin: 4px 0;
 }
 
+.ntx-select-footer {
+  border-top: 1px solid #e1e4e8;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 0 0 6px 6px;
+}
+
+.ntx-select-footer-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.ntx-select-btn {
+  padding: 8px 16px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  min-width: 80px;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &.ntx-select-btn-cancel {
+    background-color: #ffffff;
+    color: #24292f;
+
+    &:hover {
+      background-color: #f6f8fa;
+      border-color: #1976d2;
+    }
+  }
+
+  &.ntx-select-btn-apply {
+    background-color: #1976d2;
+    color: #ffffff;
+    border-color: #1976d2;
+
+    &:hover {
+      background-color: #1565c0;
+      border-color: #1565c0;
+    }
+  }
+}
+
 .ntx-select-no-options {
   padding: 12px;
   text-align: center;
@@ -338,6 +396,34 @@
 
     .ntx-select-divider {
       background-color: #374151;
+    }
+
+    .ntx-select-footer {
+      border-top-color: #374151;
+      background-color: #1f2937;
+    }
+
+    .ntx-select-btn {
+      &.ntx-select-btn-cancel {
+        background-color: #374151;
+        color: #f9fafb;
+        border-color: #4b5563;
+
+        &:hover {
+          background-color: #4b5563;
+          border-color: #3b82f6;
+        }
+      }
+
+      &.ntx-select-btn-apply {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+
+        &:hover {
+          background-color: #2563eb;
+          border-color: #2563eb;
+        }
+      }
     }
 
     .ntx-select-no-options {
