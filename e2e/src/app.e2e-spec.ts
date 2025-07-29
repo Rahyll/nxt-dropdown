@@ -2,7 +2,7 @@ import { browser, logging } from 'protractor';
 // @ts-ignore
 import { AppPage } from './app.po';
 
-describe('NTX Select Demo App', () => {
+describe('NXT Dropdown Demo App', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe('NTX Select Demo App', () => {
   describe('Page Load and Navigation', () => {
     it('should display welcome message', () => {
       page.navigateTo();
-      expect(page.getTitleText()).toContain('NTX Select Component - Comprehensive Demo');
+      expect(page.getTitleText()).toContain('NXT Dropdown Component - Comprehensive Demo');
     });
 
     it('should display all demo sections', () => {
@@ -22,7 +22,7 @@ describe('NTX Select Demo App', () => {
 
     it('should have proper page structure', () => {
       page.navigateTo();
-      expect(page.getMainHeading()).toContain('NTX Select Component');
+      expect(page.getMainHeading()).toContain('NXT Dropdown Component');
       expect(page.getDemoCards().count()).toBeGreaterThan(10);
     });
   });
@@ -149,6 +149,80 @@ describe('NTX Select Demo App', () => {
       const requiredSelect = page.getRequiredSelectDemo();
       expect(requiredSelect.isPresent()).toBeTruthy();
       expect(requiredSelect.getAttribute('placeholder')).toContain('Required field');
+    });
+  });
+
+  describe('Configuration Object Demos', () => {
+    beforeEach(() => {
+      page.navigateTo();
+    });
+
+    it('should display configuration-based single select demo', () => {
+      const configSingleSelect = page.getConfigSingleSelectDemo();
+      expect(configSingleSelect.isPresent()).toBeTruthy();
+      expect(configSingleSelect.getAttribute('placeholder')).toContain('Select an option');
+    });
+
+    it('should display configuration-based multiple select demo', () => {
+      const configMultipleSelect = page.getConfigMultipleSelectDemo();
+      expect(configMultipleSelect.isPresent()).toBeTruthy();
+      expect(configMultipleSelect.getAttribute('placeholder')).toContain('Select multiple options');
+    });
+
+    it('should display mixed configuration demo', () => {
+      const mixedConfigSelect = page.getMixedConfigSelectDemo();
+      expect(mixedConfigSelect.isPresent()).toBeTruthy();
+    });
+
+    it('should display invalid mixed configuration demo', () => {
+      const invalidMixedSelect = page.getInvalidMixedSelectDemo();
+      expect(invalidMixedSelect.isPresent()).toBeTruthy();
+    });
+  });
+
+  describe('Search Functionality Demos', () => {
+    beforeEach(() => {
+      page.navigateTo();
+    });
+
+    it('should display searchable single select demo', () => {
+      const searchableSingle = page.getSearchableSingleDemo();
+      expect(searchableSingle.isPresent()).toBeTruthy();
+      expect(searchableSingle.getAttribute('placeholder')).toContain('Searchable single select');
+    });
+
+    it('should display searchable multiple select demo', () => {
+      const searchableMultiple = page.getSearchableMultipleDemo();
+      expect(searchableMultiple.isPresent()).toBeTruthy();
+      expect(searchableMultiple.getAttribute('placeholder')).toContain('Searchable multiple select');
+    });
+
+    it('should display search with minimum length demo', () => {
+      const searchMinLength = page.getSearchMinLengthDemo();
+      expect(searchMinLength.isPresent()).toBeTruthy();
+      expect(searchMinLength.getAttribute('placeholder')).toContain('Search with minimum length');
+    });
+
+    it('should display searchable confirmation demo', () => {
+      const searchableConfirmation = page.getSearchableConfirmationDemo();
+      expect(searchableConfirmation.isPresent()).toBeTruthy();
+      expect(searchableConfirmation.getAttribute('placeholder')).toContain('Searchable with confirmation');
+    });
+
+    it('should handle search functionality', async () => {
+      const searchableSingle = page.getSearchableSingleDemo();
+      await searchableSingle.click();
+      
+      await browser.sleep(500);
+      
+      const searchInput = page.getSearchInput();
+      expect(searchInput.isPresent()).toBeTruthy();
+      
+      await searchInput.sendKeys('option');
+      await browser.sleep(300);
+      
+      const filteredOptions = page.getFilteredOptions();
+      expect(filteredOptions.count()).toBeGreaterThan(0);
     });
   });
 

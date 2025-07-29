@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NtxSelectComponent, NtxSelectOption } from './nxt-dropdown.component';
+import { NxtDropdownComponent, NxtDropdownOption, NxtDropdownConfig } from './nxt-dropdown.component';
 
-describe('NtxSelectComponent', () => {
-  let component: NtxSelectComponent;
-  let fixture: ComponentFixture<NtxSelectComponent>;
+describe('NxtDropdownComponent', () => {
+  let component: NxtDropdownComponent;
+  let fixture: ComponentFixture<NxtDropdownComponent>;
 
-  const mockOptions: NtxSelectOption[] = [
+  const mockOptions: NxtDropdownOption[] = [
     { value: 'option1', label: 'Option 1' },
     { value: 'option2', label: 'Option 2' },
     { value: 'option3', label: 'Option 3', disabled: true },
@@ -17,11 +17,11 @@ describe('NtxSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NtxSelectComponent],
+      declarations: [NxtDropdownComponent],
       imports: [FormsModule, ReactiveFormsModule]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NtxSelectComponent);
+    fixture = TestBed.createComponent(NxtDropdownComponent);
     component = fixture.componentInstance;
     component.options = mockOptions;
     fixture.detectChanges();
@@ -41,7 +41,7 @@ describe('NtxSelectComponent', () => {
       expect(component.confirmation).toBeFalse();
       expect(component.required).toBeFalse();
       expect(component.disabled).toBeFalse();
-      expect(component.placeholder).toBe('');
+      expect(component.placeholder).toBe('Select an option');
     });
 
     it('should set initial value correctly', () => {
@@ -55,6 +55,74 @@ describe('NtxSelectComponent', () => {
       component.value = ['option1', 'option2'];
       fixture.detectChanges();
       expect(component.selectedOptions).toEqual([mockOptions[0], mockOptions[1]]);
+    });
+  });
+
+  describe('Configuration Object Support', () => {
+    it('should work with configuration object', () => {
+      const config: NxtDropdownConfig = {
+        options: mockOptions,
+        placeholder: 'Custom placeholder',
+        multiple: true,
+        searchable: true
+      };
+      
+      component.config = config;
+      component.ngOnInit();
+      
+      expect(component.currentOptions).toEqual(mockOptions);
+      expect(component.currentPlaceholder).toBe('Custom placeholder');
+      expect(component.currentMultiple).toBeTrue();
+      expect(component.currentSearchable).toBeTrue();
+    });
+
+    it('should prioritize direct inputs over config when not in strict mode', () => {
+      const config: NxtDropdownConfig = {
+        placeholder: 'Config placeholder',
+        multiple: true
+      };
+      
+      component.config = config;
+      component.placeholder = 'Direct placeholder';
+      component.multiple = false;
+      component.ngOnInit();
+      
+      expect(component.currentPlaceholder).toBe('Direct placeholder');
+      expect(component.currentMultiple).toBeFalse();
+    });
+
+    it('should use only config when in strict mode', () => {
+      const config: NxtDropdownConfig = {
+        placeholder: 'Config placeholder',
+        multiple: true
+      };
+      
+      component.config = config;
+      component.strictConfigMode = true;
+      component.placeholder = 'Direct placeholder';
+      component.multiple = false;
+      component.ngOnInit();
+      
+      expect(component.currentPlaceholder).toBe('Config placeholder');
+      expect(component.currentMultiple).toBeTrue();
+    });
+
+    it('should throw error when strict mode is enabled but no config provided', () => {
+      component.strictConfigMode = true;
+      component.config = {};
+      
+      expect(() => component.ngOnInit()).toThrowError('Strict configuration mode requires a valid config object');
+    });
+
+    it('should validate configuration object', () => {
+      const invalidConfig = {
+        options: 'invalid' // should be array
+      } as any;
+      
+      component.config = invalidConfig;
+      component.strictConfigMode = true;
+      
+      expect(() => component.ngOnInit()).toThrowError('Invalid configuration: options must be an array');
     });
   });
 
@@ -538,11 +606,13 @@ describe('NtxSelectComponent', () => {
     });
 
     it('should filter options case-insensitively', () => {
-      component.searchText = 'APPLE';
+      component.searchText = 'OPTION';
       component.updateFilteredOptions();
       
       expect(component.filteredOptions).toEqual([
-        { value: 'apple', label: 'Apple' }
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' }
       ]);
     });
 
@@ -564,12 +634,14 @@ describe('NtxSelectComponent', () => {
       // Should show all options when search length is less than minimum
       expect(component.filteredOptions).toEqual(mockOptions);
       
-      component.searchText = 'ap';
+      component.searchText = 'op';
       component.updateFilteredOptions();
       
       // Should filter when search length meets minimum
       expect(component.filteredOptions).toEqual([
-        { value: 'apple', label: 'Apple' }
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' }
       ]);
     });
 
@@ -627,6 +699,48 @@ describe('NtxSelectComponent', () => {
       
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(component.selectOption).toHaveBeenCalledWith(mockOptions[0]);
+    });
+  });
+
+  describe('Configuration Getters', () => {
+    it('should return correct current options', () => {
+      expect(component.currentOptions).toEqual(mockOptions);
+    });
+
+    it('should return correct current placeholder', () => {
+      expect(component.currentPlaceholder).toBe('Select an option');
+    });
+
+    it('should return correct current disabled state', () => {
+      expect(component.currentDisabled).toBeFalse();
+    });
+
+    it('should return correct current required state', () => {
+      expect(component.currentRequired).toBeFalse();
+    });
+
+    it('should return correct current multiple state', () => {
+      expect(component.currentMultiple).toBeFalse();
+    });
+
+    it('should return correct current confirmation state', () => {
+      expect(component.currentConfirmation).toBeFalse();
+    });
+
+    it('should return correct current panel class', () => {
+      expect(component.currentPanelClass).toBe('');
+    });
+
+    it('should return correct current searchable state', () => {
+      expect(component.currentSearchable).toBeFalse();
+    });
+
+    it('should return correct current search placeholder', () => {
+      expect(component.currentSearchPlaceholder).toBe('Search options...');
+    });
+
+    it('should return correct current min search length', () => {
+      expect(component.currentMinSearchLength).toBe(0);
     });
   });
 }); 

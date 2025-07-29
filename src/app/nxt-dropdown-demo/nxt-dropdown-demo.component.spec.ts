@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NtxSelectDemoComponent } from './ntx-select-demo.component';
-import { NtxSelectComponent } from '../ntx-select/ntx-select.component';
+import { NxtDropdownDemoComponent } from './nxt-dropdown-demo.component';
+import { NxtDropdownComponent } from '../nxt-dropdown/nxt-dropdown.component';
 
-describe('NtxSelectDemoComponent', () => {
-  let component: NtxSelectDemoComponent;
-  let fixture: ComponentFixture<NtxSelectDemoComponent>;
+describe('NxtDropdownDemoComponent', () => {
+  let component: NxtDropdownDemoComponent;
+  let fixture: ComponentFixture<NxtDropdownDemoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NtxSelectDemoComponent, NtxSelectComponent],
+      declarations: [NxtDropdownDemoComponent, NxtDropdownComponent],
       imports: [FormsModule, ReactiveFormsModule],
       providers: [FormBuilder]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NtxSelectDemoComponent);
+    fixture = TestBed.createComponent(NxtDropdownDemoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -50,6 +50,42 @@ describe('NtxSelectDemoComponent', () => {
       expect(component.largeDatasetOptions.length).toBe(50);
       expect(component.virtualScrollOptions.length).toBe(1000);
       expect(component.searchPerformanceOptions.length).toBe(500);
+    });
+  });
+
+  describe('Configuration Object Demos', () => {
+    it('should initialize configuration-based demos', () => {
+      expect(component.singleSelectConfig).toBeTruthy();
+      expect(component.multipleSelectConfig).toBeTruthy();
+    });
+
+    it('should have correct single select configuration', () => {
+      expect(component.singleSelectConfig.options).toEqual(component.options);
+      expect(component.singleSelectConfig.placeholder).toBe('Select an option');
+      expect(component.singleSelectConfig.multiple).toBeFalse();
+    });
+
+    it('should have correct multiple select configuration', () => {
+      expect(component.multipleSelectConfig.options).toEqual(component.options);
+      expect(component.multipleSelectConfig.placeholder).toBe('Select multiple options');
+      expect(component.multipleSelectConfig.multiple).toBeTrue();
+      expect(component.multipleSelectConfig.confirmation).toBeTrue();
+    });
+
+    it('should initialize configuration-based values', () => {
+      expect(component.configBasedValue).toBeNull();
+      expect(component.configBasedMultipleValue).toEqual([]);
+      expect(component.configBasedMixedValue).toEqual([]);
+      expect(component.invalidMixedValue).toBeNull();
+    });
+  });
+
+  describe('Search Functionality Demos', () => {
+    it('should initialize searchable demo values', () => {
+      expect(component.searchableSingleValue).toBeNull();
+      expect(component.searchableMultipleValue).toEqual([]);
+      expect(component.searchMinLengthValue).toBeNull();
+      expect(component.searchableConfirmationValue).toEqual([]);
     });
   });
 
@@ -403,6 +439,23 @@ describe('NtxSelectDemoComponent', () => {
       spyOn(console, 'log');
       component.reactiveForm.patchValue({ singleSelect: 'option1' });
       expect(console.log).toHaveBeenCalledWith('Reactive form values:', jasmine.any(Object));
+    });
+  });
+
+  describe('Tab Management', () => {
+    it('should have demo tab active by default', () => {
+      expect(component.activeTab).toBe('demo');
+    });
+
+    it('should switch to guide tab', () => {
+      component.setActiveTab('guide');
+      expect(component.activeTab).toBe('guide');
+    });
+
+    it('should switch back to demo tab', () => {
+      component.setActiveTab('guide');
+      component.setActiveTab('demo');
+      expect(component.activeTab).toBe('demo');
     });
   });
 }); 

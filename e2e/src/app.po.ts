@@ -109,6 +109,48 @@ export class AppPage {
     return element(by.css('[placeholder="Required field"]'));
   }
 
+  // Configuration Object Demos
+  getConfigSingleSelectDemo() {
+    return element(by.css('[placeholder="Select an option"]'));
+  }
+
+  getConfigMultipleSelectDemo() {
+    return element(by.css('[placeholder="Select multiple options"]'));
+  }
+
+  getMixedConfigSelectDemo() {
+    return element(by.css('[placeholder="Mixed configuration"]'));
+  }
+
+  getInvalidMixedSelectDemo() {
+    return element(by.css('[placeholder="Invalid mixed configuration"]'));
+  }
+
+  // Search Functionality Demos
+  getSearchableSingleDemo() {
+    return element(by.css('[placeholder="Searchable single select"]'));
+  }
+
+  getSearchableMultipleDemo() {
+    return element(by.css('[placeholder="Searchable multiple select"]'));
+  }
+
+  getSearchMinLengthDemo() {
+    return element(by.css('[placeholder="Search with minimum length"]'));
+  }
+
+  getSearchableConfirmationDemo() {
+    return element(by.css('[placeholder="Searchable with confirmation"]'));
+  }
+
+  getSearchInput() {
+    return element(by.css('.nxt-dropdown-search input'));
+  }
+
+  getFilteredOptions() {
+    return element.all(by.css('.nxt-dropdown-option'));
+  }
+
   // Advanced Demos
   getLargeDatasetSelectDemo() {
     return element(by.css('[placeholder="Select from 50+ options"]'));
@@ -204,23 +246,23 @@ export class AppPage {
 
   // Dropdown Options
   getFirstOption() {
-    return element(by.css('.ntx-select-option:first-child'));
+    return element(by.css('.nxt-dropdown-option:first-child'));
   }
 
   getSecondOption() {
-    return element(by.css('.ntx-select-option:nth-child(2)'));
+    return element(by.css('.nxt-dropdown-option:nth-child(2)'));
   }
 
   getAllOptions() {
-    return element.all(by.css('.ntx-select-option'));
+    return element.all(by.css('.nxt-dropdown-option'));
   }
 
   getApplyButton() {
-    return element(by.css('.ntx-select-btn-apply'));
+    return element(by.css('.nxt-dropdown-btn-apply'));
   }
 
   getCancelButton() {
-    return element(by.css('.ntx-select-btn-cancel'));
+    return element(by.css('.nxt-dropdown-btn-cancel'));
   }
 
   // Result Text
@@ -238,7 +280,7 @@ export class AppPage {
 
   // Form Validation
   getRequiredFieldError() {
-    return element(by.css('.ntx-select-error'));
+    return element(by.css('.nxt-dropdown-error'));
   }
 
   // Accessibility
@@ -251,7 +293,7 @@ export class AppPage {
   }
 
   getAllSelectElements() {
-    return element.all(by.css('ntx-select'));
+    return element.all(by.css('nxt-dropdown'));
   }
 
   // Dynamic Options
