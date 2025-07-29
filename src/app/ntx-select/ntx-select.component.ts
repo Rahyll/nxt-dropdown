@@ -91,6 +91,50 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
     }
   }
 
+  selectAll(): void {
+    if (!this.multiple) return;
+
+    const availableOptions = this.options.filter(option => !option.disabled);
+    const allSelected = availableOptions.every(option => 
+      this.selectedOptions.some(selected => selected.value === option.value)
+    );
+
+    if (allSelected) {
+      // Deselect all
+      this.selectedOptions = [];
+      this.value = [];
+    } else {
+      // Select all available options
+      this.selectedOptions = [...availableOptions];
+      this.value = availableOptions.map(opt => opt.value);
+    }
+
+    this.onChange(this.value);
+    this.onTouched();
+    this.selectionChange.emit(this.value);
+  }
+
+  isAllSelected(): boolean {
+    if (!this.multiple) return false;
+    
+    const availableOptions = this.options.filter(option => !option.disabled);
+    return availableOptions.length > 0 && 
+           availableOptions.every(option => 
+             this.selectedOptions.some(selected => selected.value === option.value)
+           );
+  }
+
+  isPartiallySelected(): boolean {
+    if (!this.multiple) return false;
+    
+    const availableOptions = this.options.filter(option => !option.disabled);
+    const selectedCount = availableOptions.filter(option => 
+      this.selectedOptions.some(selected => selected.value === option.value)
+    ).length;
+    
+    return selectedCount > 0 && selectedCount < availableOptions.length;
+  }
+
   private selectSingleOption(option: NtxSelectOption): void {
     this.value = option.value;
     this.selectedOptions = [option];

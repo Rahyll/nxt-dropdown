@@ -51,6 +51,39 @@
        [class]="panelClass">
     
     <div class="ntx-select-options">
+      <!-- Select All Option (only for multiple selection) -->
+      <div class="ntx-select-option ntx-select-all-option"
+           *ngIf="multiple && options.length > 0"
+           [class.selected]="isAllSelected()"
+           [class.partially-selected]="isPartiallySelected()"
+           (click)="selectAll()"
+           role="option"
+           [attr.aria-selected]="isAllSelected()">
+        
+        <div class="ntx-select-option-content">
+          <div class="ntx-select-option-checkbox">
+            <div class="ntx-select-checkbox" 
+                 [class.checked]="isAllSelected()"
+                 [class.partially]="isPartiallySelected()">
+              <svg *ngIf="isAllSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <svg *ngIf="isPartiallySelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 6H9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          
+          <div class="ntx-select-option-label">
+            <strong>Select All</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider after Select All -->
+      <div class="ntx-select-divider" *ngIf="multiple && options.length > 0"></div>
+      
+      <!-- Regular Options -->
       <div class="ntx-select-option"
            *ngFor="let option of options; trackBy: trackByValue"
            [class.selected]="isOptionSelected(option)"
