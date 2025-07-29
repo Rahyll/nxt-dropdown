@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NxtDropdownOption } from '../nxt-dropdown/nxt-dropdown.component';
+import { NxtDropdownOption, NxtDropdownConfig } from '../nxt-dropdown/nxt-dropdown.component';
 
 @Component({
   selector: 'app-nxt-dropdown-demo',
@@ -46,6 +46,12 @@ export class NxtDropdownDemoComponent implements OnInit {
   searchableMultipleValue: any[] = [];
   searchMinLengthValue: any = null;
   searchableConfirmationValue: any[] = [];
+
+  // Configuration object demo values
+  configBasedValue: any = null;
+  configBasedMultipleValue: any[] = [];
+  configBasedMixedValue: any[] = [];
+  invalidMixedValue: any = null;
 
   // Reactive form
   reactiveForm: FormGroup;
@@ -117,6 +123,40 @@ export class NxtDropdownDemoComponent implements OnInit {
     label: `Search Option ${i + 1}`
   }));
 
+  // Configuration objects for demo
+  singleSelectConfig: NxtDropdownConfig = {
+    options: [
+      { value: 'config1', label: 'Config Option 1' },
+      { value: 'config2', label: 'Config Option 2' },
+      { value: 'config3', label: 'Config Option 3' },
+      { value: 'config4', label: 'Config Option 4' },
+      { value: 'config5', label: 'Config Option 5' }
+    ],
+    placeholder: 'Select from config object',
+    required: true,
+    searchable: true,
+    searchPlaceholder: 'Search config options...'
+  };
+
+  multipleSelectConfig: NxtDropdownConfig = {
+    options: [
+      { value: 'multi1', label: 'Multi Option 1' },
+      { value: 'multi2', label: 'Multi Option 2' },
+      { value: 'multi3', label: 'Multi Option 3' },
+      { value: 'multi4', label: 'Multi Option 4' },
+      { value: 'multi5', label: 'Multi Option 5' },
+      { value: 'multi6', label: 'Multi Option 6' },
+      { value: 'multi7', label: 'Multi Option 7' },
+      { value: 'multi8', label: 'Multi Option 8' }
+    ],
+    placeholder: 'Select multiple from config',
+    multiple: true,
+    confirmation: true,
+    searchable: true,
+    searchPlaceholder: 'Search multi options...',
+    minSearchLength: 1
+  };
+
   constructor(private fb: FormBuilder) {
     this.reactiveForm = this.fb.group({
       singleSelect: ['', Validators.required],
@@ -128,6 +168,8 @@ export class NxtDropdownDemoComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize any additional setup
+    console.log('[Demo] singleSelectConfig:', this.singleSelectConfig);
+    console.log('[Demo] multipleSelectConfig:', this.multipleSelectConfig);
   }
 
   // Tab management method
@@ -170,6 +212,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.searchableMultipleValue = [];
     this.searchMinLengthValue = null;
     this.searchableConfirmationValue = [];
+    this.configBasedValue = null;
+    this.configBasedMultipleValue = [];
+    this.configBasedMixedValue = [];
+    this.invalidMixedValue = null;
   }
 
   fillForm(): void {

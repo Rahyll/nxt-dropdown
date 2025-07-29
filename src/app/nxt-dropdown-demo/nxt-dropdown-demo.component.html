@@ -415,6 +415,81 @@
       </div>
     </div>
 
+    <!-- Configuration Approaches Demo Section -->
+    <div class="demo-section">
+      <h2>⚙️ Configuration Approaches</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Direct Input Properties</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectedValue"
+              [options]="options"
+              placeholder="Direct properties"
+              [required]="true"
+              [searchable]="true"
+              searchPlaceholder="Search direct options..."
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectedValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Using individual &#64;Input properties</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Strict Config Mode (Config Only)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMixedValue"
+              [config]="multipleSelectConfig"
+              [strictConfigMode]="true"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMixedValue.length }} items</p>
+          <div class="code-example">
+            <small>Config object only (strict mode enabled)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Configuration Object (Multiple)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMultipleValue"
+              [config]="multipleSelectConfig"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Multiple selection with confirmation</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>⚠️ Invalid Mixed Configuration</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="invalidMixedValue"
+              [config]="singleSelectConfig"
+              [strictConfigMode]="true"
+              [placeholder]="'This will cause an error'"
+              [multiple]="true"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ invalidMixedValue || 'None' }}</p>
+          <div class="code-example">
+            <small>⚠️ Check console for error message</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Performance Demos Section -->
     <div class="demo-section">
       <h2>⚡ Performance Demos</h2>
@@ -508,7 +583,7 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
               <tr>
                 <td><code>placeholder</code></td>
                 <td><code>string</code></td>
-                <td><code>''</code></td>
+                <td><code>'Select an option'</code></td>
                 <td>Placeholder text when no option is selected</td>
               </tr>
               <tr>
@@ -538,14 +613,38 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
               <tr>
                 <td><code>searchable</code></td>
                 <td><code>boolean</code></td>
-                <td><code>true</code></td>
+                <td><code>false</code></td>
                 <td>Enable search functionality within options</td>
               </tr>
               <tr>
-                <td><code>clearable</code></td>
+                <td><code>searchPlaceholder</code></td>
+                <td><code>string</code></td>
+                <td><code>'Search options...'</code></td>
+                <td>Placeholder text for search input</td>
+              </tr>
+              <tr>
+                <td><code>minSearchLength</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>Minimum characters required to trigger search</td>
+              </tr>
+              <tr>
+                <td><code>panelClass</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Additional CSS class for dropdown panel</td>
+              </tr>
+              <tr>
+                <td><code>config</code></td>
+                <td><code>NxtDropdownConfig</code></td>
+                <td><code>{{ '{' }}{{ '}' }}</code></td>
+                <td>Configuration object (alternative to individual properties)</td>
+              </tr>
+              <tr>
+                <td><code>strictConfigMode</code></td>
                 <td><code>boolean</code></td>
-                <td><code>true</code></td>
-                <td>Show clear button to reset selection</td>
+                <td><code>false</code></td>
+                <td>When true, prevents mixing direct properties with config object</td>
               </tr>
             </tbody>
           </table>
@@ -613,6 +712,22 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         </div>
 
         <div class="code-block">
+          <h4>NxtDropdownConfig Interface</h4>
+          <pre><code>interface NxtDropdownConfig {{ '{' }}
+  options?: NxtDropdownOption[];    // Array of options
+  placeholder?: string;             // Placeholder text
+  disabled?: boolean;               // Disable the component
+  required?: boolean;               // Mark as required
+  multiple?: boolean;               // Enable multiple selection
+  confirmation?: boolean;           // Show confirmation buttons
+  panelClass?: string;              // Additional CSS class
+  searchable?: boolean;             // Enable search functionality
+  searchPlaceholder?: string;       // Search input placeholder
+  minSearchLength?: number;         // Minimum search length
+{{ '}' }}</code></pre>
+        </div>
+
+        <div class="code-block">
           <h4>Example Options Array</h4>
           <pre><code>const options: NxtDropdownOption[] = [
   {{ '{' }} value: 'option1', label: 'Option 1' {{ '}' }},
@@ -671,6 +786,35 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
   &lt;/nxt-dropdown&gt;
 &lt;/form&gt;</code></pre>
           </div>
+
+          <div class="example-card">
+            <h4>Configuration Object Approach</h4>
+            <pre><code>// Define configuration object
+const config: NxtDropdownConfig = {{ '{' }}
+  options: countryOptions,
+  placeholder: 'Select your country',
+  multiple: true,
+  confirmation: true,
+  searchable: true,
+  searchPlaceholder: 'Search countries...'
+{{ '}' }};
+
+// Use in template
+&lt;nxt-dropdown
+  [(ngModel)]="selectedCountries"
+  [config]="config"
+  (selectionChange)="onCountriesChange($event)"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Strict Configuration Mode</h4>
+            <pre><code>&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [config]="baseConfig"
+  [strictConfigMode]="true"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
         </div>
       </div>
 
@@ -706,6 +850,57 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
 .nxt-dropdown-option {{ '{' }}
   /* Custom styles for individual options */
 {{ '}' }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Configuration Validation -->
+      <div class="guide-subsection">
+        <h3>🔒 Configuration Validation</h3>
+        
+        <div class="validation-info">
+          <h4>Strict Configuration Mode</h4>
+          <p>The component supports a strict configuration mode that prevents mixing direct input properties with configuration objects. This helps maintain consistency and prevents configuration conflicts.</p>
+          
+          <div class="code-block">
+            <h4>✅ Valid Usage (Strict Mode)</h4>
+            <pre><code>// Config object only
+&lt;nxt-dropdown
+  [strictConfigMode]="true"
+  [config]="myConfig"
+  [(ngModel)]="value"&gt;
+&lt;/nxt-dropdown&gt;
+
+// Direct properties only
+&lt;nxt-dropdown
+  [strictConfigMode]="false"
+  [options]="myOptions"
+  [placeholder]="'Select option'"
+  [multiple]="true"
+  [(ngModel)]="value"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+          
+          <div class="code-block">
+            <h4>❌ Invalid Usage (Will Show Console Error)</h4>
+            <pre><code>// Mixing config object with direct properties
+&lt;nxt-dropdown
+  [strictConfigMode]="true"
+  [config]="myConfig"
+  [placeholder]="'This will cause an error'"
+  [multiple]="true"
+  [(ngModel)]="value"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+          
+          <div class="error-message">
+            <h4>Console Error Example</h4>
+            <p>When invalid configuration is detected, the component will log detailed error messages to the console with:</p>
+            <ul>
+              <li>Clear explanation of the issue</li>
+              <li>Correct usage examples</li>
+              <li>Color-coded formatting for better readability</li>
+            </ul>
+          </div>
         </div>
       </div>
 

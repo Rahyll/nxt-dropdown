@@ -30,7 +30,9 @@ The component is already included in your Angular project. Make sure you have th
 
 ## Usage
 
-### Basic Usage
+The component supports two configuration approaches:
+
+### 1. Direct Input Properties (Traditional Approach)
 
 ```html
 <nxt-dropdown
@@ -38,6 +40,38 @@ The component is already included in your Angular project. Make sure you have th
   placeholder="Select an option">
 </nxt-dropdown>
 ```
+
+### 2. Configuration Object (New Approach)
+
+```html
+<nxt-dropdown
+  [config]="dropdownConfig">
+</nxt-dropdown>
+```
+
+```typescript
+const dropdownConfig: NxtDropdownConfig = {
+  options: [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' }
+  ],
+  placeholder: 'Select an option',
+  multiple: true,
+  searchable: true
+};
+```
+
+### 3. Mixed Approach (Config + Override)
+
+```html
+<nxt-dropdown
+  [config]="baseConfig"
+  [placeholder]="'Overridden placeholder'"
+  [required]="true">
+</nxt-dropdown>
+```
+
+**Note:** Direct input properties take precedence over configuration object properties.
 
 ### Template-Driven Forms
 
@@ -122,7 +156,7 @@ The component is already included in your Angular project. Make sure you have th
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `options` | `NtxSelectOption[]` | `[]` | Array of options to display |
+| `options` | `NxtDropdownOption[]` | `[]` | Array of options to display |
 | `placeholder` | `string` | `'Select an option'` | Placeholder text |
 | `disabled` | `boolean` | `false` | Whether the select is disabled |
 | `required` | `boolean` | `false` | Whether the field is required |
@@ -132,6 +166,7 @@ The component is already included in your Angular project. Make sure you have th
 | `searchPlaceholder` | `string` | `'Search options...'` | Placeholder text for search input |
 | `minSearchLength` | `number` | `0` | Minimum characters required to start filtering |
 | `panelClass` | `string` | `''` | CSS class for the dropdown panel |
+| `config` | `NxtDropdownConfig` | `{}` | Configuration object (alternative to individual properties) |
 
 ## Output Events
 
@@ -139,13 +174,32 @@ The component is already included in your Angular project. Make sure you have th
 |-------|------|-------------|
 | `selectionChange` | `EventEmitter<any>` | Emitted when selection changes |
 
-## NtxSelectOption Interface
+## Interfaces
+
+### NxtDropdownOption Interface
 
 ```typescript
-interface NtxSelectOption {
+interface NxtDropdownOption {
   value: any;        // The value of the option
   label: string;     // The display text
   disabled?: boolean; // Whether the option is disabled
+}
+```
+
+### NxtDropdownConfig Interface
+
+```typescript
+interface NxtDropdownConfig {
+  options?: NxtDropdownOption[];    // Array of options
+  placeholder?: string;             // Placeholder text
+  disabled?: boolean;               // Disable the component
+  required?: boolean;               // Mark as required
+  multiple?: boolean;               // Enable multiple selection
+  confirmation?: boolean;           // Show confirmation buttons
+  panelClass?: string;              // Additional CSS class
+  searchable?: boolean;             // Enable search functionality
+  searchPlaceholder?: string;       // Search input placeholder
+  minSearchLength?: number;         // Minimum search length
 }
 ```
 
@@ -153,31 +207,53 @@ interface NtxSelectOption {
 
 ```typescript
 import { Component } from '@angular/core';
-import { NtxSelectOption } from './nxt-dropdown/nxt-dropdown.component';
+import { NxtDropdownOption, NxtDropdownConfig } from './nxt-dropdown/nxt-dropdown.component';
 
 @Component({
   selector: 'app-example',
   template: `
+    <!-- Direct properties approach -->
     <nxt-dropdown
       [(ngModel)]="selectedCountry"
       [options]="countries"
       placeholder="Select your country"
       (selectionChange)="onCountryChange($event)">
     </nxt-dropdown>
+
+    <!-- Configuration object approach -->
+    <nxt-dropdown
+      [(ngModel)]="selectedCountries"
+      [config]="dropdownConfig"
+      (selectionChange)="onCountriesChange($event)">
+    </nxt-dropdown>
   `
 })
 export class ExampleComponent {
   selectedCountry: string = '';
+  selectedCountries: string[] = [];
   
-  countries: NtxSelectOption[] = [
+  countries: NxtDropdownOption[] = [
     { value: 'us', label: 'United States' },
     { value: 'uk', label: 'United Kingdom' },
     { value: 'ca', label: 'Canada' },
     { value: 'au', label: 'Australia' }
   ];
 
+  dropdownConfig: NxtDropdownConfig = {
+    options: this.countries,
+    placeholder: 'Select multiple countries',
+    multiple: true,
+    confirmation: true,
+    searchable: true,
+    searchPlaceholder: 'Search countries...'
+  };
+
   onCountryChange(value: string) {
     console.log('Selected country:', value);
+  }
+
+  onCountriesChange(values: string[]) {
+    console.log('Selected countries:', values);
   }
 }
 ```
