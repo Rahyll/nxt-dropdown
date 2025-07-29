@@ -1,0 +1,297 @@
+.ntx-select-container {
+  position: relative;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.required .ntx-select-trigger {
+    border-color: #d32f2f;
+  }
+
+  &.open .ntx-select-trigger {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+}
+
+.ntx-select-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+
+  &:hover:not(.disabled) {
+    border-color: #1976d2;
+  }
+
+  &:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+}
+
+.ntx-select-value {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.ntx-select-placeholder {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.ntx-select-selected {
+  width: 100%;
+}
+
+.ntx-select-single {
+  color: #24292f;
+  font-weight: 500;
+}
+
+.ntx-select-multiple {
+  width: 100%;
+}
+
+.ntx-select-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.ntx-select-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #bbdefb;
+  }
+}
+
+.ntx-select-chip-remove {
+  margin-left: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.ntx-select-summary {
+  color: #24292f;
+  font-weight: 500;
+}
+
+.ntx-select-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #6a737d;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+
+  .open & {
+    transform: rotate(180deg);
+  }
+}
+
+.ntx-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  margin-top: 4px;
+  background-color: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ntx-select-options {
+  padding: 4px 0;
+}
+
+.ntx-select-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  user-select: none;
+
+  &:hover:not(.disabled) {
+    background-color: #f6f8fa;
+  }
+
+  &.selected {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: #6a737d;
+  }
+}
+
+.ntx-select-option-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ntx-select-option-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.ntx-select-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d0d7de;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &.checked {
+    background-color: #1976d2;
+    border-color: #1976d2;
+  }
+}
+
+.ntx-select-option-label {
+  flex: 1;
+  font-weight: 400;
+}
+
+.ntx-select-no-options {
+  padding: 12px;
+  text-align: center;
+  color: #6a737d;
+  font-style: italic;
+}
+
+.ntx-select-error {
+  margin-top: 4px;
+  color: #d32f2f;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .ntx-select-container {
+    font-size: 16px; // Prevent zoom on iOS
+  }
+
+  .ntx-select-trigger {
+    min-height: 44px; // Better touch target
+  }
+
+  .ntx-select-option {
+    min-height: 44px; // Better touch target
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .ntx-select-container {
+    .ntx-select-trigger {
+      background-color: #1f2937;
+      border-color: #374151;
+      color: #f9fafb;
+
+      &:hover:not(.disabled) {
+        border-color: #3b82f6;
+      }
+
+      &:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+    }
+
+    .ntx-select-placeholder {
+      color: #9ca3af;
+    }
+
+    .ntx-select-single,
+    .ntx-select-summary {
+      color: #f9fafb;
+    }
+
+    .ntx-select-dropdown {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+
+    .ntx-select-option {
+      &:hover:not(.disabled) {
+        background-color: #374151;
+      }
+
+      &.selected {
+        background-color: #1e3a8a;
+        color: #3b82f6;
+      }
+
+      &.disabled {
+        color: #6b7280;
+      }
+    }
+
+    .ntx-select-no-options {
+      color: #9ca3af;
+    }
+  }
+} 
