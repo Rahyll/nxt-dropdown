@@ -24,16 +24,7 @@
          </div>
          
          <div class="nxt-dropdown-multiple" *ngIf="currentMultiple">
-           <div class="nxt-dropdown-chips" *ngIf="(currentConfirmation && currentMultiple ? pendingOptions : selectedOptions).length <= 2">
-             <span class="nxt-dropdown-chip" 
-                   *ngFor="let option of (currentConfirmation && currentMultiple ? pendingOptions : selectedOptions)"
-                   [class.removable]="!currentConfirmation"
-                   (click)="!currentConfirmation && removeOption($event, option)">
-               {{ option.label }}
-                                <span class="nxt-dropdown-chip-remove" *ngIf="!currentConfirmation">×</span>
-             </span>
-           </div>
-           <div class="nxt-dropdown-summary" *ngIf="(currentConfirmation && currentMultiple ? pendingOptions : selectedOptions).length > 2">
+           <div class="nxt-dropdown-text">
              {{ currentConfirmation && currentMultiple ? getPendingDisplayText() : getDisplayText() }}
            </div>
          </div>

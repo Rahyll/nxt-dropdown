@@ -76,49 +76,15 @@
   width: 100%;
 }
 
-.nxt-dropdown-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-items: center;
-}
-
-.nxt-dropdown-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  background-color: #e3f2fd;
-  color: #1976d2;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-
-  &.removable {
-    cursor: pointer;
-
-    &:hover {
-      background-color: #bbdefb;
-    }
-  }
-
-  &:not(.removable) {
-    cursor: default;
-    padding-right: 8px; // Remove extra padding when no remove button
-  }
-}
-
-.nxt-dropdown-chip-remove {
-  margin-left: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 1;
-}
-
-.nxt-dropdown-summary {
+.nxt-dropdown-text {
   color: #24292f;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
 
 .nxt-dropdown-arrow {
   display: flex;

@@ -537,7 +537,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       if (this.selectedOptions.length === 1) {
         return this.selectedOptions[0].label;
       }
-      return `${this.selectedOptions.length} items selected`;
+      return this.selectedOptions.map(option => option.label).join(', ');
     }
 
     return this.selectedOptions[0].label;
@@ -552,7 +552,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       if (this.pendingOptions.length === 1) {
         return this.pendingOptions[0].label;
       }
-      return `${this.pendingOptions.length} items selected`;
+      return this.pendingOptions.map(option => option.label).join(', ');
     }
 
     return this.pendingOptions[0].label;
