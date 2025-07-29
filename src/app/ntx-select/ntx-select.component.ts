@@ -27,6 +27,9 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   @Input() multiple: boolean = false;
   @Input() confirmation: boolean = false;
   @Input() panelClass: string = '';
+  @Input() searchable: boolean = false;
+  @Input() searchPlaceholder: string = 'Search options...';
+  @Input() minSearchLength: number = 0;
   @Output() selectionChange = new EventEmitter<any>();
 
   value: any;
@@ -34,6 +37,11 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   isOpen: boolean = false;
   selectedOptions: NtxSelectOption[] = [];
   pendingOptions: NtxSelectOption[] = []; // For confirmation mode
+  
+  // Search functionality
+  searchText: string = '';
+  filteredOptions: NtxSelectOption[] = [];
+  showSearchInput: boolean = false;
 
   // ControlValueAccessor implementation
   private onChange = (value: any) => {};
@@ -44,6 +52,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   ngOnInit() {
     this.isDisabled = this.disabled;
     this.updateSelectedOptions();
+    this.updateFilteredOptions();
     if (this.confirmation && this.multiple) {
       this.pendingOptions = [...this.selectedOptions];
     }
@@ -59,6 +68,11 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   writeValue(value: any): void {
     this.value = value;
     this.updateSelectedOptions();
+    
+    // In confirmation mode, also update pending options to match selected options
+    if (this.confirmation && this.multiple) {
+      this.pendingOptions = [...this.selectedOptions];
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -78,12 +92,62 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {
         this.onTouched();
+        if (this.searchable) {
+          this.showSearchInput = true;
+          // Focus search input after a short delay to ensure it's rendered
+          setTimeout(() => {
+            const searchInput = this.elementRef.nativeElement.querySelector('.ntx-select-search-input');
+            if (searchInput) {
+              searchInput.focus();
+            }
+          }, 100);
+        }
+      } else {
+        this.clearSearch();
       }
     }
   }
 
   closeDropdown(): void {
     this.isOpen = false;
+    this.clearSearch();
+  }
+
+  // Search functionality methods
+  onSearchInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchText = target.value;
+    this.updateFilteredOptions();
+  }
+
+  onSearchKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.closeDropdown();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      // Select first filtered option if available
+      const firstOption = this.filteredOptions.find(opt => !opt.disabled);
+      if (firstOption) {
+        this.selectOption(firstOption);
+      }
+    }
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.showSearchInput = false;
+    this.updateFilteredOptions();
+  }
+
+  updateFilteredOptions(): void {
+    if (!this.searchable || !this.searchText || this.searchText.length < this.minSearchLength) {
+      this.filteredOptions = [...this.options];
+    } else {
+      const searchLower = this.searchText.toLowerCase();
+      this.filteredOptions = this.options.filter(option => 
+        option.label.toLowerCase().includes(searchLower)
+      );
+    }
   }
 
   selectOption(option: NtxSelectOption): void {
@@ -111,7 +175,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   }
 
   private toggleSelectAll(): void {
-    const availableOptions = this.options.filter(option => !option.disabled);
+    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
       this.selectedOptions.some(selected => selected.value === option.value)
     );
@@ -132,7 +196,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   }
 
   private togglePendingSelectAll(): void {
-    const availableOptions = this.options.filter(option => !option.disabled);
+    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
       this.pendingOptions.some(selected => selected.value === option.value)
     );
@@ -159,7 +223,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   isAllSelected(): boolean {
     if (!this.multiple) return false;
     
-    const availableOptions = this.options.filter(option => !option.disabled);
+    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const optionsToCheck = this.confirmation ? this.pendingOptions : this.selectedOptions;
     
     return availableOptions.length > 0 && 
@@ -171,7 +235,7 @@ export class NtxSelectComponent implements ControlValueAccessor, OnInit {
   isPartiallySelected(): boolean {
     if (!this.multiple) return false;
     
-    const availableOptions = this.options.filter(option => !option.disabled);
+    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const optionsToCheck = this.confirmation ? this.pendingOptions : this.selectedOptions;
     const selectedCount = availableOptions.filter(option => 
       optionsToCheck.some(selected => selected.value === option.value)

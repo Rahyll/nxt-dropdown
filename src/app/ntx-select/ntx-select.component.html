@@ -51,10 +51,33 @@
        *ngIf="isOpen"
        [class]="panelClass">
     
+    <!-- Search Input -->
+    <div class="ntx-select-search" *ngIf="searchable && showSearchInput">
+      <div class="ntx-select-search-container">
+        <input type="text"
+               class="ntx-select-search-input"
+               [placeholder]="searchPlaceholder"
+               [value]="searchText"
+               (input)="onSearchInput($event)"
+               (keydown)="onSearchKeyDown($event)"
+               autocomplete="off"
+               spellcheck="false">
+        <button type="button" 
+                class="ntx-select-search-clear"
+                *ngIf="searchText"
+                (click)="clearSearch()"
+                aria-label="Clear search">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <div class="ntx-select-options">
       <!-- Select All Option (only for multiple selection) -->
       <div class="ntx-select-option ntx-select-all-option"
-           *ngIf="multiple && options.length > 0"
+           *ngIf="multiple && filteredOptions.length > 0"
            [class.selected]="isAllSelected()"
            [class.partially-selected]="isPartiallySelected()"
            (click)="selectAll()"
@@ -82,11 +105,11 @@
       </div>
 
       <!-- Divider after Select All -->
-      <div class="ntx-select-divider" *ngIf="multiple && options.length > 0"></div>
+      <div class="ntx-select-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
       
       <!-- Regular Options -->
       <div class="ntx-select-option"
-           *ngFor="let option of options; trackBy: trackByValue"
+           *ngFor="let option of filteredOptions; trackBy: trackByValue"
            [class.selected]="isOptionSelected(option)"
            [class.disabled]="option.disabled"
            (click)="selectOption(option)"
@@ -108,8 +131,13 @@
         </div>
       </div>
       
-      <div class="ntx-select-no-options" *ngIf="options.length === 0">
-        No options available
+      <div class="ntx-select-no-options" *ngIf="filteredOptions.length === 0">
+        <div *ngIf="searchable && searchText && searchText.length >= minSearchLength">
+          No options found for "{{ searchText }}"
+        </div>
+        <div *ngIf="!searchable || !searchText || searchText.length < minSearchLength">
+          No options available
+        </div>
       </div>
     </div>
 

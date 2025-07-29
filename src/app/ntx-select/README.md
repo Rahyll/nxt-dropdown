@@ -14,6 +14,8 @@ A custom Angular select component with Control Value Accessor implementation tha
 - ✅ Disabled options support
 - ✅ Material Design styling
 - ✅ Responsive design
+- ✅ Search functionality with filtering
+- ✅ Confirmation mode for multiple selection
 
 ## Installation
 
@@ -91,6 +93,31 @@ The component is already included in your Angular project. Make sure you have th
 </ntx-select>
 ```
 
+### Search Functionality
+
+```html
+<ntx-select
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  [searchable]="true"
+  searchPlaceholder="Type to search..."
+  [minSearchLength]="2"
+  placeholder="Searchable select">
+</ntx-select>
+```
+
+### Confirmation Mode
+
+```html
+<ntx-select
+  [(ngModel)]="selectedValues"
+  [options]="options"
+  [multiple]="true"
+  [confirmation]="true"
+  placeholder="Select with confirmation">
+</ntx-select>
+```
+
 ## Input Properties
 
 | Property | Type | Default | Description |
@@ -100,6 +127,10 @@ The component is already included in your Angular project. Make sure you have th
 | `disabled` | `boolean` | `false` | Whether the select is disabled |
 | `required` | `boolean` | `false` | Whether the field is required |
 | `multiple` | `boolean` | `false` | Whether multiple selection is allowed |
+| `confirmation` | `boolean` | `false` | Whether to show confirmation buttons for multiple selection |
+| `searchable` | `boolean` | `false` | Whether to enable search functionality |
+| `searchPlaceholder` | `string` | `'Search options...'` | Placeholder text for search input |
+| `minSearchLength` | `number` | `0` | Minimum characters required to start filtering |
 | `panelClass` | `string` | `''` | CSS class for the dropdown panel |
 
 ## Output Events

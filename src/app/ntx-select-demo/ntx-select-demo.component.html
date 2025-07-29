@@ -349,6 +349,72 @@
       </div>
     </div>
 
+    <!-- Search Functionality Demo -->
+    <div class="demo-section">
+      <h3>Search Functionality</h3>
+      <p>Enable search to filter options by typing in the search input.</p>
+      
+      <div class="demo-row">
+        <div class="demo-item">
+          <label>Searchable Single Select</label>
+          <ntx-select 
+            [options]="countryOptions"
+            placeholder="Search for a country..."
+            [searchable]="true"
+            searchPlaceholder="Type to search countries..."
+            [(ngModel)]="searchableSingleValue"
+            (selectionChange)="onSelectionChange($event)">
+          </ntx-select>
+          <div class="demo-value">Selected: {{ searchableSingleValue || 'None' }}</div>
+        </div>
+        
+        <div class="demo-item">
+          <label>Searchable Multiple Select</label>
+          <ntx-select 
+            [options]="categoryOptions"
+            placeholder="Search and select categories..."
+            [multiple]="true"
+            [searchable]="true"
+            searchPlaceholder="Type to search categories..."
+            [(ngModel)]="searchableMultipleValue"
+            (selectionChange)="onSelectionChange($event)">
+          </ntx-select>
+          <div class="demo-value">Selected: {{ searchableMultipleValue?.length ? searchableMultipleValue.join(', ') : 'None' }}</div>
+        </div>
+      </div>
+      
+      <div class="demo-row">
+        <div class="demo-item">
+          <label>Search with Minimum Length</label>
+          <ntx-select 
+            [options]="largeDatasetOptions"
+            placeholder="Search with min 2 characters..."
+            [searchable]="true"
+            [minSearchLength]="2"
+            searchPlaceholder="Type at least 2 characters..."
+            [(ngModel)]="searchMinLengthValue"
+            (selectionChange)="onSelectionChange($event)">
+          </ntx-select>
+          <div class="demo-value">Selected: {{ searchMinLengthValue || 'None' }}</div>
+        </div>
+        
+        <div class="demo-item">
+          <label>Searchable with Confirmation</label>
+          <ntx-select 
+            [options]="searchPerformanceOptions"
+            placeholder="Search and confirm selection..."
+            [multiple]="true"
+            [confirmation]="true"
+            [searchable]="true"
+            searchPlaceholder="Search from 500 options..."
+            [(ngModel)]="searchableConfirmationValue"
+            (selectionChange)="onSelectionChange($event)">
+          </ntx-select>
+          <div class="demo-value">Selected: {{ searchableConfirmationValue?.length ? searchableConfirmationValue.length + ' items' : 'None' }}</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Performance Demos Section -->
     <div class="demo-section">
       <h2>⚡ Performance Demos</h2>

@@ -41,6 +41,12 @@ export class NtxSelectDemoComponent implements OnInit {
   virtualScrollValue: any = null;
   searchPerformanceValue: any[] = [];
 
+  // Search functionality demo values
+  searchableSingleValue: any = null;
+  searchableMultipleValue: any[] = [];
+  searchMinLengthValue: any = null;
+  searchableConfirmationValue: any[] = [];
+
   // Reactive form
   reactiveForm: FormGroup;
 
@@ -160,6 +166,10 @@ export class NtxSelectDemoComponent implements OnInit {
     this.wideValue = null;
     this.virtualScrollValue = null;
     this.searchPerformanceValue = [];
+    this.searchableSingleValue = null;
+    this.searchableMultipleValue = [];
+    this.searchMinLengthValue = null;
+    this.searchableConfirmationValue = [];
   }
 
   fillForm(): void {

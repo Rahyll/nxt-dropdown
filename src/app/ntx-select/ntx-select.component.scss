@@ -154,6 +154,69 @@
   box-sizing: border-box;
 }
 
+// Search functionality styles
+.ntx-select-search {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e1e4e8;
+  background-color: #f8f9fa;
+  border-radius: 6px 6px 0 0;
+}
+
+.ntx-select-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ntx-select-search-input {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+
+  &::placeholder {
+    color: #6a737d;
+  }
+}
+
+.ntx-select-search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6a737d;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e1e4e8;
+    color: #24292f;
+  }
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;
@@ -369,6 +432,35 @@
     .ntx-select-dropdown {
       background-color: #1f2937;
       border-color: #374151;
+    }
+
+    .ntx-select-search {
+      border-bottom-color: #374151;
+      background-color: #111827;
+    }
+
+    .ntx-select-search-input {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #f9fafb;
+
+      &:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+
+    .ntx-select-search-clear {
+      color: #9ca3af;
+
+      &:hover {
+        background-color: #4b5563;
+        color: #f9fafb;
+      }
     }
 
     .ntx-select-option {

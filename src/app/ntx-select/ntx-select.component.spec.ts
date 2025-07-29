@@ -515,4 +515,118 @@ describe('NtxSelectComponent', () => {
       expect(options[0].nativeElement.getAttribute('role')).toBe('option');
     });
   });
+
+  describe('Search Functionality', () => {
+    beforeEach(() => {
+      component.searchable = true;
+      component.ngOnInit();
+    });
+
+    it('should initialize with all options when searchable is true', () => {
+      expect(component.filteredOptions).toEqual(mockOptions);
+    });
+
+    it('should filter options when search text is entered', () => {
+      component.searchText = 'option';
+      component.updateFilteredOptions();
+      
+      expect(component.filteredOptions).toEqual([
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        { value: 'option3', label: 'Option 3' }
+      ]);
+    });
+
+    it('should filter options case-insensitively', () => {
+      component.searchText = 'APPLE';
+      component.updateFilteredOptions();
+      
+      expect(component.filteredOptions).toEqual([
+        { value: 'apple', label: 'Apple' }
+      ]);
+    });
+
+    it('should show all options when search text is cleared', () => {
+      component.searchText = 'option';
+      component.updateFilteredOptions();
+      expect(component.filteredOptions.length).toBe(3);
+      
+      component.searchText = '';
+      component.updateFilteredOptions();
+      expect(component.filteredOptions).toEqual(mockOptions);
+    });
+
+    it('should respect minimum search length', () => {
+      component.minSearchLength = 2;
+      component.searchText = 'a';
+      component.updateFilteredOptions();
+      
+      // Should show all options when search length is less than minimum
+      expect(component.filteredOptions).toEqual(mockOptions);
+      
+      component.searchText = 'ap';
+      component.updateFilteredOptions();
+      
+      // Should filter when search length meets minimum
+      expect(component.filteredOptions).toEqual([
+        { value: 'apple', label: 'Apple' }
+      ]);
+    });
+
+    it('should clear search when dropdown is closed', () => {
+      component.searchText = 'option';
+      component.showSearchInput = true;
+      
+      component.closeDropdown();
+      
+      expect(component.searchText).toBe('');
+      expect(component.showSearchInput).toBe(false);
+    });
+
+    it('should focus search input when dropdown opens with searchable enabled', () => {
+      const focusSpy = spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue({
+        focus: jasmine.createSpy('focus')
+      });
+      
+      component.toggleDropdown();
+      
+      expect(component.showSearchInput).toBe(true);
+    });
+  });
+
+  describe('Search Input Events', () => {
+    beforeEach(() => {
+      component.searchable = true;
+      component.ngOnInit();
+    });
+
+    it('should update search text on input event', () => {
+      const mockEvent = { target: { value: 'test search' } } as any;
+      
+      component.onSearchInput(mockEvent);
+      
+      expect(component.searchText).toBe('test search');
+    });
+
+    it('should close dropdown on escape key', () => {
+      const mockEvent = { key: 'Escape' } as KeyboardEvent;
+      spyOn(component, 'closeDropdown');
+      
+      component.onSearchKeyDown(mockEvent);
+      
+      expect(component.closeDropdown).toHaveBeenCalled();
+    });
+
+    it('should select first available option on enter key', () => {
+      const mockEvent = { key: 'Enter', preventDefault: jasmine.createSpy('preventDefault') } as any;
+      component.searchText = 'option';
+      component.updateFilteredOptions();
+      spyOn(component, 'selectOption');
+      
+      component.onSearchKeyDown(mockEvent);
+      
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(component.selectOption).toHaveBeenCalledWith(mockOptions[0]);
+    });
+  });
 }); 
