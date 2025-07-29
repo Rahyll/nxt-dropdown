@@ -1,0 +1,38 @@
+p {
+  font-family: Lato;
+}
+
+$bp_xs: 600px;
+$bp_sm: 960px;
+$bp_md: 1280px;
+$bp_lg: 1920px;
+$bp_xl: 3200px;
+$bp_xxl: 5760px;
+
+@mixin bp_sm {
+  @media screen and (min-width: #{$bp_sm}) and (max-width: #{$bp_md - 1px}) {
+    @content;
+  }
+}
+
+.alpha {
+  background-color: aqua;
+  @include bp_sm {
+    font: {
+      size: 28px;
+    }
+  }
+}
+
+.container {
+  > div {
+    height: 40px;
+  }
+}
+
+a.my-item-text {
+  span.mdc-button__label {
+    background-color: rgb(255, 72, 0);
+    font-weight: 700;
+  }
+}
