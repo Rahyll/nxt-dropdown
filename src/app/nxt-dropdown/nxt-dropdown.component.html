@@ -4,7 +4,14 @@
      [class.required]="currentRequired"
      [class.multiple]="currentMultiple">
   
+  <!-- Custom Trigger (if provided) -->
+  <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
+    <ng-content select="nxt-dropdown-trigger"></ng-content>
+  </div>
+  
+  <!-- Default Trigger (if no custom trigger provided) -->
   <div class="nxt-dropdown-trigger" 
+       *ngIf="!hasCustomTrigger"
        (click)="toggleDropdown()"
        (keydown)="onKeyDown($event)"
        tabindex="0"
@@ -13,23 +20,23 @@
        [attr.aria-haspopup]="true"
        [attr.aria-label]="currentPlaceholder">
     
-         <div class="nxt-dropdown-value">
-       <div class="nxt-dropdown-placeholder" *ngIf="(currentConfirmation && currentMultiple ? pendingOptions : selectedOptions).length === 0">
-         {{ currentPlaceholder }}
-       </div>
-       
-       <div class="nxt-dropdown-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
-         <div class="nxt-dropdown-single" *ngIf="!multiple">
-           {{ getDisplayText() }}
-         </div>
-         
-         <div class="nxt-dropdown-multiple" *ngIf="currentMultiple">
-           <div class="nxt-dropdown-text">
-             {{ currentConfirmation && currentMultiple ? getPendingDisplayText() : getDisplayText() }}
-           </div>
-         </div>
-       </div>
-     </div>
+    <div class="nxt-dropdown-value">
+      <div class="nxt-dropdown-placeholder" *ngIf="(currentConfirmation && currentMultiple ? pendingOptions : selectedOptions).length === 0">
+        {{ currentPlaceholder }}
+      </div>
+      
+      <div class="nxt-dropdown-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
+        <div class="nxt-dropdown-single" *ngIf="!multiple">
+          {{ getDisplayText() }}
+        </div>
+        
+        <div class="nxt-dropdown-multiple" *ngIf="currentMultiple">
+          <div class="nxt-dropdown-text">
+            {{ currentConfirmation && currentMultiple ? getPendingDisplayText() : getDisplayText() }}
+          </div>
+        </div>
+      </div>
+    </div>
     
     <div class="nxt-dropdown-arrow">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

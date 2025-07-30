@@ -20,6 +20,18 @@
     border-color: #1976d2;
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
   }
+
+  // Custom trigger styling
+  nxt-dropdown-trigger {
+    display: block;
+    width: 100%;
+  }
+
+  .nxt-dropdown-custom-trigger-wrapper {
+    position: relative;
+    width: 100%;
+    display: block;
+  }
 }
 
 .nxt-dropdown-trigger {

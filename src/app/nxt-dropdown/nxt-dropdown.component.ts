@@ -1,7 +1,8 @@
-import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NxtOptionComponent } from './nxt-option.component';
 import { NxtOptionGroupComponent } from './nxt-option-group.component';
+import { NxtDropdownTriggerComponent } from './nxt-dropdown-trigger.component';
 
 export interface NxtDropdownOption {
   value: any;
@@ -63,6 +64,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   // Content projection support
   @ContentChildren(NxtOptionComponent) optionComponents?: QueryList<NxtOptionComponent>;
   @ContentChildren(NxtOptionGroupComponent) optionGroupComponents?: QueryList<NxtOptionGroupComponent>;
+  @ContentChild(NxtDropdownTriggerComponent) customTrigger?: NxtDropdownTriggerComponent;
 
   // Internal properties that will be used by the component
   private _options: NxtDropdownOption[] = [];
@@ -119,6 +121,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
         this.processContentProjectedOptions();
       });
     }
+
+    // Setup custom trigger if provided
+    this.setupCustomTrigger();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -164,6 +169,38 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       // Update the options with projected content
       this._options = projectedOptions;
       this.updateFilteredOptions();
+    }
+  }
+
+  private setupCustomTrigger(): void {
+    if (this.customTrigger) {
+      console.log('[NXT Dropdown] Setting up custom trigger');
+      
+      // Subscribe to trigger events
+      this.customTrigger.triggerClick.subscribe((event: Event) => {
+        console.log('[NXT Dropdown] Custom trigger clicked, toggling dropdown');
+        this.toggleDropdown();
+      });
+
+      this.customTrigger.keyDown.subscribe((event: KeyboardEvent) => {
+        console.log('[NXT Dropdown] Custom trigger keydown');
+        this.onKeyDown(event);
+      });
+
+      // Update trigger properties
+      this.updateTriggerProperties();
+    } else {
+      console.log('[NXT Dropdown] No custom trigger found');
+    }
+  }
+
+  private updateTriggerProperties(): void {
+    if (this.customTrigger) {
+      this.customTrigger.disabled = this.isDisabled;
+      this.customTrigger.isOpen = this.isOpen;
+      this.customTrigger.required = this.currentRequired;
+      this.customTrigger.multiple = this.currentMultiple;
+      this.customTrigger.placeholder = this.currentPlaceholder;
     }
   }
 
@@ -352,6 +389,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     return this._minSearchLength;
   }
 
+  get hasCustomTrigger(): boolean {
+    return !!this.customTrigger;
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
@@ -379,11 +420,16 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
+    this.updateTriggerProperties();
   }
 
   toggleDropdown(): void {
+    console.log('[NXT Dropdown] toggleDropdown called, isDisabled:', this.isDisabled);
     if (!this.isDisabled) {
       this.isOpen = !this.isOpen;
+      console.log('[NXT Dropdown] Dropdown isOpen:', this.isOpen);
+      this.updateTriggerProperties();
+      
       if (this.isOpen) {
         this.onTouched();
         if (this._searchable) {
@@ -404,6 +450,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   closeDropdown(): void {
     this.isOpen = false;
+    this.updateTriggerProperties();
     this.clearSearch();
   }
 

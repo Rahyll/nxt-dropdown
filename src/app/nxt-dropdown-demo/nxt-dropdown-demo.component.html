@@ -415,6 +415,129 @@
       </div>
     </div>
 
+    <!-- Custom Trigger Demo Section -->
+    <div class="demo-section">
+      <h2>🎛️ Custom Trigger (mat-select-trigger style)</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Basic Custom Trigger</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customTriggerValue"
+              [options]="options"
+              placeholder="Select an option">
+              <nxt-dropdown-trigger>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #1976d2;">🎯</span>
+                  <span>{{ customTriggerValue ? 'Selected: ' + customTriggerValue : 'Click to select' }}</span>
+                </div>
+              </nxt-dropdown-trigger>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customTriggerValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom trigger with icon and dynamic text</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Custom Trigger with Status</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customTriggerStatusValue"
+              [options]="options"
+              placeholder="Select an option">
+              <nxt-dropdown-trigger>
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #4caf50;"></div>
+                    <span>{{ customTriggerStatusValue ? 'Active: ' + customTriggerStatusValue : 'Select status' }}</span>
+                  </div>
+                  <span style="font-size: 12px; color: #666;">Status</span>
+                </div>
+              </nxt-dropdown-trigger>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customTriggerStatusValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom trigger with status indicator</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Custom Trigger with Multiple</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customTriggerStatusValue"
+              [multiple]="true"
+              placeholder="Select an option">
+              <nxt-dropdown-trigger>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span>{{customTriggerStatusValue?.[0] || ''}}</span>
+                  <span *ngIf="(customTriggerStatusValue?.length || 0) > 1">
+                    (+{{(customTriggerStatusValue?.length || 0) - 1}} {{customTriggerStatusValue?.length === 2 ? 'other' : 'others'}})
+                  </span>
+                </div>
+              </nxt-dropdown-trigger>
+              <nxt-option *ngFor="let option of options" [value]="option.value">{{option.label}}</nxt-option>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customTriggerStatusValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom trigger with status indicator</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Custom Trigger without Arrow</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customTriggerNoArrowValue"
+              [options]="options"
+              placeholder="Select an option">
+              <nxt-dropdown-trigger [showArrow]="false">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: #ff9800;">⭐</span>
+                  <span>{{ customTriggerNoArrowValue ? 'Rating: ' + customTriggerNoArrowValue : 'Select rating' }}</span>
+                </div>
+              </nxt-dropdown-trigger>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customTriggerNoArrowValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom trigger without dropdown arrow</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Rich Custom Trigger</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customTriggerRichValue"
+              [options]="countryOptions"
+              placeholder="Select your country">
+              <nxt-dropdown-trigger>
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(45deg, #1976d2, #42a5f5); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">
+                    {{ customTriggerRichValue ? customTriggerRichValue.charAt(0).toUpperCase() : '?' }}
+                  </div>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 500;">{{ customTriggerRichValue ? 'Country Selected' : 'Select Country' }}</div>
+                    <div style="font-size: 12px; color: #666;">{{ customTriggerRichValue || 'Click to choose' }}</div>
+                  </div>
+                </div>
+              </nxt-dropdown-trigger>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customTriggerRichValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Rich custom trigger with avatar and description</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Content Projection Demo Section -->
     <div class="demo-section">
       <h2>🎯 Content Projection (mat-select style)</h2>
@@ -935,6 +1058,26 @@ export class NxtOptionGroupComponent {{ '{' }}
         </div>
 
         <div class="code-block">
+          <h4>NxtDropdownTriggerComponent</h4>
+          <pre><code>&#64;Component({{ '{' }}
+  selector: 'nxt-dropdown-trigger',
+  template: '&lt;ng-content&gt;&lt;/ng-content&gt;'
+{{ '}' }})
+export class NxtDropdownTriggerComponent {{ '{' }}
+  &#64;Input() disabled: boolean;        // Whether the trigger is disabled
+  &#64;Input() isOpen: boolean;          // Whether the dropdown is open
+  &#64;Input() required: boolean;        // Whether the field is required
+  &#64;Input() multiple: boolean;        // Whether multiple selection is enabled
+  &#64;Input() placeholder: string;      // Placeholder text
+  &#64;Input() showArrow: boolean;       // Whether to show the dropdown arrow
+  
+  &#64;Output() triggerClick: EventEmitter&lt;Event&gt;;
+  &#64;Output() keyDown: EventEmitter&lt;KeyboardEvent&gt;;
+  // Content is projected via ng-content
+{{ '}' }}</code></pre>
+        </div>
+
+        <div class="code-block">
           <h4>Example Options Array</h4>
           <pre><code>const options: NxtDropdownOption[] = [
   {{ '{' }} value: 'option1', label: 'Option 1' {{ '}' }},
@@ -998,6 +1141,57 @@ export class NxtOptionGroupComponent {{ '{' }}
     &lt;span style="font-weight: bold;"&gt;🍌 Banana&lt;/span&gt;
     &lt;br&gt;&lt;small&gt;Yellow and sweet&lt;/small&gt;
   &lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+        </div>
+
+        <h4>Custom Trigger (mat-select-trigger style)</h4>
+        
+        <div class="example-grid">
+          <div class="example-card">
+            <h4>Basic Custom Trigger</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-dropdown-trigger&gt;
+    &lt;div style="display: flex; align-items: center; gap: 8px;"&gt;
+      &lt;span style="color: #1976d2;"&gt;🎯&lt;/span&gt;
+      &lt;span&gt;{{ selectedValue ? 'Selected: ' + selectedValue : 'Click to select' }}&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/nxt-dropdown-trigger&gt;
+  &lt;nxt-option value="option1"&gt;Option 1&lt;/nxt-option&gt;
+  &lt;nxt-option value="option2"&gt;Option 2&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Custom Trigger without Arrow</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-dropdown-trigger [showArrow]="false"&gt;
+    &lt;div style="display: flex; align-items: center; gap: 8px;"&gt;
+      &lt;span style="color: #ff9800;"&gt;⭐&lt;/span&gt;
+      &lt;span&gt;{{ selectedValue ? 'Rating: ' + selectedValue : 'Select rating' }}&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/nxt-dropdown-trigger&gt;
+  &lt;nxt-option value="1"&gt;1 Star&lt;/nxt-option&gt;
+  &lt;nxt-option value="2"&gt;2 Stars&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Rich Custom Trigger</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-dropdown-trigger&gt;
+    &lt;div style="display: flex; align-items: center; gap: 12px; width: 100%;"&gt;
+      &lt;div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(45deg, #1976d2, #42a5f5); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;"&gt;
+        {{ selectedValue ? selectedValue.charAt(0).toUpperCase() : '?' }}
+      &lt;/div&gt;
+      &lt;div style="flex: 1;"&gt;
+        &lt;div style="font-weight: 500;"&gt;{{ selectedValue ? 'Country Selected' : 'Select Country' }}&lt;/div&gt;
+        &lt;div style="font-size: 12px; color: #666;"&gt;{{ selectedValue || 'Click to choose' }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/nxt-dropdown-trigger&gt;
+  &lt;nxt-option value="us"&gt;United States&lt;/nxt-option&gt;
+  &lt;nxt-option value="uk"&gt;United Kingdom&lt;/nxt-option&gt;
 &lt;/nxt-dropdown&gt;</code></pre>
           </div>
         </div>

@@ -59,6 +59,12 @@ export class NxtDropdownDemoComponent implements OnInit {
   contentProjectionGroupValue: any = null;
   contentProjectionSearchValue: any[] = [];
 
+  // Custom trigger demo values
+  customTriggerValue: any = null;
+  customTriggerStatusValue: any = null;
+  customTriggerNoArrowValue: any = null;
+  customTriggerRichValue: any = null;
+
   // Reactive form
   reactiveForm: FormGroup;
 
