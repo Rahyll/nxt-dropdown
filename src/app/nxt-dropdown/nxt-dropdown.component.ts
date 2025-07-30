@@ -148,9 +148,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.optionComponents.forEach(optionComp => {
         projectedOptions.push({
           value: optionComp.value,
-          label: optionComp.label,
-          disabled: optionComp.disabled,
-          description: optionComp.description
+          label: optionComp.option.label,
+          disabled: optionComp.disabled
         });
       });
       

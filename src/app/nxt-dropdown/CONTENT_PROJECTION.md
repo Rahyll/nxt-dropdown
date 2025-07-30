@@ -10,20 +10,18 @@ Content projection provides a more declarative way to define dropdown options, m
 
 ### NxtOptionComponent
 
-The `nxt-option` component represents a single option in the dropdown.
+The `nxt-option` component represents a single option in the dropdown. It uses content projection to allow flexible content inside the option tags.
 
 ```typescript
 @Component({
   selector: 'nxt-option',
-  // ...
+  template: '<ng-content></ng-content>'
 })
 export class NxtOptionComponent {
   @Input() value: any;           // The value of the option
-  @Input() label: string;        // Display text for the option
   @Input() disabled: boolean;    // Whether the option is disabled
   @Input() group?: string;       // Group label for grouped options
-  @Input() icon?: string;        // Icon class or URL
-  @Input() description?: string; // Additional description text
+  // Content is projected via ng-content
 }
 ```
 
@@ -47,10 +45,10 @@ export class NxtOptionGroupComponent {
 
 ```html
 <nxt-dropdown [(ngModel)]="selectedValue" placeholder="Select an option">
-  <nxt-option value="option1" label="Option 1"></nxt-option>
-  <nxt-option value="option2" label="Option 2"></nxt-option>
-  <nxt-option value="option3" label="Option 3" [disabled]="true"></nxt-option>
-  <nxt-option value="option4" label="Option 4"></nxt-option>
+  <nxt-option value="option1">Option 1</nxt-option>
+  <nxt-option value="option2">Option 2</nxt-option>
+  <nxt-option value="option3" [disabled]="true">Option 3 (Disabled)</nxt-option>
+  <nxt-option value="option4">Option 4</nxt-option>
 </nxt-dropdown>
 ```
 
@@ -58,10 +56,22 @@ export class NxtOptionGroupComponent {
 
 ```html
 <nxt-dropdown [(ngModel)]="selectedValues" [multiple]="true" placeholder="Select multiple options">
-  <nxt-option value="fruit1" label="Apple" description="Red and delicious"></nxt-option>
-  <nxt-option value="fruit2" label="Banana" description="Yellow and sweet"></nxt-option>
-  <nxt-option value="fruit3" label="Orange" description="Citrus fruit"></nxt-option>
-  <nxt-option value="fruit4" label="Grape" description="Small and purple"></nxt-option>
+  <nxt-option value="fruit1">
+    <span style="font-weight: bold;">🍎 Apple</span>
+    <br><small style="color: #666;">Red and delicious</small>
+  </nxt-option>
+  <nxt-option value="fruit2">
+    <span style="font-weight: bold;">🍌 Banana</span>
+    <br><small style="color: #666;">Yellow and sweet</small>
+  </nxt-option>
+  <nxt-option value="fruit3">
+    <span style="font-weight: bold;">🍊 Orange</span>
+    <br><small style="color: #666;">Citrus fruit</small>
+  </nxt-option>
+  <nxt-option value="fruit4">
+    <span style="font-weight: bold;">🍇 Grape</span>
+    <br><small style="color: #666;">Small and purple</small>
+  </nxt-option>
 </nxt-dropdown>
 ```
 
@@ -70,14 +80,14 @@ export class NxtOptionGroupComponent {
 ```html
 <nxt-dropdown [(ngModel)]="selectedValue" placeholder="Select from grouped options">
   <nxt-option-group label="Fruits">
-    <nxt-option value="apple" label="Apple"></nxt-option>
-    <nxt-option value="banana" label="Banana"></nxt-option>
-    <nxt-option value="orange" label="Orange"></nxt-option>
+    <nxt-option value="apple">🍎 Apple</nxt-option>
+    <nxt-option value="banana">🍌 Banana</nxt-option>
+    <nxt-option value="orange">🍊 Orange</nxt-option>
   </nxt-option-group>
   <nxt-option-group label="Vegetables">
-    <nxt-option value="carrot" label="Carrot"></nxt-option>
-    <nxt-option value="broccoli" label="Broccoli"></nxt-option>
-    <nxt-option value="spinach" label="Spinach"></nxt-option>
+    <nxt-option value="carrot">🥕 Carrot</nxt-option>
+    <nxt-option value="broccoli">🥦 Broccoli</nxt-option>
+    <nxt-option value="spinach">🥬 Spinach</nxt-option>
   </nxt-option-group>
 </nxt-dropdown>
 ```
@@ -90,16 +100,24 @@ export class NxtOptionGroupComponent {
               [multiple]="true" 
               placeholder="Search and select from groups">
   <nxt-option-group label="Programming Languages">
-    <nxt-option value="js" label="JavaScript" description="Web development"></nxt-option>
-    <nxt-option value="ts" label="TypeScript" description="Typed JavaScript"></nxt-option>
-    <nxt-option value="py" label="Python" description="General purpose"></nxt-option>
-    <nxt-option value="java" label="Java" description="Enterprise development"></nxt-option>
-  </nxt-option-group>
-  <nxt-option-group label="Frameworks">
-    <nxt-option value="angular" label="Angular" description="Google's framework"></nxt-option>
-    <nxt-option value="react" label="React" description="Facebook's library"></nxt-option>
-    <nxt-option value="vue" label="Vue.js" description="Progressive framework"></nxt-option>
-    <nxt-option value="svelte" label="Svelte" description="Compile-time framework"></nxt-option>
+    <nxt-option value="js">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="color: #f7df1e;">⚡</span>
+        <div>
+          <div style="font-weight: bold;">JavaScript</div>
+          <div style="font-size: 0.8em; color: #666;">Web development</div>
+        </div>
+      </div>
+    </nxt-option>
+    <nxt-option value="ts">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="color: #3178c6;">🔷</span>
+        <div>
+          <div style="font-weight: bold;">TypeScript</div>
+          <div style="font-size: 0.8em; color: #666;">Typed JavaScript</div>
+        </div>
+      </div>
+    </nxt-option>
   </nxt-option-group>
 </nxt-dropdown>
 ```
@@ -111,20 +129,32 @@ export class NxtOptionGroupComponent {
               [multiple]="true" 
               [confirmation]="true" 
               placeholder="Select with confirmation">
-  <nxt-option value="item1" label="Item 1" description="First item"></nxt-option>
-  <nxt-option value="item2" label="Item 2" description="Second item"></nxt-option>
-  <nxt-option value="item3" label="Item 3" description="Third item"></nxt-option>
+  <nxt-option value="item1">
+    <span style="font-weight: bold;">📦 Item 1</span>
+    <br><small style="color: #666;">First item</small>
+  </nxt-option>
+  <nxt-option value="item2">
+    <span style="font-weight: bold;">📦 Item 2</span>
+    <br><small style="color: #666;">Second item</small>
+  </nxt-option>
+  <nxt-option value="item3">
+    <span style="font-weight: bold;">📦 Item 3</span>
+    <br><small style="color: #666;">Third item</small>
+  </nxt-option>
 </nxt-dropdown>
 ```
 
 ## Features
 
-### Description Support
+### Rich Content Support
 
-Options can include descriptions that provide additional context:
+Options can include any HTML content for rich displays:
 
 ```html
-<nxt-option value="js" label="JavaScript" description="Web development language"></nxt-option>
+<nxt-option value="js">
+  <span style="color: #f7df1e;">⚡</span> JavaScript
+  <br><small style="color: #666;">Web development language</small>
+</nxt-option>
 ```
 
 ### Disabled Options
@@ -141,10 +171,9 @@ You can dynamically generate options using `*ngFor`:
 
 ```html
 <nxt-dropdown [(ngModel)]="selectedValue">
-  <nxt-option *ngFor="let item of items" 
-               [value]="item.value" 
-               [label]="item.label"
-               [description]="item.description">
+  <nxt-option *ngFor="let item of items" [value]="item.value">
+    <span style="font-weight: bold;">{{ item.label }}</span>
+    <br><small style="color: #666;">{{ item.description }}</small>
   </nxt-option>
 </nxt-dropdown>
 ```
@@ -154,8 +183,8 @@ You can dynamically generate options using `*ngFor`:
 ### Content Projection (New)
 ```html
 <nxt-dropdown [(ngModel)]="selectedValue">
-  <nxt-option value="option1" label="Option 1"></nxt-option>
-  <nxt-option value="option2" label="Option 2"></nxt-option>
+  <nxt-option value="option1">Option 1</nxt-option>
+  <nxt-option value="option2">Option 2</nxt-option>
 </nxt-dropdown>
 ```
 
