@@ -71,6 +71,10 @@ export class NxtDropdownDemoComponent implements OnInit {
   customTriggerNoArrowValue: any = null;
   customTriggerRichValue: any = null;
 
+  // Custom confirmation buttons demo values
+  customConfirmationValue: any[] = [];
+  customConfirmationWithIconsValue: any[] = [];
+
   // Reactive form
   reactiveForm: FormGroup;
 

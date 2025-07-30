@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NxtOptionComponent } from './nxt-option.component';
 import { NxtOptionGroupComponent } from './nxt-option-group.component';
 import { NxtDropdownTriggerComponent } from './nxt-dropdown-trigger.component';
@@ -27,6 +28,16 @@ export interface NxtDropdownConfig {
   showDescriptions?: boolean;
   showGroups?: boolean;
   iconType?: 'caret' | 'arrow' | 'sharp-caret';
+  confirmationButtons?: {
+    apply?: {
+      text?: string;
+      icon?: string;
+    };
+    cancel?: {
+      text?: string;
+      icon?: string;
+    };
+  };
 }
 
 @Component({
@@ -54,6 +65,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() searchPlaceholder: string = 'Search options...';
   @Input() minSearchLength: number = 0;
   @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
+  
+  // Confirmation button customization
+  @Input() applyButtonText: string = 'Apply';
+  @Input() applyButtonIcon: string = '';
+  @Input() cancelButtonText: string = 'Cancel';
+  @Input() cancelButtonIcon: string = '';
 
   // Configuration object input (new way)
   @Input() config: NxtDropdownConfig = {};
@@ -80,6 +97,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   private _searchPlaceholder: string = 'Search options...';
   private _minSearchLength: number = 0;
   private _iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
+  
+  // Confirmation button customization
+  private _applyButtonText: string = 'Apply';
+  private _applyButtonIcon: string = '';
+  private _cancelButtonText: string = 'Cancel';
+  private _cancelButtonIcon: string = '';
 
   value: any;
   isDisabled: boolean = false;
@@ -96,7 +119,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   private onChange = (value: any) => {};
   private onTouched = () => {};
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(
+    private elementRef: ElementRef,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit() {
     this.updateConfiguration();
@@ -233,6 +259,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this._searchPlaceholder = this.config.searchPlaceholder || this.searchPlaceholder || 'Search options...';
       this._minSearchLength = this.config.minSearchLength !== undefined ? this.config.minSearchLength : (this.minSearchLength || 0);
       this._iconType = this.config.iconType || this.iconType || 'caret';
+      
+      // Confirmation button configuration
+      this._applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
+      this._applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
+      this._cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
+      this._cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
     } else {
       // In non-strict mode, direct inputs override config object
       this._options = this.options || this.config.options || [];
@@ -254,6 +286,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this._searchPlaceholder = this.searchPlaceholder !== 'Search options...' ? this.searchPlaceholder : (this.config.searchPlaceholder || 'Search options...');
       this._minSearchLength = this.minSearchLength !== undefined ? this.minSearchLength : (this.config.minSearchLength || 0);
       this._iconType = this.iconType !== 'caret' ? this.iconType : (this.config.iconType || 'caret');
+      
+      // Confirmation button configuration (non-strict mode)
+      this._applyButtonText = this.applyButtonText !== 'Apply' ? this.applyButtonText : (this.config.confirmationButtons?.apply?.text || 'Apply');
+      this._applyButtonIcon = this.applyButtonIcon !== '' ? this.applyButtonIcon : (this.config.confirmationButtons?.apply?.icon || '');
+      this._cancelButtonText = this.cancelButtonText !== 'Cancel' ? this.cancelButtonText : (this.config.confirmationButtons?.cancel?.text || 'Cancel');
+      this._cancelButtonIcon = this.cancelButtonIcon !== '' ? this.cancelButtonIcon : (this.config.confirmationButtons?.cancel?.icon || '');
     }
     
     // Debug logging for final options
@@ -399,6 +437,22 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   get currentIconType(): 'caret' | 'arrow' | 'sharp-caret' {
     return this._iconType;
+  }
+
+  get currentApplyButtonText(): string {
+    return this._applyButtonText;
+  }
+
+  get currentApplyButtonIcon(): string {
+    return this._applyButtonIcon;
+  }
+
+  get currentCancelButtonText(): string {
+    return this._cancelButtonText;
+  }
+
+  get currentCancelButtonIcon(): string {
+    return this._cancelButtonIcon;
   }
 
   get hasCustomTrigger(): boolean {
@@ -747,5 +801,23 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Reset pending options to match current selected options
     this.pendingOptions = [...this.selectedOptions];
     this.closeDropdown();
+  }
+
+  /**
+   * Sanitizes and returns the icon HTML for safe rendering
+   * Supports both string icons (emoji, unicode) and HTML elements (font icons)
+   */
+  getSanitizedIcon(icon: string): SafeHtml {
+    if (!icon) {
+      return '';
+    }
+    
+    // Check if the icon contains HTML tags (font icon)
+    if (icon.includes('<') && icon.includes('>')) {
+      return this.sanitizer.bypassSecurityTrustHtml(icon);
+    }
+    
+    // For regular string icons (emoji, unicode), return as is
+    return icon;
   }
 } 

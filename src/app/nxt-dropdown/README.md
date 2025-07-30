@@ -152,6 +152,79 @@ const dropdownConfig: NxtDropdownConfig = {
 </nxt-dropdown>
 ```
 
+### Custom Confirmation Buttons
+
+When `confirmation` is true, you can customize the button text and icons. The component supports multiple icon types:
+
+#### **Emoji/Unicode Icons:**
+```html
+<nxt-dropdown
+  [(ngModel)]="selectedValues"
+  [options]="options"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Save Selection"
+  applyButtonIcon="💾"
+  cancelButtonText="Discard Changes"
+  cancelButtonIcon="🗑️"
+  placeholder="Select with custom buttons">
+</nxt-dropdown>
+```
+
+#### **Font Awesome Icons:**
+```html
+<nxt-dropdown
+  [(ngModel)]="selectedValues"
+  [options]="options"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Save"
+  applyButtonIcon="<i class='fas fa-check'></i>"
+  cancelButtonText="Cancel"
+  cancelButtonIcon="<i class='fas fa-times'></i>"
+  placeholder="Select with font icons">
+</nxt-dropdown>
+```
+
+#### **Material Icons:**
+```html
+<nxt-dropdown
+  [(ngModel)]="selectedValues"
+  [options]="options"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Confirm"
+  applyButtonIcon="<span class='material-icons'>check</span>"
+  cancelButtonText="Cancel"
+  cancelButtonIcon="<span class='material-icons'>close</span>"
+  placeholder="Select with Material icons">
+</nxt-dropdown>
+```
+
+**Note:** When using HTML elements for icons, the component automatically sanitizes the content to prevent XSS attacks. Only trusted HTML content should be used.
+
+**Icon Dependencies:** 
+- **Material Icons**: Already included in this project
+- **Font Awesome**: Add to your `index.html`: `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">`
+- **Other Icon Libraries**: Ensure the respective CSS is loaded in your project
+
+You can also use the configuration object approach:
+
+```html
+<nxt-dropdown
+  [(ngModel)]="selectedValues"
+  [config]="{
+    options: options,
+    multiple: true,
+    confirmation: true,
+    confirmationButtons: {
+      apply: { text: 'Done', icon: '🎯' },
+      cancel: { text: 'Reset', icon: '🔄' }
+    }
+  }">
+</nxt-dropdown>
+```
+
 ### Icon Types
 
 The component supports three different icon types for the dropdown arrow:
@@ -193,6 +266,10 @@ The component supports three different icon types for the dropdown arrow:
 | `searchPlaceholder` | `string` | `'Search options...'` | Placeholder text for search input |
 | `minSearchLength` | `number` | `0` | Minimum characters required to start filtering |
 | `iconType` | `'caret' \| 'arrow' \| 'sharp-caret'` | `'caret'` | Type of dropdown icon |
+| `applyButtonText` | `string` | `'Apply'` | Custom text for the apply button in confirmation mode |
+| `applyButtonIcon` | `string` | `''` | Custom icon for the apply button (emoji, unicode, or HTML elements like Font Awesome, Material Icons) |
+| `cancelButtonText` | `string` | `'Cancel'` | Custom text for the cancel button in confirmation mode |
+| `cancelButtonIcon` | `string` | `''` | Custom icon for the cancel button (emoji, unicode, or HTML elements like Font Awesome, Material Icons) |
 | `panelClass` | `string` | `''` | CSS class for the dropdown panel |
 | `config` | `NxtDropdownConfig` | `{}` | Configuration object (alternative to individual properties) |
 
@@ -229,6 +306,16 @@ interface NxtDropdownConfig {
   searchPlaceholder?: string;       // Search input placeholder
   minSearchLength?: number;         // Minimum search length
   iconType?: 'caret' | 'arrow' | 'sharp-caret'; // Type of dropdown icon
+  confirmationButtons?: {
+    apply?: {
+      text?: string;
+      icon?: string;
+    };
+    cancel?: {
+      text?: string;
+      icon?: string;
+    };
+  };
 }
 ```
 

@@ -162,12 +162,14 @@
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
                 (click)="cancelSelection()">
-          Cancel
+          <span *ngIf="currentCancelButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(currentCancelButtonIcon)"></span>
+          {{ currentCancelButtonText }}
         </button>
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-apply"
                 (click)="applySelection()">
-          Apply
+          <span *ngIf="currentApplyButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(currentApplyButtonIcon)"></span>
+          {{ currentApplyButtonText }}
         </button>
       </div>
     </div>

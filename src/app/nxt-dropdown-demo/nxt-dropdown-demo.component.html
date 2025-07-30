@@ -67,6 +67,70 @@
         </div>
 
         <div class="demo-card">
+          <h3>Custom Confirmation Buttons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customConfirmationValue"
+              [options]="options"
+              [multiple]="true"
+              [confirmation]="true"
+              applyButtonText="Save Selection"
+              cancelButtonText="Discard Changes"
+              placeholder="Select with custom button text"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customConfirmationValue.length }} items</p>
+          <div class="code-example">
+            <small>Custom button text: "Save Selection" and "Discard Changes"</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Confirmation with Icons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customConfirmationWithIconsValue"
+              [options]="options"
+              [multiple]="true"
+              [confirmation]="true"
+              applyButtonText="Confirm"
+              applyButtonIcon="✅"
+              cancelButtonText="Cancel"
+              cancelButtonIcon="❌"
+              placeholder="Select with icon buttons"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customConfirmationWithIconsValue.length }} items</p>
+          <div class="code-example">
+            <small>Buttons with emoji icons: ✅ and ❌</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Confirmation with Font Icons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customConfirmationWithIconsValue"
+              [options]="options"
+              [multiple]="true"
+              [confirmation]="true"
+              applyButtonText="Save"
+              applyButtonIcon="<span class='material-icons'>check</span>"
+              cancelButtonText="Cancel"
+              cancelButtonIcon="<span class='material-icons'>close</span>"
+              placeholder="Select with font icons"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customConfirmationWithIconsValue.length }} items</p>
+          <div class="code-example">
+            <small>Buttons with Material Icons: <span class="material-icons">check</span> and <span class="material-icons">close</span></small>
+          </div>
+        </div>
+
+        <div class="demo-card">
           <h3>Required Field</h3>
           <div class="select-wrapper">
             <nxt-dropdown
@@ -854,6 +918,103 @@
         </div>
 
         <div class="demo-card">
+          <h3>Config with Custom Buttons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMultipleValue"
+              [config]="{
+                options: options,
+                multiple: true,
+                confirmation: true,
+                placeholder: 'Select via config with custom buttons',
+                confirmationButtons: {
+                  apply: { text: 'Done', icon: '🎯' },
+                  cancel: { text: 'Reset', icon: '🔄' }
+                }
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Custom buttons via configuration object</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Config with Material Icons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMultipleValue"
+              [config]="{
+                options: options,
+                multiple: true,
+                confirmation: true,
+                placeholder: 'Select via config with Material icons',
+                confirmationButtons: {
+                  apply: { text: 'Confirm', icon: '<span class=&quot;material-icons&quot;>check</span>' },
+                  cancel: { text: 'Cancel', icon: '<span class=&quot;material-icons&quot;>close</span>' }
+                }
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Custom buttons with Material Icons</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Config with Font Awesome Icons</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMultipleValue"
+              [config]="{
+                options: options,
+                multiple: true,
+                confirmation: true,
+                placeholder: 'Select via config with Font Awesome icons',
+                confirmationButtons: {
+                  apply: { text: 'Save', icon: '<i class=&quot;fas fa-check&quot;></i>' },
+                  cancel: { text: 'Cancel', icon: '<i class=&quot;fas fa-times&quot;></i>' }
+                }
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Custom buttons with Font Awesome Icons</small>
+            <br><small style="color: #666; font-style: italic;">Note: Font Awesome CSS must be loaded in your project</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Config with Unicode Icons (No Dependencies)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configBasedMultipleValue"
+              [config]="{
+                options: options,
+                multiple: true,
+                confirmation: true,
+                placeholder: 'Select via config with Unicode icons',
+                confirmationButtons: {
+                  apply: { text: 'Confirm', icon: '✓' },
+                  cancel: { text: 'Cancel', icon: '✗' }
+                }
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Custom buttons with Unicode icons (no external dependencies)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
           <h3>⚠️ Invalid Mixed Configuration</h3>
           <div class="select-wrapper">
             <nxt-dropdown
@@ -1018,6 +1179,30 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
                 <td>Type of dropdown icon: 'caret' for chevron, 'arrow' for down arrow, or 'sharp-caret' for sharp-cornered triangle</td>
               </tr>
               <tr>
+                <td><code>applyButtonText</code></td>
+                <td><code>string</code></td>
+                <td><code>'Apply'</code></td>
+                <td>Custom text for the apply button in confirmation mode</td>
+              </tr>
+              <tr>
+                <td><code>applyButtonIcon</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Custom icon for the apply button (emoji, unicode, or icon class)</td>
+              </tr>
+              <tr>
+                <td><code>cancelButtonText</code></td>
+                <td><code>string</code></td>
+                <td><code>'Cancel'</code></td>
+                <td>Custom text for the cancel button in confirmation mode</td>
+              </tr>
+              <tr>
+                <td><code>cancelButtonIcon</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Custom icon for the cancel button (emoji, unicode, or icon class)</td>
+              </tr>
+              <tr>
                 <td><code>panelClass</code></td>
                 <td><code>string</code></td>
                 <td><code>''</code></td>
@@ -1139,6 +1324,16 @@ export class NxtOptionGroupComponent {{ '{' }}
   searchPlaceholder?: string;       // Search input placeholder
   minSearchLength?: number;         // Minimum search length
   iconType?: 'caret' | 'arrow' | 'sharp-caret';     // Type of dropdown icon
+  confirmationButtons?: {{ '{' }}
+    apply?: {{ '{' }}
+      text?: string;
+      icon?: string;
+    {{ '}' }};
+    cancel?: {{ '{' }}
+      text?: string;
+      icon?: string;
+    {{ '}' }};
+  {{ '}' }};
 {{ '}' }}</code></pre>
         </div>
 
@@ -1355,6 +1550,53 @@ export class NxtDropdownTriggerComponent {{ '{' }}
           </div>
 
           <div class="example-card">
+            <h4>Custom Confirmation Buttons</h4>
+            <pre><code>&lt;nxt-dropdown
+  [(ngModel)]="selectedItems"
+  [options]="itemOptions"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Save Selection"
+  applyButtonIcon="💾"
+  cancelButtonText="Discard Changes"
+  cancelButtonIcon="🗑️"
+  placeholder="Select with custom buttons"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Custom Buttons with Font Icons</h4>
+            <pre><code>&lt;nxt-dropdown
+  [(ngModel)]="selectedItems"
+  [options]="itemOptions"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Save"
+  applyButtonIcon="&lt;i class='fas fa-check'&gt;&lt;/i&gt;"
+  cancelButtonText="Cancel"
+  cancelButtonIcon="&lt;i class='fas fa-times'&gt;&lt;/i&gt;"
+  placeholder="Select with font icons"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+            <p><small><strong>Note:</strong> Font Awesome CSS must be loaded in your project. Add this to your index.html:</small></p>
+            <pre><code>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Custom Buttons with Material Icons</h4>
+            <pre><code>&lt;nxt-dropdown
+  [(ngModel)]="selectedItems"
+  [options]="itemOptions"
+  [multiple]="true"
+  [confirmation]="true"
+  applyButtonText="Confirm"
+  applyButtonIcon="&lt;span class='material-icons'&gt;check&lt;/span&gt;"
+  cancelButtonText="Cancel"
+  cancelButtonIcon="&lt;span class='material-icons'&gt;close&lt;/span&gt;"
+  placeholder="Select with Material icons"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
             <h4>Reactive Form Integration</h4>
             <pre><code>&lt;form [formGroup]="myForm"&gt;
   &lt;nxt-dropdown
@@ -1376,6 +1618,28 @@ const config: NxtDropdownConfig = {{ '{' }}
   confirmation: true,
   searchable: true,
   searchPlaceholder: 'Search countries...'
+{{ '}' }};
+
+// Use in template
+&lt;nxt-dropdown
+  [(ngModel)]="selectedCountries"
+  [config]="config"
+  (selectionChange)="onCountriesChange($event)"&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Config with Custom Buttons</h4>
+            <pre><code>// Define configuration object with custom buttons
+const config: NxtDropdownConfig = {{ '{' }}
+  options: countryOptions,
+  placeholder: 'Select your country',
+  multiple: true,
+  confirmation: true,
+  confirmationButtons: {{ '{' }}
+    apply: {{ '{' }} text: 'Done', icon: '🎯' {{ '}' }},
+    cancel: {{ '{' }} text: 'Reset', icon: '🔄' {{ '}' }}
+  {{ '}' }}
 {{ '}' }};
 
 // Use in template
