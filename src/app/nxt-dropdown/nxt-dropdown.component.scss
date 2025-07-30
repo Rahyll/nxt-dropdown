@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   max-width: 100%;
+  min-width: 200px; // Add minimum width to prevent dropdown from becoming too narrow
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
@@ -25,11 +26,13 @@
   nxt-dropdown-trigger {
     display: block;
     width: 100%;
+    min-width: 200px; // Add minimum width to custom trigger component
   }
 
   .nxt-dropdown-custom-trigger-wrapper {
     position: relative;
     width: 100%;
+    min-width: 200px; // Add minimum width to custom trigger wrapper
     display: block;
   }
 }
@@ -41,6 +44,7 @@
   justify-content: space-between;
   width: 100%;
   max-width: 100%;
+  min-width: 200px; // Add minimum width to trigger
   min-height: 40px;
   padding: 8px 12px;
   background-color: #ffffff;
@@ -126,6 +130,7 @@
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   max-height: 200px;
+  min-width: 200px; // Ensure dropdown panel has minimum width
   overflow-y: auto;
   overflow-x: hidden;
   animation: dropdownFadeIn 0.2s ease;
