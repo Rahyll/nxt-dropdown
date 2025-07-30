@@ -119,8 +119,14 @@
           <div class="nxt-dropdown-option-label">
             {{ option.label }}
           </div>
+          
+          <div class="nxt-dropdown-option-description" *ngIf="option.description">
+            {{ option.description }}
+          </div>
         </div>
       </div>
+      
+      <!-- Content Projected Options will be processed in the component -->
       
       <div class="nxt-dropdown-no-options" *ngIf="filteredOptions.length === 0">
         <div *ngIf="currentSearchable && searchText && searchText.length >= currentMinSearchLength">

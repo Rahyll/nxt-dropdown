@@ -1,10 +1,15 @@
-import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NxtOptionComponent } from './nxt-option.component';
+import { NxtOptionGroupComponent } from './nxt-option-group.component';
 
 export interface NxtDropdownOption {
   value: any;
   label: string;
   disabled?: boolean;
+  description?: string;
+  group?: string;
+  icon?: string;
 }
 
 export interface NxtDropdownConfig {
@@ -18,6 +23,8 @@ export interface NxtDropdownConfig {
   searchable?: boolean;
   searchPlaceholder?: string;
   minSearchLength?: number;
+  showDescriptions?: boolean;
+  showGroups?: boolean;
 }
 
 @Component({
@@ -32,7 +39,7 @@ export interface NxtDropdownConfig {
     }
   ]
 })
-export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnChanges {
+export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnChanges, AfterContentInit {
   // Direct input properties (current way)
   @Input() options: NxtDropdownOption[] = [];
   @Input() placeholder: string = 'Select an option';
@@ -52,6 +59,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() strictConfigMode: boolean = false;
 
   @Output() selectionChange = new EventEmitter<any>();
+
+  // Content projection support
+  @ContentChildren(NxtOptionComponent) optionComponents?: QueryList<NxtOptionComponent>;
+  @ContentChildren(NxtOptionGroupComponent) optionGroupComponents?: QueryList<NxtOptionGroupComponent>;
 
   // Internal properties that will be used by the component
   private _options: NxtDropdownOption[] = [];
@@ -92,6 +103,24 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  ngAfterContentInit() {
+    // Process content projected options
+    this.processContentProjectedOptions();
+    
+    // Subscribe to content changes
+    if (this.optionComponents) {
+      this.optionComponents.changes.subscribe(() => {
+        this.processContentProjectedOptions();
+      });
+    }
+    
+    if (this.optionGroupComponents) {
+      this.optionGroupComponents.changes.subscribe(() => {
+        this.processContentProjectedOptions();
+      });
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     // Handle changes to both direct inputs and config object
     if (changes['config'] || changes['options'] || changes['placeholder'] || 
@@ -101,6 +130,40 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.updateConfiguration();
       this.isDisabled = this._disabled;
       this.updateSelectedOptions();
+      this.updateFilteredOptions();
+    }
+    
+    // Process content projected options if they change
+    if (changes['optionComponents'] || changes['optionGroupComponents']) {
+      this.processContentProjectedOptions();
+    }
+  }
+
+  private processContentProjectedOptions(): void {
+    // If content projected options are available, use them instead of the options input
+    if (this.optionComponents && this.optionComponents.length > 0) {
+      const projectedOptions: NxtDropdownOption[] = [];
+      
+      // Process direct options
+      this.optionComponents.forEach(optionComp => {
+        projectedOptions.push({
+          value: optionComp.value,
+          label: optionComp.label,
+          disabled: optionComp.disabled,
+          description: optionComp.description
+        });
+      });
+      
+      // Process grouped options
+      if (this.optionGroupComponents) {
+        this.optionGroupComponents.forEach(groupComp => {
+          // For now, we'll handle groups by adding them as regular options
+          // In a more advanced implementation, you might want to preserve the group structure
+        });
+      }
+      
+      // Update the options with projected content
+      this._options = projectedOptions;
       this.updateFilteredOptions();
     }
   }

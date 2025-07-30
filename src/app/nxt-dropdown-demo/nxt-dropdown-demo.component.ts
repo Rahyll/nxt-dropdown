@@ -53,6 +53,12 @@ export class NxtDropdownDemoComponent implements OnInit {
   configBasedMixedValue: any[] = [];
   invalidMixedValue: any = null;
 
+  // Content projection demo values
+  contentProjectionValue: any = null;
+  contentProjectionMultipleValue: any[] = [];
+  contentProjectionGroupValue: any = null;
+  contentProjectionSearchValue: any[] = [];
+
   // Reactive form
   reactiveForm: FormGroup;
 

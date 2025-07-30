@@ -415,6 +415,109 @@
       </div>
     </div>
 
+    <!-- Content Projection Demo Section -->
+    <div class="demo-section">
+      <h2>🎯 Content Projection (mat-select style)</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Basic Options</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="contentProjectionValue"
+              placeholder="Select using content projection">
+              <nxt-option value="option1" label="Option 1"></nxt-option>
+              <nxt-option value="option2" label="Option 2"></nxt-option>
+              <nxt-option value="option3" label="Option 3" [disabled]="true"></nxt-option>
+              <nxt-option value="option4" label="Option 4"></nxt-option>
+              <nxt-option value="option5" label="Option 5"></nxt-option>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ contentProjectionValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Using nxt-option components as children</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Multiple Selection</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="contentProjectionMultipleValue"
+              [multiple]="true"
+              placeholder="Select multiple options">
+              <nxt-option value="fruit1" label="Apple" description="Red and delicious"></nxt-option>
+              <nxt-option value="fruit2" label="Banana" description="Yellow and sweet"></nxt-option>
+              <nxt-option value="fruit3" label="Orange" description="Citrus fruit"></nxt-option>
+              <nxt-option value="fruit4" label="Grape" description="Small and purple"></nxt-option>
+              <nxt-option value="fruit5" label="Strawberry" description="Red and juicy"></nxt-option>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ contentProjectionMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Multiple selection with descriptions</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>With Option Groups</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="contentProjectionGroupValue"
+              placeholder="Select from grouped options">
+              <nxt-option-group label="Fruits">
+                <nxt-option value="apple" label="Apple"></nxt-option>
+                <nxt-option value="banana" label="Banana"></nxt-option>
+                <nxt-option value="orange" label="Orange"></nxt-option>
+              </nxt-option-group>
+              <nxt-option-group label="Vegetables">
+                <nxt-option value="carrot" label="Carrot"></nxt-option>
+                <nxt-option value="broccoli" label="Broccoli"></nxt-option>
+                <nxt-option value="spinach" label="Spinach"></nxt-option>
+              </nxt-option-group>
+              <nxt-option-group label="Grains">
+                <nxt-option value="rice" label="Rice"></nxt-option>
+                <nxt-option value="wheat" label="Wheat"></nxt-option>
+                <nxt-option value="oats" label="Oats"></nxt-option>
+              </nxt-option-group>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ contentProjectionGroupValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Using nxt-option-group for organization</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Searchable with Groups</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="contentProjectionSearchValue"
+              [searchable]="true"
+              [multiple]="true"
+              placeholder="Search and select from groups">
+              <nxt-option-group label="Programming Languages">
+                <nxt-option value="js" label="JavaScript" description="Web development"></nxt-option>
+                <nxt-option value="ts" label="TypeScript" description="Typed JavaScript"></nxt-option>
+                <nxt-option value="py" label="Python" description="General purpose"></nxt-option>
+                <nxt-option value="java" label="Java" description="Enterprise development"></nxt-option>
+              </nxt-option-group>
+              <nxt-option-group label="Frameworks">
+                <nxt-option value="angular" label="Angular" description="Google's framework"></nxt-option>
+                <nxt-option value="react" label="React" description="Facebook's library"></nxt-option>
+                <nxt-option value="vue" label="Vue.js" description="Progressive framework"></nxt-option>
+                <nxt-option value="svelte" label="Svelte" description="Compile-time framework"></nxt-option>
+              </nxt-option-group>
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ contentProjectionSearchValue.length }} items</p>
+          <div class="code-example">
+            <small>Searchable multiple selection with groups</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Configuration Approaches Demo Section -->
     <div class="demo-section">
       <h2>⚙️ Configuration Approaches</h2>
@@ -700,6 +803,33 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
         <h3>📊 Data Structure</h3>
         
         <div class="code-block">
+          <h4>NxtOptionComponent</h4>
+          <pre><code>&#64;Component({{ '{' }}
+  selector: 'nxt-option',
+  // ...
+{{ '}' }})
+export class NxtOptionComponent {{ '{' }}
+  &#64;Input() value: any;           // The value of the option
+  &#64;Input() label: string;        // Display text for the option
+  &#64;Input() disabled: boolean;    // Whether the option is disabled
+  &#64;Input() group?: string;       // Group label for grouped options
+  &#64;Input() icon?: string;        // Icon class or URL
+  &#64;Input() description?: string; // Additional description text
+{{ '}' }}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <h4>NxtOptionGroupComponent</h4>
+          <pre><code>&#64;Component({{ '{' }}
+  selector: 'nxt-option-group',
+  // ...
+{{ '}' }})
+export class NxtOptionGroupComponent {{ '{' }}
+  &#64;Input() label: string;        // Group label
+{{ '}' }}</code></pre>
+        </div>
+        
+        <div class="code-block">
           <h4>NxtDropdownOption Interface</h4>
           <pre><code>interface NxtDropdownOption {{ '{' }}
   value: any;           // The value of the option
@@ -741,6 +871,51 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
       <!-- Usage Examples -->
       <div class="guide-subsection">
         <h3>💡 Usage Examples</h3>
+        
+        <div class="example-grid">
+          <div class="example-card">
+            <h4>Content Projection (mat-select style)</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-option value="option1" label="Option 1"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="option2" label="Option 2"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="option3" label="Option 3" [disabled]="true"&gt;&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>With Option Groups</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-option-group label="Fruits"&gt;
+    &lt;nxt-option value="apple" label="Apple"&gt;&lt;/nxt-option&gt;
+    &lt;nxt-option value="banana" label="Banana"&gt;&lt;/nxt-option&gt;
+  &lt;/nxt-option-group&gt;
+  &lt;nxt-option-group label="Vegetables"&gt;
+    &lt;nxt-option value="carrot" label="Carrot"&gt;&lt;/nxt-option&gt;
+    &lt;nxt-option value="broccoli" label="Broccoli"&gt;&lt;/nxt-option&gt;
+  &lt;/nxt-option-group&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>With Descriptions</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValue"&gt;
+  &lt;nxt-option value="js" label="JavaScript" description="Web development"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="ts" label="TypeScript" description="Typed JavaScript"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="py" label="Python" description="General purpose"&gt;&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Multiple Selection with Content Projection</h4>
+            <pre><code>&lt;nxt-dropdown [(ngModel)]="selectedValues" [multiple]="true"&gt;
+  &lt;nxt-option value="fruit1" label="Apple" description="Red and delicious"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="fruit2" label="Banana" description="Yellow and sweet"&gt;&lt;/nxt-option&gt;
+  &lt;nxt-option value="fruit3" label="Orange" description="Citrus fruit"&gt;&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+        </div>
+        
+        <h4>Traditional Array Approach</h4>
         
         <div class="example-grid">
           <div class="example-card">
