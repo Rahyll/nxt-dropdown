@@ -742,5 +742,83 @@ describe('NxtDropdownComponent', () => {
     it('should return correct current min search length', () => {
       expect(component.currentMinSearchLength).toBe(0);
     });
+
+    it('should return correct current icon type', () => {
+      expect(component.currentIconType).toBe('caret');
+    });
+  });
+
+  describe('Icon Type Feature', () => {
+    it('should default to caret icon type', () => {
+      expect(component.iconType).toBe('caret');
+      expect(component.currentIconType).toBe('caret');
+    });
+
+    it('should set arrow icon type via direct input', () => {
+      component.iconType = 'arrow';
+      component.ngOnInit();
+      
+      expect(component.currentIconType).toBe('arrow');
+    });
+
+    it('should set icon type via configuration object', () => {
+      const config: NxtDropdownConfig = {
+        options: mockOptions,
+        iconType: 'arrow'
+      };
+      
+      component.config = config;
+      component.ngOnInit();
+      
+      expect(component.currentIconType).toBe('arrow');
+    });
+
+    it('should prioritize direct input over config when not in strict mode', () => {
+      const config: NxtDropdownConfig = {
+        iconType: 'arrow'
+      };
+      
+      component.config = config;
+      component.iconType = 'caret';
+      component.ngOnInit();
+      
+      expect(component.currentIconType).toBe('caret');
+    });
+
+    it('should use config icon type when in strict mode', () => {
+      const config: NxtDropdownConfig = {
+        iconType: 'arrow'
+      };
+      
+      component.config = config;
+      component.strictConfigMode = true;
+      component.ngOnInit();
+      
+      expect(component.currentIconType).toBe('arrow');
+    });
+
+    it('should update trigger properties with icon type', () => {
+      component.iconType = 'arrow';
+      component.ngOnInit();
+      
+      // Mock custom trigger
+      component['customTrigger'] = {
+        iconType: 'caret',
+        disabled: false,
+        isOpen: false,
+        required: false,
+        multiple: false,
+        placeholder: '',
+        showArrow: true,
+        triggerClick: jasmine.createSpyObj('EventEmitter', ['emit']),
+        keyDown: jasmine.createSpyObj('EventEmitter', ['emit']),
+        onTriggerClick: jasmine.createSpy('onTriggerClick'),
+        onKeyDown: jasmine.createSpy('onKeyDown')
+      };
+      
+      component['updateTriggerProperties']();
+      
+      expect(component['customTrigger'].iconType).toBe('arrow');
+    });
   });
 }); 

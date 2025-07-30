@@ -415,6 +415,84 @@
       </div>
     </div>
 
+    <!-- Icon Type Demo Section -->
+    <div class="demo-section">
+      <h2>🎯 Icon Type Selection</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Down Caret Icon (Default)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="caretIconValue"
+              [options]="options"
+              [iconType]="'caret'"
+              placeholder="Select with caret icon"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ caretIconValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Uses the default down caret (chevron) icon</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Down Arrow Icon</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="arrowIconValue"
+              [options]="options"
+              [iconType]="'arrow'"
+              placeholder="Select with arrow icon"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ arrowIconValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Uses a down arrow icon instead of caret</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Icon Type via Config</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="configIconValue"
+              [config]="{
+                options: options,
+                placeholder: 'Select via config',
+                iconType: 'arrow',
+                searchable: true
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ configIconValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Icon type specified through configuration object</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Sharp Cornered Caret Icon</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="sharpCaretIconValue"
+              [options]="options"
+              [iconType]="'sharp-caret'"
+              placeholder="Select with sharp caret icon"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ sharpCaretIconValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Uses a sharp-cornered triangle caret icon</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Custom Trigger Demo Section -->
     <div class="demo-section">
       <h2>🎛️ Custom Trigger (mat-select-trigger style)</h2>
@@ -934,6 +1012,12 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
                 <td>Minimum characters required to trigger search</td>
               </tr>
               <tr>
+                <td><code>iconType</code></td>
+                <td><code>'caret' | 'arrow' | 'sharp-caret'</code></td>
+                <td><code>'caret'</code></td>
+                <td>Type of dropdown icon: 'caret' for chevron, 'arrow' for down arrow, or 'sharp-caret' for sharp-cornered triangle</td>
+              </tr>
+              <tr>
                 <td><code>panelClass</code></td>
                 <td><code>string</code></td>
                 <td><code>''</code></td>
@@ -1054,6 +1138,7 @@ export class NxtOptionGroupComponent {{ '{' }}
   searchable?: boolean;             // Enable search functionality
   searchPlaceholder?: string;       // Search input placeholder
   minSearchLength?: number;         // Minimum search length
+  iconType?: 'caret' | 'arrow' | 'sharp-caret';     // Type of dropdown icon
 {{ '}' }}</code></pre>
         </div>
 
@@ -1070,6 +1155,7 @@ export class NxtDropdownTriggerComponent {{ '{' }}
   &#64;Input() multiple: boolean;        // Whether multiple selection is enabled
   &#64;Input() placeholder: string;      // Placeholder text
   &#64;Input() showArrow: boolean;       // Whether to show the dropdown arrow
+  &#64;Input() iconType: 'caret' | 'arrow' | 'sharp-caret'; // Type of dropdown icon
   
   &#64;Output() triggerClick: EventEmitter&lt;Event&gt;;
   &#64;Output() keyDown: EventEmitter&lt;KeyboardEvent&gt;;
@@ -1159,6 +1245,43 @@ export class NxtDropdownTriggerComponent {{ '{' }}
   &lt;/nxt-dropdown-trigger&gt;
   &lt;nxt-option value="option1"&gt;Option 1&lt;/nxt-option&gt;
   &lt;nxt-option value="option2"&gt;Option 2&lt;/nxt-option&gt;
+&lt;/nxt-dropdown&gt;</code></pre>
+          </div>
+
+          <div class="example-card">
+            <h4>Icon Type Selection</h4>
+            <pre><code>&lt;!-- Down Caret Icon (Default) --&gt;
+&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  [iconType]="'caret'"
+  placeholder="Select with caret icon"&gt;
+&lt;/nxt-dropdown&gt;
+
+&lt;!-- Down Arrow Icon --&gt;
+&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  [iconType]="'arrow'"
+  placeholder="Select with arrow icon"&gt;
+&lt;/nxt-dropdown&gt;
+
+&lt;!-- Sharp Cornered Caret Icon --&gt;
+&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  [iconType]="'sharp-caret'"
+  placeholder="Select with sharp caret icon"&gt;
+&lt;/nxt-dropdown&gt;
+
+&lt;!-- Via Configuration Object --&gt;
+&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [config]="{{ '{' }}
+    options: options,
+    iconType: 'arrow',
+    searchable: true
+  {{ '}' }}"&gt;
 &lt;/nxt-dropdown&gt;</code></pre>
           </div>
 

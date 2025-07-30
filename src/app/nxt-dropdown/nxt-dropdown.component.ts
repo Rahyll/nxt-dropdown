@@ -26,6 +26,7 @@ export interface NxtDropdownConfig {
   minSearchLength?: number;
   showDescriptions?: boolean;
   showGroups?: boolean;
+  iconType?: 'caret' | 'arrow' | 'sharp-caret';
 }
 
 @Component({
@@ -52,6 +53,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() searchable: boolean = false;
   @Input() searchPlaceholder: string = 'Search options...';
   @Input() minSearchLength: number = 0;
+  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
 
   // Configuration object input (new way)
   @Input() config: NxtDropdownConfig = {};
@@ -77,6 +79,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   private _searchable: boolean = false;
   private _searchPlaceholder: string = 'Search options...';
   private _minSearchLength: number = 0;
+  private _iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
 
   value: any;
   isDisabled: boolean = false;
@@ -131,7 +134,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (changes['config'] || changes['options'] || changes['placeholder'] || 
         changes['disabled'] || changes['required'] || changes['multiple'] || 
         changes['confirmation'] || changes['panelClass'] || changes['searchable'] || 
-        changes['searchPlaceholder'] || changes['minSearchLength'] || changes['strictConfigMode']) {
+        changes['searchPlaceholder'] || changes['minSearchLength'] || changes['iconType'] || changes['strictConfigMode']) {
       this.updateConfiguration();
       this.isDisabled = this._disabled;
       this.updateSelectedOptions();
@@ -201,6 +204,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.customTrigger.required = this.currentRequired;
       this.customTrigger.multiple = this.currentMultiple;
       this.customTrigger.placeholder = this.currentPlaceholder;
+      this.customTrigger.iconType = this.currentIconType;
     }
   }
 
@@ -228,6 +232,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this._searchable = this.config.searchable !== undefined ? this.config.searchable : (this.searchable || false);
       this._searchPlaceholder = this.config.searchPlaceholder || this.searchPlaceholder || 'Search options...';
       this._minSearchLength = this.config.minSearchLength !== undefined ? this.config.minSearchLength : (this.minSearchLength || 0);
+      this._iconType = this.config.iconType || this.iconType || 'caret';
     } else {
       // In non-strict mode, direct inputs override config object
       this._options = this.options || this.config.options || [];
@@ -248,6 +253,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this._searchable = this.searchable !== undefined ? this.searchable : (this.config.searchable || false);
       this._searchPlaceholder = this.searchPlaceholder !== 'Search options...' ? this.searchPlaceholder : (this.config.searchPlaceholder || 'Search options...');
       this._minSearchLength = this.minSearchLength !== undefined ? this.minSearchLength : (this.config.minSearchLength || 0);
+      this._iconType = this.iconType !== 'caret' ? this.iconType : (this.config.iconType || 'caret');
     }
     
     // Debug logging for final options
@@ -326,6 +332,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (this.searchable === true) return true;
     if (this.searchPlaceholder !== 'Search options...') return true;
     if (this.minSearchLength !== 0) return true;
+    if (this.iconType !== 'caret') return true;
     return false;
   }
 
@@ -344,7 +351,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.config.panelClass ||
       this.config.searchable !== undefined ||
       this.config.searchPlaceholder ||
-      this.config.minSearchLength !== undefined
+      this.config.minSearchLength !== undefined ||
+      this.config.iconType !== undefined
     );
   }
 
@@ -387,6 +395,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   get currentMinSearchLength(): number {
     return this._minSearchLength;
+  }
+
+  get currentIconType(): 'caret' | 'arrow' | 'sharp-caret' {
+    return this._iconType;
   }
 
   get hasCustomTrigger(): boolean {

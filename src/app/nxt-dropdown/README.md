@@ -152,6 +152,33 @@ const dropdownConfig: NxtDropdownConfig = {
 </nxt-dropdown>
 ```
 
+### Icon Types
+
+The component supports three different icon types for the dropdown arrow:
+
+```html
+<!-- Default caret icon (chevron) -->
+<nxt-dropdown
+  [iconType]="'caret'"
+  [options]="options"
+  placeholder="Select with caret icon">
+</nxt-dropdown>
+
+<!-- Down arrow icon -->
+<nxt-dropdown
+  [iconType]="'arrow'"
+  [options]="options"
+  placeholder="Select with arrow icon">
+</nxt-dropdown>
+
+<!-- Sharp-cornered triangle caret -->
+<nxt-dropdown
+  [iconType]="'sharp-caret'"
+  [options]="options"
+  placeholder="Select with sharp caret icon">
+</nxt-dropdown>
+```
+
 ## Input Properties
 
 | Property | Type | Default | Description |
@@ -165,6 +192,7 @@ const dropdownConfig: NxtDropdownConfig = {
 | `searchable` | `boolean` | `false` | Whether to enable search functionality |
 | `searchPlaceholder` | `string` | `'Search options...'` | Placeholder text for search input |
 | `minSearchLength` | `number` | `0` | Minimum characters required to start filtering |
+| `iconType` | `'caret' \| 'arrow' \| 'sharp-caret'` | `'caret'` | Type of dropdown icon |
 | `panelClass` | `string` | `''` | CSS class for the dropdown panel |
 | `config` | `NxtDropdownConfig` | `{}` | Configuration object (alternative to individual properties) |
 
@@ -200,6 +228,7 @@ interface NxtDropdownConfig {
   searchable?: boolean;             // Enable search functionality
   searchPlaceholder?: string;       // Search input placeholder
   minSearchLength?: number;         // Minimum search length
+  iconType?: 'caret' | 'arrow' | 'sharp-caret'; // Type of dropdown icon
 }
 ```
 

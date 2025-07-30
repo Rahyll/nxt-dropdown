@@ -19,8 +19,19 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
       <ng-content></ng-content>
       
       <div class="nxt-dropdown-arrow" *ngIf="showArrow">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <!-- Down Caret Icon -->
+        <svg *ngIf="iconType === 'caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
           <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <!-- Down Arrow Icon -->
+        <svg *ngIf="iconType === 'arrow'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M6 2L6 10M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <!-- Sharp Cornered Down Caret Icon -->
+        <svg *ngIf="iconType === 'sharp-caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <polygon points="3,4.5 6,7.5 9,4.5" fill="currentColor"/>
         </svg>
       </div>
     </div>
@@ -34,6 +45,7 @@ export class NxtDropdownTriggerComponent {
   @Input() multiple: boolean = false;
   @Input() placeholder: string = 'Select an option';
   @Input() showArrow: boolean = true;
+  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
 
   @Output() triggerClick = new EventEmitter<Event>();
   @Output() keyDown = new EventEmitter<KeyboardEvent>();

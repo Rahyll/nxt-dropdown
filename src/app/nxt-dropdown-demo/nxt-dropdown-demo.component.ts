@@ -59,6 +59,12 @@ export class NxtDropdownDemoComponent implements OnInit {
   contentProjectionGroupValue: any = null;
   contentProjectionSearchValue: any[] = [];
 
+  // Icon type demo values
+  caretIconValue: any = null;
+  arrowIconValue: any = null;
+  configIconValue: any = null;
+  sharpCaretIconValue: any = null;
+
   // Custom trigger demo values
   customTriggerValue: any = null;
   customTriggerStatusValue: any = null;
@@ -228,6 +234,17 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.configBasedMultipleValue = [];
     this.configBasedMixedValue = [];
     this.invalidMixedValue = null;
+    this.contentProjectionValue = null;
+    this.contentProjectionMultipleValue = [];
+    this.contentProjectionGroupValue = null;
+    this.contentProjectionSearchValue = [];
+    this.caretIconValue = null;
+    this.arrowIconValue = null;
+    this.configIconValue = null;
+    this.customTriggerValue = null;
+    this.customTriggerStatusValue = null;
+    this.customTriggerNoArrowValue = null;
+    this.customTriggerRichValue = null;
   }
 
   fillForm(): void {
