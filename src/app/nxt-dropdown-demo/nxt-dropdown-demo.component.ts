@@ -64,6 +64,7 @@ export class NxtDropdownDemoComponent implements OnInit {
   arrowIconValue: any = null;
   configIconValue: any = null;
   sharpCaretIconValue: any = null;
+  invertedTriangleIconValue: any = null;
 
   // Custom trigger demo values
   customTriggerValue: any = null;

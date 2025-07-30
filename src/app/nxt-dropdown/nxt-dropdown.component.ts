@@ -27,7 +27,7 @@ export interface NxtDropdownConfig {
   minSearchLength?: number;
   showDescriptions?: boolean;
   showGroups?: boolean;
-  iconType?: 'caret' | 'arrow' | 'sharp-caret';
+  iconType?: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle';
   confirmationButtons?: {
     apply?: {
       text?: string;
@@ -64,7 +64,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() searchable: boolean = false;
   @Input() searchPlaceholder: string = 'Search options...';
   @Input() minSearchLength: number = 0;
-  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
+  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' = 'caret';
   
   // Confirmation button customization
   @Input() applyButtonText: string = 'Apply';
@@ -96,7 +96,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   private _searchable: boolean = false;
   private _searchPlaceholder: string = 'Search options...';
   private _minSearchLength: number = 0;
-  private _iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
+  private _iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' = 'caret';
   
   // Confirmation button customization
   private _applyButtonText: string = 'Apply';
@@ -435,7 +435,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     return this._minSearchLength;
   }
 
-  get currentIconType(): 'caret' | 'arrow' | 'sharp-caret' {
+  get currentIconType(): 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' {
     return this._iconType;
   }
 

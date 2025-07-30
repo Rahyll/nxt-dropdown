@@ -33,6 +33,11 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
         <svg *ngIf="iconType === 'sharp-caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
           <polygon points="3,4.5 6,7.5 9,4.5" fill="currentColor"/>
         </svg>
+        
+        <!-- Inverted Triangle Icon -->
+        <svg *ngIf="iconType === 'inverted-triangle'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <polygon points="2,3 6,9 10,3" fill="currentColor"/>
+        </svg>
       </div>
     </div>
   `,
@@ -45,7 +50,7 @@ export class NxtDropdownTriggerComponent {
   @Input() multiple: boolean = false;
   @Input() placeholder: string = 'Select an option';
   @Input() showArrow: boolean = true;
-  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' = 'caret';
+  @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' = 'caret';
 
   @Output() triggerClick = new EventEmitter<Event>();
   @Output() keyDown = new EventEmitter<KeyboardEvent>();

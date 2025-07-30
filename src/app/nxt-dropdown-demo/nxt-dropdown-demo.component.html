@@ -554,6 +554,23 @@
             <small>Uses a sharp-cornered triangle caret icon</small>
           </div>
         </div>
+
+        <div class="demo-card">
+          <h3>Inverted Triangle Icon</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="invertedTriangleIconValue"
+              [options]="options"
+              [iconType]="'inverted-triangle'"
+              placeholder="Select with inverted triangle icon"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ invertedTriangleIconValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Uses an inverted triangle icon</small>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1328,7 +1345,7 @@ export class NxtOptionGroupComponent {{ '{' }}
   searchable?: boolean;             // Enable search functionality
   searchPlaceholder?: string;       // Search input placeholder
   minSearchLength?: number;         // Minimum search length
-  iconType?: 'caret' | 'arrow' | 'sharp-caret';     // Type of dropdown icon
+  iconType?: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle';     // Type of dropdown icon
   confirmationButtons?: {{ '{' }}
     apply?: {{ '{' }}
       text?: string;
@@ -1355,7 +1372,7 @@ export class NxtDropdownTriggerComponent {{ '{' }}
   &#64;Input() multiple: boolean;        // Whether multiple selection is enabled
   &#64;Input() placeholder: string;      // Placeholder text
   &#64;Input() showArrow: boolean;       // Whether to show the dropdown arrow
-  &#64;Input() iconType: 'caret' | 'arrow' | 'sharp-caret'; // Type of dropdown icon
+  &#64;Input() iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle'; // Type of dropdown icon
   
   &#64;Output() triggerClick: EventEmitter&lt;Event&gt;;
   &#64;Output() keyDown: EventEmitter&lt;KeyboardEvent&gt;;
@@ -1472,6 +1489,14 @@ export class NxtDropdownTriggerComponent {{ '{' }}
   [options]="options"
   [iconType]="'sharp-caret'"
   placeholder="Select with sharp caret icon"&gt;
+&lt;/nxt-dropdown&gt;
+
+&lt;!-- Inverted Triangle Icon --&gt;
+&lt;nxt-dropdown
+  [(ngModel)]="selectedValue"
+  [options]="options"
+  [iconType]="'inverted-triangle'"
+  placeholder="Select with inverted triangle icon"&gt;
 &lt;/nxt-dropdown&gt;
 
 &lt;!-- Via Configuration Object --&gt;
