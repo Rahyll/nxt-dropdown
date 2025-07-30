@@ -135,6 +135,14 @@
   overflow-x: hidden;
   animation: dropdownFadeIn 0.2s ease;
   box-sizing: border-box;
+
+  // When confirmation mode is enabled, use flexbox layout
+  &.confirmation-mode {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; // Prevent overall scrolling
+    max-height: 300px; // Increase max height for confirmation mode
+  }
 }
 
 // Search functionality styles
@@ -213,6 +221,14 @@
 
 .nxt-dropdown-options {
   padding: 4px 0;
+
+  // When in confirmation mode, make options scrollable
+  .confirmation-mode & {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0; // Allow flex item to shrink
+  }
 }
 
 .nxt-dropdown-option {
@@ -310,6 +326,12 @@
   padding: 12px;
   background-color: #f8f9fa;
   border-radius: 0 0 6px 6px;
+
+  // When in confirmation mode, keep footer at bottom
+  .confirmation-mode & {
+    flex-shrink: 0; // Prevent footer from shrinking
+    border-radius: 0 0 6px 6px; // Ensure proper border radius
+  }
 }
 
 .nxt-dropdown-footer-buttons {

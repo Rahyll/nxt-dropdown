@@ -63,7 +63,8 @@
   
   <div class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
-       [class]="currentPanelClass">
+       [class]="currentPanelClass"
+       [class.confirmation-mode]="currentConfirmation && currentMultiple">
     
     <!-- Search Input -->
     <div class="nxt-dropdown-search" *ngIf="currentSearchable && showSearchInput">
