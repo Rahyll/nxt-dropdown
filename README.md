@@ -1,3 +1,3 @@
-# angular-v15
+# Nxt Dropdown
 
-[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/Rahyll/angular-v15)
+A modern Angular dropdown component built with Angular 15.
