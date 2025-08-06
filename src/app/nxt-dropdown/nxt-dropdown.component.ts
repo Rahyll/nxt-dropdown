@@ -4,41 +4,34 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NxtOptionComponent } from './nxt-option.component';
 import { NxtOptionGroupComponent } from './nxt-option-group.component';
 import { NxtDropdownTriggerComponent } from './nxt-dropdown-trigger.component';
-
-export interface NxtDropdownOption {
-  value: any;
-  label: string;
-  disabled?: boolean;
-  description?: string;
-  group?: string;
-  icon?: string;
-}
-
-export interface NxtDropdownConfig {
-  options?: NxtDropdownOption[];
-  placeholder?: string;
-  disabled?: boolean;
-  required?: boolean;
-  multiple?: boolean;
-  confirmation?: boolean;
-  panelClass?: string;
-  searchable?: boolean;
-  searchPlaceholder?: string;
-  minSearchLength?: number;
-  showDescriptions?: boolean;
-  showGroups?: boolean;
-  iconType?: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle';
-  confirmationButtons?: {
-    apply?: {
-      text?: string;
-      icon?: string;
-    };
-    cancel?: {
-      text?: string;
-      icon?: string;
-    };
-  };
-}
+import { NxtDropdownOption, NxtDropdownConfig } from './interfaces';
+import { 
+  filterOptionsBySearch,
+  clearSearchState,
+  findFirstAvailableOption
+} from './utils/search.utils';
+import {
+  isAllSelected,
+  isPartiallySelected,
+  isOptionSelected,
+  updateSelectedOptions,
+  toggleOptionSelection,
+  getValuesFromSelectedOptions
+} from './utils/selection.utils';
+import {
+  getDisplayText,
+  getPendingDisplayText
+} from './utils/display.utils';
+import {
+  validateStrictConfiguration,
+  mergeConfiguration
+} from './utils/config.utils';
+import {
+  getSanitizedIcon,
+  trackByValue,
+  handleDropdownKeyDown,
+  handleSearchKeyDown
+} from './utils/ui.utils';
 
 @Component({
   selector: 'nxt-dropdown',
@@ -302,60 +295,26 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   private validateStrictConfiguration(): void {
-    const hasDirectInputs = this.hasDirectInputs();
-    const hasConfigObject = this.hasConfigObject();
+    const validation = validateStrictConfiguration(
+      this.config,
+      {
+        options: this.options,
+        placeholder: this.placeholder,
+        disabled: this.disabled,
+        required: this.required,
+        multiple: this.multiple,
+        confirmation: this.confirmation,
+        panelClass: this.panelClass,
+        searchable: this.searchable,
+        searchPlaceholder: this.searchPlaceholder,
+        minSearchLength: this.minSearchLength,
+        iconType: this.iconType
+      },
+      this.strictConfigMode
+    );
 
-    if (hasDirectInputs && hasConfigObject) {
-      console.error(
-        '%c[NXT Dropdown] Configuration Error:',
-        'color: #d32f2f; font-weight: bold; font-size: 14px;'
-      );
-      console.error(
-        '%cYou cannot mix direct input properties with config object when strictConfigMode is enabled.',
-        'color: #d32f2f; font-size: 12px;'
-      );
-      console.error(
-        '%cPlease use either:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(
-        '%c1. Direct input properties only (strictConfigMode: false)',
-        'color: #1976d2; font-size: 12px;'
-      );
-      console.error(
-        '%c2. Config object only (strictConfigMode: true)',
-        'color: #1976d2; font-size: 12px;'
-      );
-      console.error(
-        '%cExample with config object:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(`
-        <nxt-dropdown
-          [strictConfigMode]="true"
-          [config]="{
-            options: myOptions,
-            placeholder: 'Select option',
-            multiple: true,
-            searchable: true
-          }"
-          [(ngModel)]="selectedValue">
-        </nxt-dropdown>
-      `);
-      console.error(
-        '%cExample with direct properties:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(`
-        <nxt-dropdown
-          [strictConfigMode]="false"
-          [options]="myOptions"
-          [placeholder]="'Select option'"
-          [multiple]="true"
-          [searchable]="true"
-          [(ngModel)]="selectedValue">
-        </nxt-dropdown>
-      `);
+    if (!validation.isValid) {
+      console.error('[NXT Dropdown] Configuration Error:', validation.errorMessage);
     }
   }
 
@@ -528,33 +487,31 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   onSearchKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      this.closeDropdown();
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      // Select first filtered option if available
-      const firstOption = this.filteredOptions.find(opt => !opt.disabled);
-      if (firstOption) {
-        this.selectOption(firstOption);
+    handleSearchKeyDown(event, {
+      closeDropdown: () => this.closeDropdown(),
+      selectFirstOption: () => {
+        const firstOption = findFirstAvailableOption(this.filteredOptions);
+        if (firstOption) {
+          this.selectOption(firstOption);
+        }
       }
-    }
+    });
   }
 
   clearSearch(): void {
-    this.searchText = '';
-    this.showSearchInput = false;
+    const clearedState = clearSearchState();
+    this.searchText = clearedState.searchText;
+    this.showSearchInput = clearedState.showSearchInput;
     this.updateFilteredOptions();
   }
 
   updateFilteredOptions(): void {
-    if (!this._searchable || !this.searchText || this.searchText.length < this._minSearchLength) {
-      this.filteredOptions = [...this._options];
-    } else {
-      const searchLower = this.searchText.toLowerCase();
-      this.filteredOptions = this._options.filter(option => 
-        option.label.toLowerCase().includes(searchLower)
-      );
-    }
+    this.filteredOptions = filterOptionsBySearch(
+      this._options,
+      this.searchText,
+      this._searchable,
+      this._minSearchLength
+    );
     
     // Debug logging for filtered options
     console.log('[NXT Dropdown] Filtered options:', this.filteredOptions);
@@ -634,27 +591,11 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   isAllSelected(): boolean {
-    if (!this._multiple) return false;
-    
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
-    const optionsToCheck = this._confirmation ? this.pendingOptions : this.selectedOptions;
-    
-    return availableOptions.length > 0 && 
-           availableOptions.every(option => 
-             optionsToCheck.some(selected => selected.value === option.value)
-           );
+    return isAllSelected(this.filteredOptions, this.selectedOptions, this._multiple);
   }
 
   isPartiallySelected(): boolean {
-    if (!this._multiple) return false;
-    
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
-    const optionsToCheck = this._confirmation ? this.pendingOptions : this.selectedOptions;
-    const selectedCount = availableOptions.filter(option => 
-      optionsToCheck.some(selected => selected.value === option.value)
-    ).length;
-    
-    return selectedCount > 0 && selectedCount < availableOptions.length;
+    return isPartiallySelected(this.filteredOptions, this.selectedOptions, this._multiple);
   }
 
   private selectSingleOption(option: NxtDropdownOption): void {
@@ -685,57 +626,20 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   private updateSelectedOptions(): void {
-    if (!this.value) {
-      this.selectedOptions = [];
-      return;
-    }
-
-    if (this._multiple && Array.isArray(this.value)) {
-      this.selectedOptions = this._options.filter(option => 
-        this.value.includes(option.value)
-      );
-    } else {
-      this.selectedOptions = this._options.filter(option => 
-        option.value === this.value
-      );
-    }
+    this.selectedOptions = updateSelectedOptions(this.value, this._options, this._multiple);
   }
 
   getDisplayText(): string {
-    if (this.selectedOptions.length === 0) {
-      return this._placeholder;
-    }
-
-    if (this._multiple) {
-      if (this.selectedOptions.length === 1) {
-        return this.selectedOptions[0].label;
-      }
-      return this.selectedOptions.map(option => option.label).join(', ');
-    }
-
-    return this.selectedOptions[0].label;
+    return getDisplayText(this.selectedOptions, this._placeholder, this._multiple);
   }
 
   getPendingDisplayText(): string {
-    if (this.pendingOptions.length === 0) {
-      return this._placeholder;
-    }
-
-    if (this._multiple) {
-      if (this.pendingOptions.length === 1) {
-        return this.pendingOptions[0].label;
-      }
-      return this.pendingOptions.map(option => option.label).join(', ');
-    }
-
-    return this.pendingOptions[0].label;
+    return getPendingDisplayText(this.pendingOptions, this._placeholder, this._multiple);
   }
 
   isOptionSelected(option: NxtDropdownOption): boolean {
-    if (this._confirmation && this._multiple) {
-      return this.pendingOptions.some(selected => selected.value === option.value);
-    }
-    return this.selectedOptions.some(selected => selected.value === option.value);
+    const optionsToCheck = this._confirmation && this._multiple ? this.pendingOptions : this.selectedOptions;
+    return isOptionSelected(option, optionsToCheck);
   }
 
   removeOption(event: Event, option: NxtDropdownOption): void {
@@ -754,34 +658,14 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if (this.isDisabled) return;
-
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        this.toggleDropdown();
-        break;
-      case 'Escape':
-        this.closeDropdown();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        if (!this.isOpen) {
-          this.toggleDropdown();
-        }
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        if (this.isOpen) {
-          this.closeDropdown();
-        }
-        break;
-    }
+    handleDropdownKeyDown(event, this.isDisabled, this.isOpen, {
+      toggleDropdown: () => this.toggleDropdown(),
+      closeDropdown: () => this.closeDropdown()
+    });
   }
 
   trackByValue(index: number, option: NxtDropdownOption): any {
-    return option.value;
+    return trackByValue(index, option);
   }
 
   applySelection(): void {
@@ -808,16 +692,6 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Supports both string icons (emoji, unicode) and HTML elements (font icons)
    */
   getSanitizedIcon(icon: string): SafeHtml {
-    if (!icon) {
-      return '';
-    }
-    
-    // Check if the icon contains HTML tags (font icon)
-    if (icon.includes('<') && icon.includes('>')) {
-      return this.sanitizer.bypassSecurityTrustHtml(icon);
-    }
-    
-    // For regular string icons (emoji, unicode), return as is
-    return icon;
+    return getSanitizedIcon(icon, this.sanitizer);
   }
 } 

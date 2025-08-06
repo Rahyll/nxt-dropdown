@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NxtDropdownComponent, NxtDropdownOption, NxtDropdownConfig } from './nxt-dropdown.component';
+import { NxtDropdownComponent } from './nxt-dropdown.component';
+import { NxtDropdownOption, NxtDropdownConfig } from './interfaces';
 
 describe('NxtDropdownComponent', () => {
   let component: NxtDropdownComponent;

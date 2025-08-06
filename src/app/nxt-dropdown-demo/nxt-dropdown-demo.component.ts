@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NxtDropdownOption, NxtDropdownConfig } from '../nxt-dropdown/nxt-dropdown.component';
+import { NxtDropdownOption, NxtDropdownConfig } from '../nxt-dropdown/interfaces';
 
 @Component({
   selector: 'app-nxt-dropdown-demo',
