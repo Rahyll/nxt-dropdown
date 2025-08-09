@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NxtDropdownComponent } from './nxt-dropdown.component';
-import { NxtDropdownOption, NxtDropdownConfig } from './interfaces';
+import { NxtDropdownComponent, NxtDropdownOption, NxtDropdownConfig } from './nxt-dropdown.component';
 
 describe('NxtDropdownComponent', () => {
   let component: NxtDropdownComponent;
@@ -820,6 +819,116 @@ describe('NxtDropdownComponent', () => {
       component['updateTriggerProperties']();
       
       expect(component['customTrigger'].iconType).toBe('arrow');
+    });
+  });
+
+  describe('Dropdown Positioning', () => {
+    beforeEach(() => {
+      // Mock window.innerHeight
+      Object.defineProperty(window, 'innerHeight', {
+        writable: true,
+        configurable: true,
+        value: 800
+      });
+    });
+
+    it('should position dropdown below by default when there is enough space', () => {
+      // Mock getBoundingClientRect to simulate trigger at top of viewport
+      const mockRect = {
+        bottom: 100,
+        top: 50,
+        left: 0,
+        right: 200,
+        width: 200,
+        height: 50
+      };
+      
+      const mockElement = {
+        getBoundingClientRect: () => mockRect
+      };
+      
+      spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockElement);
+      
+      component.toggleDropdown();
+      
+      expect(component.shouldPositionAbove).toBeFalse();
+    });
+
+    it('should position dropdown above when there is not enough space below', () => {
+      // Mock getBoundingClientRect to simulate trigger near bottom of viewport
+      const mockRect = {
+        bottom: 750, // Near bottom of 800px viewport
+        top: 700,
+        left: 0,
+        right: 200,
+        width: 200,
+        height: 50
+      };
+      
+      const mockElement = {
+        getBoundingClientRect: () => mockRect
+      };
+      
+      spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockElement);
+      
+      component.toggleDropdown();
+      
+      expect(component.shouldPositionAbove).toBeTrue();
+    });
+
+    it('should recalculate position on window resize', () => {
+      component.isOpen = true;
+      spyOn(component as any, 'calculateDropdownPosition');
+      
+      component.onWindowResize();
+      
+      expect(component['calculateDropdownPosition']).toHaveBeenCalled();
+    });
+
+    it('should recalculate position on window scroll', () => {
+      component.isOpen = true;
+      spyOn(component as any, 'calculateDropdownPosition');
+      
+      component.onWindowScroll();
+      
+      expect(component['calculateDropdownPosition']).toHaveBeenCalled();
+    });
+
+    it('should recalculate position when filtered options change', fakeAsync(() => {
+      component.isOpen = true;
+      component.searchable = true;
+      spyOn(component as any, 'calculateDropdownPosition');
+      
+      component.updateFilteredOptions();
+      tick(0); // Wait for setTimeout
+      
+      expect(component['calculateDropdownPosition']).toHaveBeenCalled();
+    }));
+
+    it('should use correct max height for confirmation mode', () => {
+      component.confirmation = true;
+      component.multiple = true;
+      
+      // Mock getBoundingClientRect to simulate trigger near bottom of viewport
+      const mockRect = {
+        bottom: 750,
+        top: 700,
+        left: 0,
+        right: 200,
+        width: 200,
+        height: 50
+      };
+      
+      const mockElement = {
+        getBoundingClientRect: () => mockRect
+      };
+      
+      spyOn(component['elementRef'].nativeElement, 'querySelector').and.returnValue(mockElement);
+      
+      component.toggleDropdown();
+      
+      // Should still position above even with larger max height for confirmation mode
+      expect(component.shouldPositionAbove).toBeTrue();
     });
   });
 }); 

@@ -143,6 +143,15 @@
     overflow: hidden; // Prevent overall scrolling
     max-height: 300px; // Increase max height for confirmation mode
   }
+
+  // Position above the trigger when there's not enough space below
+  &.position-above {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
+    animation: dropdownFadeInAbove 0.2s ease;
+  }
 }
 
 // Search functionality styles
@@ -212,6 +221,17 @@
   from {
     opacity: 0;
     transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownFadeInAbove {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
