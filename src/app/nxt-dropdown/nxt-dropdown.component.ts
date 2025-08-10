@@ -1,44 +1,10 @@
 import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { NxtOptionComponent } from './nxt-option.component';
-import { NxtOptionGroupComponent } from './nxt-option-group.component';
-import { NxtDropdownTriggerComponent } from './nxt-dropdown-trigger.component';
-
-export interface NxtDropdownOption {
-  value: any;
-  label: string;
-  disabled?: boolean;
-  description?: string;
-  group?: string;
-  icon?: string;
-}
-
-export interface NxtDropdownConfig {
-  options?: NxtDropdownOption[];
-  placeholder?: string;
-  disabled?: boolean;
-  required?: boolean;
-  multiple?: boolean;
-  confirmation?: boolean;
-  panelClass?: string;
-  searchable?: boolean;
-  searchPlaceholder?: string;
-  minSearchLength?: number;
-  showDescriptions?: boolean;
-  showGroups?: boolean;
-  iconType?: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle';
-  confirmationButtons?: {
-    apply?: {
-      text?: string;
-      icon?: string;
-    };
-    cancel?: {
-      text?: string;
-      icon?: string;
-    };
-  };
-}
+import { NxtOptionComponent } from './components/nxt-option/nxt-option.component';
+import { NxtOptionGroupComponent } from './components/nxt-option-group/nxt-option-group.component';
+import { NxtDropdownTriggerComponent } from './components/nxt-dropdown-trigger/nxt-dropdown-trigger.component';
+import { NxtDropdownConfig, NxtDropdownOption } from './interfaces/nxt-dropdown.interfaces';
 
 @Component({
   selector: 'nxt-dropdown',
