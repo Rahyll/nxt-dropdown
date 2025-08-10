@@ -5,6 +5,11 @@ import { NxtOptionComponent } from './components/nxt-option/nxt-option.component
 import { NxtOptionGroupComponent } from './components/nxt-option-group/nxt-option-group.component';
 import { NxtDropdownTriggerComponent } from './components/nxt-dropdown-trigger/nxt-dropdown-trigger.component';
 import { NxtDropdownConfig, NxtDropdownOption } from './interfaces/nxt-dropdown.interfaces';
+import { validateStrictConfiguration, mergeConfiguration, hasDirectInputValues, hasConfigValues } from './utils/config.utils';
+import { isAllSelected, isPartiallySelected, isOptionSelected, updateSelectedOptions, getValuesFromSelectedOptions, toggleOptionSelection } from './utils/selection.utils';
+import { getDisplayText, getPendingDisplayText } from './utils/display.utils';
+import { filterOptionsBySearch, clearSearchState } from './utils/search.utils';
+import { getSanitizedIcon, trackByValue, handleDropdownKeyDown, handleSearchKeyDown } from './utils/ui.utils';
 
 @Component({
   selector: 'nxt-dropdown',
@@ -186,87 +191,79 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   private setupCustomTrigger(): void {
-    if (this.customTrigger) {
-      
-      // Subscribe to trigger events
-      this.customTrigger.triggerClick.subscribe((event: Event) => {
-        this.toggleDropdown();
-      });
+    if (!this.customTrigger) return;
+    
+    // Subscribe to trigger events
+    this.customTrigger.triggerClick.subscribe((event: Event) => {
+      this.toggleDropdown();
+    });
 
-      this.customTrigger.keyDown.subscribe((event: KeyboardEvent) => {
-        this.onKeyDown(event);
-      });
+    this.customTrigger.keyDown.subscribe((event: KeyboardEvent) => {
+      this.onKeyDown(event);
+    });
 
-      // Update trigger properties
-      this.updateTriggerProperties();
-    } else {
-    }
+    // Update trigger properties
+    this.updateTriggerProperties();
   }
 
   private updateTriggerProperties(): void {
-    if (this.customTrigger) {
-      this.customTrigger.disabled = this.isDisabled;
-      this.customTrigger.isOpen = this.isOpen;
-      this.customTrigger.required = this.currentRequired;
-      this.customTrigger.multiple = this.currentMultiple;
-      this.customTrigger.placeholder = this.currentPlaceholder;
-      this.customTrigger.iconType = this.currentIconType;
-    }
+    if (!this.customTrigger) return;
+    
+    this.customTrigger.disabled = this.isDisabled;
+    this.customTrigger.isOpen = this.isOpen;
+    this.customTrigger.required = this.currentRequired;
+    this.customTrigger.multiple = this.currentMultiple;
+    this.customTrigger.placeholder = this.currentPlaceholder;
+    this.customTrigger.iconType = this.currentIconType;
   }
 
   private updateConfiguration(): void {
-    // Validate configuration approach if strict mode is enabled
-    if (this.strictConfigMode) {
-      this.validateStrictConfiguration();
+    const directInputs = {
+      options: this.options,
+      placeholder: this.placeholder,
+      disabled: this.disabled,
+      required: this.required,
+      multiple: this.multiple,
+      confirmation: this.confirmation,
+      panelClass: this.panelClass,
+      searchable: this.searchable,
+      searchPlaceholder: this.searchPlaceholder,
+      minSearchLength: this.minSearchLength,
+      iconType: this.iconType,
+      applyButtonText: this.applyButtonText,
+      applyButtonIcon: this.applyButtonIcon,
+      cancelButtonText: this.cancelButtonText,
+      cancelButtonIcon: this.cancelButtonIcon
+    };
+
+    // Validate configuration
+    const validation = validateStrictConfiguration(this.config, directInputs, this.strictConfigMode);
+    if (!validation.isValid) {
+      console.error('[NXT Dropdown] Configuration Error:', validation.errorMessage);
+      return;
     }
 
-    // Store the previous options to check if they changed
-    const previousOptions = this._options;
-
-    // Apply configuration based on strict mode
-    if (this.strictConfigMode) {
-      // In strict mode, prioritize config object over direct inputs
-      this._options = this.config.options || this.options || [];
-      
-      this._placeholder = this.config.placeholder || this.placeholder || 'Select an option';
-      this._disabled = this.config.disabled !== undefined ? this.config.disabled : (this.disabled || false);
-      this._required = this.config.required !== undefined ? this.config.required : (this.required || false);
-      this._multiple = this.config.multiple !== undefined ? this.config.multiple : (this.multiple || false);
-      this._confirmation = this.config.confirmation !== undefined ? this.config.confirmation : (this.confirmation || false);
-      this._panelClass = this.config.panelClass || this.panelClass || '';
-      this._searchable = this.config.searchable !== undefined ? this.config.searchable : (this.searchable || false);
-      this._searchPlaceholder = this.config.searchPlaceholder || this.searchPlaceholder || 'Search options...';
-      this._minSearchLength = this.config.minSearchLength !== undefined ? this.config.minSearchLength : (this.minSearchLength || 0);
-      this._iconType = this.config.iconType || this.iconType || 'caret';
-      
-      // Confirmation button configuration
-      this._applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
-      this._applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
-      this._cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
-      this._cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
-    } else {
-      // In non-strict mode, direct inputs override config object
-      this._options = this.options || this.config.options || [];
-      
-      // For non-strict mode, check if direct inputs are explicitly set
-      // If not explicitly set, use config values
-      this._placeholder = this.placeholder !== 'Select an option' ? this.placeholder : (this.config.placeholder || 'Select an option');
-      this._disabled = this.disabled !== undefined ? this.disabled : (this.config.disabled || false);
-      this._required = this.required !== undefined ? this.required : (this.config.required || false);
-      this._multiple = this.multiple !== undefined ? this.multiple : (this.config.multiple || false);
-      this._confirmation = this.confirmation !== undefined ? this.confirmation : (this.config.confirmation || false);
-      this._panelClass = this.panelClass !== '' ? this.panelClass : (this.config.panelClass || '');
-      this._searchable = this.searchable !== undefined ? this.searchable : (this.config.searchable || false);
-      this._searchPlaceholder = this.searchPlaceholder !== 'Search options...' ? this.searchPlaceholder : (this.config.searchPlaceholder || 'Search options...');
-      this._minSearchLength = this.minSearchLength !== undefined ? this.minSearchLength : (this.config.minSearchLength || 0);
-      this._iconType = this.iconType !== 'caret' ? this.iconType : (this.config.iconType || 'caret');
-      
-      // Confirmation button configuration (non-strict mode)
-      this._applyButtonText = this.applyButtonText !== 'Apply' ? this.applyButtonText : (this.config.confirmationButtons?.apply?.text || 'Apply');
-      this._applyButtonIcon = this.applyButtonIcon !== '' ? this.applyButtonIcon : (this.config.confirmationButtons?.apply?.icon || '');
-      this._cancelButtonText = this.cancelButtonText !== 'Cancel' ? this.cancelButtonText : (this.config.confirmationButtons?.cancel?.text || 'Cancel');
-      this._cancelButtonIcon = this.cancelButtonIcon !== '' ? this.cancelButtonIcon : (this.config.confirmationButtons?.cancel?.icon || '');
-    }
+    // Merge configuration
+    const mergedConfig = mergeConfiguration(this.config, directInputs, this.strictConfigMode);
+    
+    // Apply merged configuration
+    this._options = mergedConfig.options;
+    this._placeholder = mergedConfig.placeholder;
+    this._disabled = mergedConfig.disabled;
+    this._required = mergedConfig.required;
+    this._multiple = mergedConfig.multiple;
+    this._confirmation = mergedConfig.confirmation;
+    this._panelClass = mergedConfig.panelClass;
+    this._searchable = mergedConfig.searchable;
+    this._searchPlaceholder = mergedConfig.searchPlaceholder;
+    this._minSearchLength = mergedConfig.minSearchLength;
+    this._iconType = mergedConfig.iconType;
+    
+    // Handle confirmation buttons
+    this._applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
+    this._applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
+    this._cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
+    this._cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
 
     // Check if options became available and we have a pending value
     if (this._options && this._options.length > 0 && this.pendingValue !== null) {
@@ -286,99 +283,6 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     
     // Clear the pending value since we've processed it
     this.pendingValue = null;
-  }
-
-  private validateStrictConfiguration(): void {
-    const hasDirectInputs = this.hasDirectInputs();
-    const hasConfigObject = this.hasConfigObject();
-
-    if (hasDirectInputs && hasConfigObject) {
-      console.error(
-        '%c[NXT Dropdown] Configuration Error:',
-        'color: #d32f2f; font-weight: bold; font-size: 14px;'
-      );
-      console.error(
-        '%cYou cannot mix direct input properties with config object when strictConfigMode is enabled.',
-        'color: #d32f2f; font-size: 12px;'
-      );
-      console.error(
-        '%cPlease use either:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(
-        '%c1. Direct input properties only (strictConfigMode: false)',
-        'color: #1976d2; font-size: 12px;'
-      );
-      console.error(
-        '%c2. Config object only (strictConfigMode: true)',
-        'color: #1976d2; font-size: 12px;'
-      );
-      console.error(
-        '%cExample with config object:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(`
-        <nxt-dropdown
-          [strictConfigMode]="true"
-          [config]="{
-            options: myOptions,
-            placeholder: 'Select option',
-            multiple: true,
-            searchable: true
-          }"
-          [(ngModel)]="selectedValue">
-        </nxt-dropdown>
-      `);
-      console.error(
-        '%cExample with direct properties:',
-        'color: #1976d2; font-weight: bold; font-size: 12px;'
-      );
-      console.error(`
-        <nxt-dropdown
-          [strictConfigMode]="false"
-          [options]="myOptions"
-          [placeholder]="'Select option'"
-          [multiple]="true"
-          [searchable]="true"
-          [(ngModel)]="selectedValue">
-        </nxt-dropdown>
-      `);
-    }
-  }
-
-  private hasDirectInputs(): boolean {
-    if (this.options.length > 0) return true;
-    if (this.placeholder !== 'Select an option') return true;
-    if (this.disabled === true) return true;
-    if (this.required === true) return true;
-    if (this.multiple === true) return true;
-    if (this.confirmation === true) return true;
-    if (this.panelClass !== '') return true;
-    if (this.searchable === true) return true;
-    if (this.searchPlaceholder !== 'Search options...') return true;
-    if (this.minSearchLength !== 0) return true;
-    if (this.iconType !== 'caret') return true;
-    return false;
-  }
-
-  private hasConfigObject(): boolean {
-    if (!this.config || Object.keys(this.config).length === 0) {
-      return false;
-    }
-    
-    return !!(
-      this.config.options ||
-      this.config.placeholder ||
-      this.config.disabled !== undefined ||
-      this.config.required !== undefined ||
-      this.config.multiple !== undefined ||
-      this.config.confirmation !== undefined ||
-      this.config.panelClass ||
-      this.config.searchable !== undefined ||
-      this.config.searchPlaceholder ||
-      this.config.minSearchLength !== undefined ||
-      this.config.iconType !== undefined
-    );
   }
 
   // Getters for template access
@@ -555,33 +459,26 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   onSearchKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      this.closeDropdown();
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      // Select first filtered option if available
-      const firstOption = this.filteredOptions.find(opt => !opt.disabled);
-      if (firstOption) {
-        this.selectOption(firstOption);
+    handleSearchKeyDown(event, {
+      closeDropdown: () => this.closeDropdown(),
+      selectFirstOption: () => {
+        const firstOption = this.filteredOptions.find(opt => !opt.disabled);
+        if (firstOption) {
+          this.selectOption(firstOption);
+        }
       }
-    }
+    });
   }
 
   clearSearch(): void {
-    this.searchText = '';
-    this.showSearchInput = false;
+    const clearedState = clearSearchState();
+    this.searchText = clearedState.searchText;
+    this.showSearchInput = clearedState.showSearchInput;
     this.updateFilteredOptions();
   }
 
   updateFilteredOptions(): void {
-    if (!this._searchable || !this.searchText || this.searchText.length < this._minSearchLength) {
-      this.filteredOptions = [...this._options];
-    } else {
-      const searchLower = this.searchText.toLowerCase();
-      this.filteredOptions = this._options.filter(option => 
-        option.label.toLowerCase().includes(searchLower)
-      );
-    }
+    this.filteredOptions = filterOptionsBySearch(this._options, this.searchText, this._searchable, this._minSearchLength);
     
     // Recalculate position if dropdown is open, as content height might have changed
     if (this.isOpen) {
@@ -660,27 +557,16 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   isAllSelected(): boolean {
-    if (!this._multiple) return false;
-    
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
-    const optionsToCheck = this._confirmation ? this.pendingOptions : this.selectedOptions;
-    
-    return availableOptions.length > 0 && 
-           availableOptions.every(option => 
-             optionsToCheck.some(selected => selected.value === option.value)
-           );
+    return isAllSelected(this.filteredOptions, this._confirmation ? this.pendingOptions : this.selectedOptions, this._multiple);
   }
 
   isPartiallySelected(): boolean {
-    if (!this._multiple) return false;
-    
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
-    const optionsToCheck = this._confirmation ? this.pendingOptions : this.selectedOptions;
-    const selectedCount = availableOptions.filter(option => 
-      optionsToCheck.some(selected => selected.value === option.value)
-    ).length;
-    
-    return selectedCount > 0 && selectedCount < availableOptions.length;
+    return isPartiallySelected(this.filteredOptions, this._confirmation ? this.pendingOptions : this.selectedOptions, this._multiple);
+  }
+
+  isOptionSelected(option: NxtDropdownOption): boolean {
+    const optionsToCheck = this._confirmation && this._multiple ? this.pendingOptions : this.selectedOptions;
+    return isOptionSelected(option, optionsToCheck);
   }
 
   private selectSingleOption(option: NxtDropdownOption): void {
@@ -693,75 +579,23 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   private toggleMultipleSelection(option: NxtDropdownOption): void {
-    const index = this.selectedOptions.findIndex(opt => opt.value === option.value);
-    
-    if (index > -1) {
-      this.selectedOptions.splice(index, 1);
-    } else {
-      this.selectedOptions.push(option);
-    }
-
-    this.value = this.selectedOptions.map(opt => opt.value);
+    this.selectedOptions = toggleOptionSelection(option, this.selectedOptions);
+    this.value = getValuesFromSelectedOptions(this.selectedOptions, this._multiple);
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
-    
-    // Keep dropdown open for multiple selection to allow continuous selection
-    // Only close for single selection or when confirmation is enabled
   }
 
   private updateSelectedOptions(): void {
-    if (!this.value) {
-      this.selectedOptions = [];
-      return;
-    }
-
-    if (this._multiple && Array.isArray(this.value)) {
-      this.selectedOptions = this._options.filter(option => 
-        this.value.includes(option.value)
-      );
-    } else {
-      this.selectedOptions = this._options.filter(option => 
-        option.value === this.value
-      );
-    }
+    this.selectedOptions = updateSelectedOptions(this.value, this._options, this._multiple);
   }
 
   getDisplayText(): string {
-    if (this.selectedOptions.length === 0) {
-      return this._placeholder;
-    }
-
-    if (this._multiple) {
-      if (this.selectedOptions.length === 1) {
-        return this.selectedOptions[0].label;
-      }
-      return this.selectedOptions.map(option => option.label).join(', ');
-    }
-
-    return this.selectedOptions[0].label;
+    return getDisplayText(this.selectedOptions, this._placeholder, this._multiple);
   }
 
   getPendingDisplayText(): string {
-    if (this.pendingOptions.length === 0) {
-      return this._placeholder;
-    }
-
-    if (this._multiple) {
-      if (this.pendingOptions.length === 1) {
-        return this.pendingOptions[0].label;
-      }
-      return this.pendingOptions.map(option => option.label).join(', ');
-    }
-
-    return this.pendingOptions[0].label;
-  }
-
-  isOptionSelected(option: NxtDropdownOption): boolean {
-    if (this._confirmation && this._multiple) {
-      return this.pendingOptions.some(selected => selected.value === option.value);
-    }
-    return this.selectedOptions.some(selected => selected.value === option.value);
+    return getPendingDisplayText(this.pendingOptions, this._placeholder, this._multiple);
   }
 
   removeOption(event: Event, option: NxtDropdownOption): void {
@@ -780,34 +614,14 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if (this.isDisabled) return;
-
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        this.toggleDropdown();
-        break;
-      case 'Escape':
-        this.closeDropdown();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        if (!this.isOpen) {
-          this.toggleDropdown();
-        }
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        if (this.isOpen) {
-          this.closeDropdown();
-        }
-        break;
-    }
+    handleDropdownKeyDown(event, this.isDisabled, this.isOpen, {
+      toggleDropdown: () => this.toggleDropdown(),
+      closeDropdown: () => this.closeDropdown()
+    });
   }
 
   trackByValue(index: number, option: NxtDropdownOption): any {
-    return option.value;
+    return trackByValue(index, option);
   }
 
   shouldShowGroupHeader(option: NxtDropdownOption, index: number): boolean {
@@ -829,7 +643,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (!this._confirmation || !this._multiple) return;
 
     this.selectedOptions = [...this.pendingOptions];
-    this.value = this.selectedOptions.map(opt => opt.value);
+    this.value = getValuesFromSelectedOptions(this.selectedOptions, this._multiple);
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
@@ -849,16 +663,6 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Supports both string icons (emoji, unicode) and HTML elements (font icons)
    */
   getSanitizedIcon(icon: string): SafeHtml {
-    if (!icon) {
-      return '';
-    }
-    
-    // Check if the icon contains HTML tags (font icon)
-    if (icon.includes('<') && icon.includes('>')) {
-      return this.sanitizer.bypassSecurityTrustHtml(icon);
-    }
-    
-    // For regular string icons (emoji, unicode), return as is
-    return icon;
+    return getSanitizedIcon(icon, this.sanitizer);
   }
 } 
