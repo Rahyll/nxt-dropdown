@@ -24,7 +24,7 @@ import { getSanitizedIcon, trackByValue, handleDropdownKeyDown, handleSearchKeyD
   ]
 })
 export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnChanges, AfterContentInit {
-  // Direct input properties (current way)
+  // Direct input properties
   @Input() options: NxtDropdownOption[] = [];
   @Input() placeholder: string = 'Select an option';
   @Input() disabled: boolean = false;
@@ -43,7 +43,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() cancelButtonText: string = 'Cancel';
   @Input() cancelButtonIcon: string = '';
 
-  // Configuration object input (new way)
+  // Configuration object input
   @Input() config: NxtDropdownConfig = {};
   
   // Strict configuration mode - when true, only config object is allowed
@@ -55,25 +55,6 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @ContentChildren(NxtOptionComponent) optionComponents?: QueryList<NxtOptionComponent>;
   @ContentChildren(NxtOptionGroupComponent) optionGroupComponents?: QueryList<NxtOptionGroupComponent>;
   @ContentChild(NxtDropdownTriggerComponent) customTrigger?: NxtDropdownTriggerComponent;
-
-  // Internal properties that will be used by the component
-  private _options: NxtDropdownOption[] = [];
-  private _placeholder: string = 'Select an option';
-  private _disabled: boolean = false;
-  private _required: boolean = false;
-  private _multiple: boolean = false;
-  private _confirmation: boolean = false;
-  private _panelClass: string = '';
-  private _searchable: boolean = false;
-  private _searchPlaceholder: string = 'Search options...';
-  private _minSearchLength: number = 0;
-  private _iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' = 'caret';
-  
-  // Confirmation button customization
-  private _applyButtonText: string = 'Apply';
-  private _applyButtonIcon: string = '';
-  private _cancelButtonText: string = 'Cancel';
-  private _cancelButtonIcon: string = '';
 
   value: any;
   isDisabled: boolean = false;
@@ -102,10 +83,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   ngOnInit() {
     this.updateConfiguration();
-    this.isDisabled = this._disabled;
+    this.isDisabled = this.disabled;
     this.updateSelectedOptions();
     this.updateFilteredOptions();
-    if (this._confirmation && this._multiple) {
+    if (this.confirmation && this.multiple) {
       this.pendingOptions = [...this.selectedOptions];
     }
   }
@@ -140,7 +121,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
         changes['confirmation'] || changes['panelClass'] || changes['searchable'] || 
         changes['searchPlaceholder'] || changes['minSearchLength'] || changes['iconType'] || changes['strictConfigMode']) {
       this.updateConfiguration();
-      this.isDisabled = this._disabled;
+      this.isDisabled = this.disabled;
       this.updateSelectedOptions();
       this.updateFilteredOptions();
     }
@@ -180,11 +161,11 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       }
       
       // Update the options with projected content
-      this._options = projectedOptions;
+      this.options = projectedOptions;
       this.updateFilteredOptions();
       
       // Check if we have a pending value now that options are available
-      if (this._options && this._options.length > 0 && this.pendingValue !== null) {
+      if (this.options && this.options.length > 0 && this.pendingValue !== null) {
         this.handlePendingValue();
       }
     }
@@ -211,10 +192,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     
     this.customTrigger.disabled = this.isDisabled;
     this.customTrigger.isOpen = this.isOpen;
-    this.customTrigger.required = this.currentRequired;
-    this.customTrigger.multiple = this.currentMultiple;
-    this.customTrigger.placeholder = this.currentPlaceholder;
-    this.customTrigger.iconType = this.currentIconType;
+    this.customTrigger.required = this.required;
+    this.customTrigger.multiple = this.multiple;
+    this.customTrigger.placeholder = this.placeholder;
+    this.customTrigger.iconType = this.iconType;
   }
 
   private updateConfiguration(): void {
@@ -246,27 +227,17 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Merge configuration
     const mergedConfig = mergeConfiguration(this.config, directInputs, this.strictConfigMode);
     
-    // Apply merged configuration
-    this._options = mergedConfig.options;
-    this._placeholder = mergedConfig.placeholder;
-    this._disabled = mergedConfig.disabled;
-    this._required = mergedConfig.required;
-    this._multiple = mergedConfig.multiple;
-    this._confirmation = mergedConfig.confirmation;
-    this._panelClass = mergedConfig.panelClass;
-    this._searchable = mergedConfig.searchable;
-    this._searchPlaceholder = mergedConfig.searchPlaceholder;
-    this._minSearchLength = mergedConfig.minSearchLength;
-    this._iconType = mergedConfig.iconType;
+    // Apply merged configuration directly to input properties
+    Object.assign(this, mergedConfig);
     
     // Handle confirmation buttons
-    this._applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
-    this._applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
-    this._cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
-    this._cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
+    this.applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
+    this.applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
+    this.cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
+    this.cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
 
     // Check if options became available and we have a pending value
-    if (this._options && this._options.length > 0 && this.pendingValue !== null) {
+    if (this.options && this.options.length > 0 && this.pendingValue !== null) {
       this.handlePendingValue();
     }
   }
@@ -277,73 +248,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.updateSelectedOptions();
     
     // In confirmation mode, also update pending options to match selected options
-    if (this._confirmation && this._multiple) {
+    if (this.confirmation && this.multiple) {
       this.pendingOptions = [...this.selectedOptions];
     }
     
     // Clear the pending value since we've processed it
     this.pendingValue = null;
-  }
-
-  // Getters for template access
-  get currentOptions(): NxtDropdownOption[] {
-    return this._options;
-  }
-
-  get currentPlaceholder(): string {
-    return this._placeholder;
-  }
-
-  get currentDisabled(): boolean {
-    return this._disabled;
-  }
-
-  get currentRequired(): boolean {
-    return this._required;
-  }
-
-  get currentMultiple(): boolean {
-    return this._multiple;
-  }
-
-  get currentConfirmation(): boolean {
-    return this._confirmation;
-  }
-
-  get currentPanelClass(): string {
-    return this._panelClass;
-  }
-
-  get currentSearchable(): boolean {
-    return this._searchable;
-  }
-
-  get currentSearchPlaceholder(): string {
-    return this._searchPlaceholder;
-  }
-
-  get currentMinSearchLength(): number {
-    return this._minSearchLength;
-  }
-
-  get currentIconType(): 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' {
-    return this._iconType;
-  }
-
-  get currentApplyButtonText(): string {
-    return this._applyButtonText;
-  }
-
-  get currentApplyButtonIcon(): string {
-    return this._applyButtonIcon;
-  }
-
-  get currentCancelButtonText(): string {
-    return this._cancelButtonText;
-  }
-
-  get currentCancelButtonIcon(): string {
-    return this._cancelButtonIcon;
   }
 
   get hasCustomTrigger(): boolean {
@@ -362,7 +272,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     
     // If options are not available yet, store the value as pending
     // This handles the case where the form control value is set before the dropdown options are loaded
-    if (!this._options || this._options.length === 0) {
+    if (!this.options || this.options.length === 0) {
       this.pendingValue = value;
       return;
     }
@@ -373,7 +283,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.updateSelectedOptions();
     
     // In confirmation mode, also update pending options to match selected options
-    if (this._confirmation && this._multiple) {
+    if (this.confirmation && this.multiple) {
       this.pendingOptions = [...this.selectedOptions];
     }
   }
@@ -399,7 +309,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       if (this.isOpen) {
         this.calculateDropdownPosition();
         this.onTouched();
-        if (this._searchable) {
+        if (this.searchable) {
           this.showSearchInput = true;
           // Focus search input after a short delay to ensure it's rendered
           setTimeout(() => {
@@ -421,7 +331,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
     const triggerRect = triggerElement.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const dropdownMaxHeight = this.currentConfirmation ? 300 : 200; // Adjust based on confirmation mode
+    const dropdownMaxHeight = this.confirmation ? 300 : 200; // Adjust based on confirmation mode
     const buffer = 0; // Additional buffer space as requested
     
     // Calculate available space below the trigger
@@ -478,7 +388,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   updateFilteredOptions(): void {
-    this.filteredOptions = filterOptionsBySearch(this._options, this.searchText, this._searchable, this._minSearchLength);
+    this.filteredOptions = filterOptionsBySearch(this.options, this.searchText, this.searchable, this.minSearchLength);
     
     // Recalculate position if dropdown is open, as content height might have changed
     if (this.isOpen) {
@@ -489,8 +399,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   selectOption(option: NxtDropdownOption): void {
     if (option.disabled) return;
 
-    if (this._multiple) {
-      if (this._confirmation) {
+    if (this.multiple) {
+      if (this.confirmation) {
         this.togglePendingSelection(option);
       } else {
         this.toggleMultipleSelection(option);
@@ -501,9 +411,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   selectAll(): void {
-    if (!this._multiple) return;
+    if (!this.multiple) return;
 
-    if (this._confirmation) {
+    if (this.confirmation) {
       this.togglePendingSelectAll();
     } else {
       this.toggleSelectAll();
@@ -557,15 +467,15 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   isAllSelected(): boolean {
-    return isAllSelected(this.filteredOptions, this._confirmation ? this.pendingOptions : this.selectedOptions, this._multiple);
+    return isAllSelected(this.filteredOptions, this.confirmation ? this.pendingOptions : this.selectedOptions, this.multiple);
   }
 
   isPartiallySelected(): boolean {
-    return isPartiallySelected(this.filteredOptions, this._confirmation ? this.pendingOptions : this.selectedOptions, this._multiple);
+    return isPartiallySelected(this.filteredOptions, this.confirmation ? this.pendingOptions : this.selectedOptions, this.multiple);
   }
 
   isOptionSelected(option: NxtDropdownOption): boolean {
-    const optionsToCheck = this._confirmation && this._multiple ? this.pendingOptions : this.selectedOptions;
+    const optionsToCheck = this.confirmation && this.multiple ? this.pendingOptions : this.selectedOptions;
     return isOptionSelected(option, optionsToCheck);
   }
 
@@ -580,28 +490,28 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   private toggleMultipleSelection(option: NxtDropdownOption): void {
     this.selectedOptions = toggleOptionSelection(option, this.selectedOptions);
-    this.value = getValuesFromSelectedOptions(this.selectedOptions, this._multiple);
+    this.value = getValuesFromSelectedOptions(this.selectedOptions, this.multiple);
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
   }
 
   private updateSelectedOptions(): void {
-    this.selectedOptions = updateSelectedOptions(this.value, this._options, this._multiple);
+    this.selectedOptions = updateSelectedOptions(this.value, this.options, this.multiple);
   }
 
   getDisplayText(): string {
-    return getDisplayText(this.selectedOptions, this._placeholder, this._multiple);
+    return getDisplayText(this.selectedOptions, this.placeholder, this.multiple);
   }
 
   getPendingDisplayText(): string {
-    return getPendingDisplayText(this.pendingOptions, this._placeholder, this._multiple);
+    return getPendingDisplayText(this.pendingOptions, this.placeholder, this.multiple);
   }
 
   removeOption(event: Event, option: NxtDropdownOption): void {
     event.stopPropagation();
     
-    if (this._confirmation && this._multiple) {
+    if (this.confirmation && this.multiple) {
       // In confirmation mode, remove from pending options
       const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
       if (index > -1) {
@@ -640,10 +550,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   applySelection(): void {
-    if (!this._confirmation || !this._multiple) return;
+    if (!this.confirmation || !this.multiple) return;
 
     this.selectedOptions = [...this.pendingOptions];
-    this.value = getValuesFromSelectedOptions(this.selectedOptions, this._multiple);
+    this.value = getValuesFromSelectedOptions(this.selectedOptions, this.multiple);
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
@@ -651,7 +561,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   cancelSelection(): void {
-    if (!this._confirmation || !this._multiple) return;
+    if (!this.confirmation || !this.multiple) return;
 
     // Reset pending options to match current selected options
     this.pendingOptions = [...this.selectedOptions];

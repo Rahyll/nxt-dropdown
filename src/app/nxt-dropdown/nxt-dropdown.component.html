@@ -1,8 +1,8 @@
 <div class="nxt-dropdown-container" 
      [class.disabled]="isDisabled"
      [class.open]="isOpen"
-     [class.required]="currentRequired"
-     [class.multiple]="currentMultiple">
+     [class.required]="required"
+     [class.multiple]="multiple">
   
   <!-- Custom Trigger (if provided) -->
   <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
@@ -18,11 +18,11 @@
        role="combobox"
        [attr.aria-expanded]="isOpen"
        [attr.aria-haspopup]="true"
-       [attr.aria-label]="currentPlaceholder">
+       [attr.aria-label]="placeholder">
     
     <div class="nxt-dropdown-value">
-      <div class="nxt-dropdown-placeholder" *ngIf="(currentConfirmation && currentMultiple ? pendingOptions : selectedOptions).length === 0">
-        {{ currentPlaceholder }}
+      <div class="nxt-dropdown-placeholder" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length === 0">
+        {{ placeholder }}
       </div>
       
       <div class="nxt-dropdown-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
@@ -30,9 +30,9 @@
           {{ getDisplayText() }}
         </div>
         
-        <div class="nxt-dropdown-multiple" *ngIf="currentMultiple">
+        <div class="nxt-dropdown-multiple" *ngIf="multiple">
           <div class="nxt-dropdown-text">
-            {{ currentConfirmation && currentMultiple ? getPendingDisplayText() : getDisplayText() }}
+            {{ confirmation && multiple ? getPendingDisplayText() : getDisplayText() }}
           </div>
         </div>
       </div>
@@ -40,22 +40,22 @@
     
     <div class="nxt-dropdown-arrow">
       <!-- Down Caret Icon -->
-      <svg *ngIf="currentIconType === 'caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <svg *ngIf="iconType === 'caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
         <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
       <!-- Down Arrow Icon -->
-      <svg *ngIf="currentIconType === 'arrow'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <svg *ngIf="iconType === 'arrow'" width="12" height="12" viewBox="0 0 12 12" fill="none">
         <path d="M6 2L6 10M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
       <!-- Sharp Cornered Down Caret Icon -->
-      <svg *ngIf="currentIconType === 'sharp-caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <svg *ngIf="iconType === 'sharp-caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
         <polygon points="3,4.5 6,7.5 9,4.5" fill="currentColor"/>
       </svg>
       
       <!-- Inverted Triangle Icon -->
-      <svg *ngIf="currentIconType === 'inverted-triangle'" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <svg *ngIf="iconType === 'inverted-triangle'" width="12" height="12" viewBox="0 0 12 12" fill="none">
         <polygon points="2,3 6,9 10,3" fill="currentColor"/>
       </svg>
     </div>
@@ -63,16 +63,16 @@
   
   <div class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
-       [class]="currentPanelClass"
-       [class.confirmation-mode]="currentConfirmation && currentMultiple"
+       [class]="panelClass"
+       [class.confirmation-mode]="confirmation && multiple"
        [class.position-above]="shouldPositionAbove">
     
     <!-- Search Input -->
-    <div class="nxt-dropdown-search" *ngIf="currentSearchable && showSearchInput">
+    <div class="nxt-dropdown-search" *ngIf="searchable && showSearchInput">
       <div class="nxt-dropdown-search-container">
         <input type="text"
                class="nxt-dropdown-search-input"
-               [placeholder]="currentSearchPlaceholder"
+               [placeholder]="searchPlaceholder"
                [value]="searchText"
                (input)="onSearchInput($event)"
                (keydown)="onSearchKeyDown($event)"
@@ -93,7 +93,7 @@
     <div class="nxt-dropdown-options">
       <!-- Select All Option (only for multiple selection) -->
       <div class="nxt-dropdown-option nxt-dropdown-all-option"
-           *ngIf="currentMultiple && filteredOptions.length > 0"
+           *ngIf="multiple && filteredOptions.length > 0"
            [class.selected]="isAllSelected()"
            [class.partially-selected]="isPartiallySelected()"
            (click)="selectAll()"
@@ -121,7 +121,7 @@
       </div>
 
       <!-- Divider after Select All -->
-      <div class="nxt-dropdown-divider" *ngIf="currentMultiple && filteredOptions.length > 0"></div>
+      <div class="nxt-dropdown-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
       
       <!-- Grouped and Regular Options -->
       <ng-container *ngFor="let option of filteredOptions; let i = index; trackBy: trackByValue">
@@ -140,7 +140,7 @@
              [attr.aria-selected]="isOptionSelected(option)">
           
           <div class="nxt-dropdown-option-content">
-            <div class="nxt-dropdown-option-checkbox" *ngIf="currentMultiple">
+            <div class="nxt-dropdown-option-checkbox" *ngIf="multiple">
               <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
                 <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -162,35 +162,35 @@
       <!-- Content Projected Options will be processed in the component -->
       
       <div class="nxt-dropdown-no-options" *ngIf="filteredOptions.length === 0">
-        <div *ngIf="currentSearchable && searchText && searchText.length >= currentMinSearchLength">
+        <div *ngIf="searchable && searchText && searchText.length >= minSearchLength">
           No options found for "{{ searchText }}"
         </div>
-        <div *ngIf="!currentSearchable || !searchText || searchText.length < currentMinSearchLength">
+        <div *ngIf="!searchable || !searchText || searchText.length < minSearchLength">
           No options available
         </div>
       </div>
     </div>
 
     <!-- Confirmation Footer -->
-    <div class="nxt-dropdown-footer" *ngIf="currentConfirmation && currentMultiple">
+    <div class="nxt-dropdown-footer" *ngIf="confirmation && multiple">
       <div class="nxt-dropdown-footer-buttons">
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
                 (click)="cancelSelection()">
-          <span *ngIf="currentCancelButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(currentCancelButtonIcon)"></span>
-          {{ currentCancelButtonText }}
+          <span *ngIf="cancelButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(cancelButtonIcon)"></span>
+          {{ cancelButtonText }}
         </button>
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-apply"
                 (click)="applySelection()">
-          <span *ngIf="currentApplyButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(currentApplyButtonIcon)"></span>
-          {{ currentApplyButtonText }}
+          <span *ngIf="applyButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(applyButtonIcon)"></span>
+          {{ applyButtonText }}
         </button>
       </div>
     </div>
   </div>
   
-  <div class="nxt-dropdown-error" *ngIf="currentRequired && !value">
+  <div class="nxt-dropdown-error" *ngIf="required && !value">
     This field is required
   </div>
 </div> 
