@@ -1,4 +1,5 @@
-import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, ContentChildren, QueryList } from '@angular/core';
+import { NxtOptionComponent } from '../nxt-option/nxt-option.component';
 
 @Component({
   selector: 'nxt-option-group',
@@ -41,8 +42,31 @@ export class NxtOptionGroupComponent {
   @Input() label: string = '';
   
   @ContentChild(TemplateRef) labelTemplate?: TemplateRef<any>;
+  @ContentChildren(NxtOptionComponent) optionComponents?: QueryList<NxtOptionComponent>;
   
   get defaultLabelTemplate(): TemplateRef<any> {
     return null as any; // Will be handled in template
+  }
+  
+
+  
+  getOptions(): any[] {
+    if (!this.optionComponents) {
+      return [];
+    }
+    
+    return this.optionComponents.map(optionComp => {
+      // Ensure the option has the group label set
+      if (!optionComp.group) {
+        optionComp.group = this.label;
+      }
+      
+      return {
+        value: optionComp.value,
+        label: optionComp.option.label,
+        disabled: optionComp.disabled,
+        group: this.label
+      };
+    });
   }
 } 

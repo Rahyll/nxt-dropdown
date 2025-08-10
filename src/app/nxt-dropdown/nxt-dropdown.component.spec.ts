@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NxtDropdownComponent, NxtDropdownOption, NxtDropdownConfig } from './nxt-dropdown.component';
+import { NxtDropdownComponent } from './nxt-dropdown.component';
+import { NxtDropdownOption, NxtDropdownConfig } from './interfaces/nxt-dropdown.interfaces';
+import { NxtOptionComponent } from './components/nxt-option/nxt-option.component';
+import { QueryList } from '@angular/core';
 
 describe('NxtDropdownComponent', () => {
   let component: NxtDropdownComponent;
@@ -929,6 +932,86 @@ describe('NxtDropdownComponent', () => {
       
       // Should still position above even with larger max height for confirmation mode
       expect(component.shouldPositionAbove).toBeTrue();
+    });
+  });
+
+  describe('Option Groups', () => {
+    it('should process grouped options correctly', () => {
+      // Create mock option group components
+      const mockGroup1 = {
+        label: 'Fruits',
+        getOptions: () => [
+          { value: 'apple', label: 'Apple', disabled: false, group: 'Fruits' },
+          { value: 'banana', label: 'Banana', disabled: false, group: 'Fruits' }
+        ]
+      };
+      
+      const mockGroup2 = {
+        label: 'Vegetables',
+        getOptions: () => [
+          { value: 'carrot', label: 'Carrot', disabled: false, group: 'Vegetables' },
+          { value: 'broccoli', label: 'Broccoli', disabled: true, group: 'Vegetables' }
+        ]
+      };
+
+      // Mock the QueryList
+      const mockQueryList = {
+        forEach: (callback: (item: any) => void) => {
+          callback(mockGroup1);
+          callback(mockGroup2);
+        }
+      };
+
+      // Set up the component
+      component.optionGroupComponents = mockQueryList as any;
+      component.optionComponents = new QueryList<NxtOptionComponent>();
+
+      // Call the method that processes grouped options
+      component['processContentProjectedOptions']();
+
+      // Verify that grouped options are included in the options array
+      expect(component['_options']).toContain(jasmine.objectContaining({
+        value: 'apple',
+        label: 'Apple',
+        group: 'Fruits'
+      }));
+      
+      expect(component['_options']).toContain(jasmine.objectContaining({
+        value: 'banana',
+        label: 'Banana',
+        group: 'Fruits'
+      }));
+      
+      expect(component['_options']).toContain(jasmine.objectContaining({
+        value: 'carrot',
+        label: 'Carrot',
+        group: 'Vegetables'
+      }));
+      
+      expect(component['_options']).toContain(jasmine.objectContaining({
+        value: 'broccoli',
+        label: 'Broccoli',
+        disabled: true,
+        group: 'Vegetables'
+      }));
+    });
+
+    it('should show group headers correctly', () => {
+      // Set up options with groups
+      component['_options'] = [
+        { value: 'apple', label: 'Apple', group: 'Fruits' },
+        { value: 'banana', label: 'Banana', group: 'Fruits' },
+        { value: 'carrot', label: 'Carrot', group: 'Vegetables' },
+        { value: 'broccoli', label: 'Broccoli', group: 'Vegetables' }
+      ];
+      
+      component.updateFilteredOptions();
+
+      // Test shouldShowGroupHeader method
+      expect(component.shouldShowGroupHeader(component.filteredOptions[0], 0)).toBe(true); // First fruit
+      expect(component.shouldShowGroupHeader(component.filteredOptions[1], 1)).toBe(false); // Second fruit
+      expect(component.shouldShowGroupHeader(component.filteredOptions[2], 2)).toBe(true); // First vegetable
+      expect(component.shouldShowGroupHeader(component.filteredOptions[3], 3)).toBe(false); // Second vegetable
     });
   });
 }); 

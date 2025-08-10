@@ -106,8 +106,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   ngAfterContentInit() {
-    // Process content projected options
-    this.processContentProjectedOptions();
+    // Process content projected options with a small delay to ensure all components are initialized
+    setTimeout(() => {
+      this.processContentProjectedOptions();
+    });
     
     // Subscribe to content changes
     if (this.optionComponents) {
@@ -146,23 +148,29 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   private processContentProjectedOptions(): void {
     // If content projected options are available, use them instead of the options input
-    if (this.optionComponents && this.optionComponents.length > 0) {
+    const hasDirectOptions = this.optionComponents && this.optionComponents.length > 0;
+    const hasGroupedOptions = this.optionGroupComponents && this.optionGroupComponents.length > 0;
+    
+    if (hasDirectOptions || hasGroupedOptions) {
       const projectedOptions: NxtDropdownOption[] = [];
       
       // Process direct options
-      this.optionComponents.forEach(optionComp => {
-        projectedOptions.push({
-          value: optionComp.value,
-          label: optionComp.option.label,
-          disabled: optionComp.disabled
+      if (hasDirectOptions) {
+        this.optionComponents!.forEach(optionComp => {
+          projectedOptions.push({
+            value: optionComp.value,
+            label: optionComp.option.label,
+            disabled: optionComp.disabled
+          });
         });
-      });
+      }
       
       // Process grouped options
-      if (this.optionGroupComponents) {
-        this.optionGroupComponents.forEach(groupComp => {
-          // For now, we'll handle groups by adding them as regular options
-          // In a more advanced implementation, you might want to preserve the group structure
+      if (hasGroupedOptions) {
+        this.optionGroupComponents!.forEach(groupComp => {
+          // Get options from each group component
+          const groupOptions = groupComp.getOptions();
+          projectedOptions.push(...groupOptions);
         });
       }
       
@@ -800,6 +808,21 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
   trackByValue(index: number, option: NxtDropdownOption): any {
     return option.value;
+  }
+
+  shouldShowGroupHeader(option: NxtDropdownOption, index: number): boolean {
+    if (!option.group) {
+      return false;
+    }
+    
+    // Show group header if this is the first option with this group
+    for (let i = 0; i < index; i++) {
+      if (this.filteredOptions[i].group === option.group) {
+        return false;
+      }
+    }
+    
+    return true;
   }
 
   applySelection(): void {

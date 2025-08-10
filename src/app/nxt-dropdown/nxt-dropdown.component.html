@@ -123,33 +123,41 @@
       <!-- Divider after Select All -->
       <div class="nxt-dropdown-divider" *ngIf="currentMultiple && filteredOptions.length > 0"></div>
       
-      <!-- Regular Options -->
-      <div class="nxt-dropdown-option"
-           *ngFor="let option of filteredOptions; trackBy: trackByValue"
-           [class.selected]="isOptionSelected(option)"
-           [class.disabled]="option.disabled"
-           (click)="selectOption(option)"
-           role="option"
-           [attr.aria-selected]="isOptionSelected(option)">
+      <!-- Grouped and Regular Options -->
+      <ng-container *ngFor="let option of filteredOptions; let i = index; trackBy: trackByValue">
+        <!-- Group Header -->
+        <div class="nxt-dropdown-group-header" *ngIf="option.group && shouldShowGroupHeader(option, i)">
+          {{ option.group }}
+        </div>
         
-        <div class="nxt-dropdown-option-content">
-          <div class="nxt-dropdown-option-checkbox" *ngIf="currentMultiple">
-            <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
-              <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+        <!-- Option -->
+        <div class="nxt-dropdown-option"
+             [class.selected]="isOptionSelected(option)"
+             [class.disabled]="option.disabled"
+             [class.grouped]="option.group"
+             (click)="selectOption(option)"
+             role="option"
+             [attr.aria-selected]="isOptionSelected(option)">
+          
+          <div class="nxt-dropdown-option-content">
+            <div class="nxt-dropdown-option-checkbox" *ngIf="currentMultiple">
+              <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
+                <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="nxt-dropdown-option-label">
+              {{ option.label }}
+            </div>
+            
+            <div class="nxt-dropdown-option-description" *ngIf="option.description">
+              {{ option.description }}
             </div>
           </div>
-          
-          <div class="nxt-dropdown-option-label">
-            {{ option.label }}
-          </div>
-          
-          <div class="nxt-dropdown-option-description" *ngIf="option.description">
-            {{ option.description }}
-          </div>
         </div>
-      </div>
+      </ng-container>
       
       <!-- Content Projected Options will be processed in the component -->
       

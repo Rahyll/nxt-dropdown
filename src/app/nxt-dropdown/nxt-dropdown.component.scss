@@ -341,6 +341,22 @@
   margin: 2px 0;
 }
 
+.nxt-dropdown-group-header {
+  padding: 8px 12px 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 4px;
+}
+
+.nxt-dropdown-option.grouped {
+  padding-left: 20px; // Indent grouped options slightly
+}
+
 .nxt-dropdown-footer {
   border-top: 1px solid #e1e4e8;
   padding: 12px;
