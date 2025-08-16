@@ -288,6 +288,26 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   }
 
   /**
+   * Updates all internal state properties after configuration changes
+   * Consolidates the common pattern of updating disabled state, selected options, and filtered options
+   */
+  private updateInternalState(): void {
+    this.isDisabled = this.disabled;
+    this.updateSelectedOptions();
+    this.updateFilteredOptions();
+  }
+
+  /**
+   * Checks if there's a pending value and handles it when options are available
+   * Consolidates the repeated logic for checking and processing pending values
+   */
+  private checkAndHandlePendingValue(): void {
+    if (this.options && this.options.length > 0 && this.pendingValue !== null) {
+      this.handlePendingValue();
+    }
+  }
+
+  /**
    * Lifecycle hook called after data-bound properties are initialized
    * Sets up initial state and configuration
    */
@@ -295,14 +315,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Update configuration by merging config object with direct inputs
     this.updateConfiguration();
     
-    // Set initial disabled state
-    this.isDisabled = this.disabled;
-    
-    // Update selected options based on current value
-    this.updateSelectedOptions();
-    
-    // Initialize filtered options (same as all options initially)
-    this.updateFilteredOptions();
+    // Update all internal state
+    this.updateInternalState();
     
     // Initialize pending options in confirmation mode
     this.resetPendingOptions();
@@ -342,16 +356,16 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * @param changes - Object containing information about what changed
    */
   ngOnChanges(changes: SimpleChanges) {
-    // Handle changes to both direct inputs and config object
-    // This ensures the component stays in sync when inputs are modified
-    if (changes['config'] || changes['options'] || changes['placeholder'] || 
-        changes['disabled'] || changes['required'] || changes['multiple'] || 
-        changes['confirmation'] || changes['panelClass'] || changes['searchable'] || 
-        changes['searchPlaceholder'] || changes['minSearchLength'] || changes['iconType'] || changes['strictConfigMode']) {
+    // Check if any configuration-related properties changed
+    const configProperties = ['config', 'options', 'placeholder', 'disabled', 'required', 
+      'multiple', 'confirmation', 'panelClass', 'searchable', 'searchPlaceholder', 
+      'minSearchLength', 'iconType', 'strictConfigMode'];
+    
+    const hasConfigChanges = configProperties.some(prop => changes[prop]);
+    
+    if (hasConfigChanges) {
       this.updateConfiguration();
-      this.isDisabled = this.disabled;
-      this.updateSelectedOptions();
-      this.updateFilteredOptions();
+      this.updateInternalState();
     }
     
     // Process content projected options if they change
@@ -397,9 +411,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.updateFilteredOptions();
       
       // Check if we have a pending value now that options are available
-      if (this.options && this.options.length > 0 && this.pendingValue !== null) {
-        this.handlePendingValue();
-      }
+      this.checkAndHandlePendingValue();
     }
   }
 
@@ -483,9 +495,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
 
     // Check if options became available and we have a pending value
-    if (this.options && this.options.length > 0 && this.pendingValue !== null) {
-      this.handlePendingValue();
-    }
+    this.checkAndHandlePendingValue();
   }
 
   /**
