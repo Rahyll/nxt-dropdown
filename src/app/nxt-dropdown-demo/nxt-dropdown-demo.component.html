@@ -415,12 +415,12 @@
 
     <!-- Search Functionality Demo -->
     <div class="demo-section">
-      <h3>Search Functionality</h3>
+      <h2>🔍 Search Functionality</h2>
       <p>Enable search to filter options by typing in the search input.</p>
       
-      <div class="demo-row">
-        <div class="demo-item">
-          <label>Searchable Single Select</label>
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Searchable Single Select</h3>
           <nxt-dropdown 
             [options]="countryOptions"
             placeholder="Search for a country..."
@@ -429,11 +429,11 @@
             [(ngModel)]="searchableSingleValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
-          <div class="demo-value">Selected: {{ searchableSingleValue || 'None' }}</div>
+          <div class="result">Selected: {{ searchableSingleValue || 'None' }}</div>
         </div>
         
-        <div class="demo-item">
-          <label>Searchable Multiple Select</label>
+        <div class="demo-card">
+          <h3>Searchable Multiple Select</h3>
           <nxt-dropdown 
             [options]="categoryOptions"
             placeholder="Search and select categories..."
@@ -443,13 +443,13 @@
             [(ngModel)]="searchableMultipleValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
-          <div class="demo-value">Selected: {{ searchableMultipleValue?.length ? searchableMultipleValue.join(', ') : 'None' }}</div>
+          <div class="result">Selected: {{ searchableMultipleValue?.length ? searchableMultipleValue.join(', ') : 'None' }}</div>
         </div>
       </div>
       
-      <div class="demo-row">
-        <div class="demo-item">
-          <label>Search with Minimum Length</label>
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Search with Minimum Length</h3>
           <nxt-dropdown 
             [options]="largeDatasetOptions"
             placeholder="Search with min 2 characters..."
@@ -459,11 +459,11 @@
             [(ngModel)]="searchMinLengthValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
-          <div class="demo-value">Selected: {{ searchMinLengthValue || 'None' }}</div>
+          <div class="result">Selected: {{ searchMinLengthValue || 'None' }}</div>
         </div>
         
-        <div class="demo-item">
-          <label>Searchable with Confirmation</label>
+        <div class="demo-card">
+          <h3>Searchable with Confirmation</h3>
           <nxt-dropdown 
             [options]="searchPerformanceOptions"
             placeholder="Search and confirm selection..."
@@ -474,7 +474,7 @@
             [(ngModel)]="searchableConfirmationValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
-          <div class="demo-value">Selected: {{ searchableConfirmationValue?.length ? searchableConfirmationValue.length + ' items' : 'None' }}</div>
+          <div class="result">Selected: {{ searchableConfirmationValue?.length ? searchableConfirmationValue.length + ' items' : 'None' }}</div>
         </div>
       </div>
     </div>
