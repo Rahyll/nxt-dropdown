@@ -324,14 +324,14 @@ describe('Performance', () => {
 2. **Option Removal**: Remove individual options
 3. **Select All**: Select/deselect all options
 4. **Partial Selection**: Handle partial selection state
-5. **Chip Display**: Display selected options as chips
+5. **Text Display**: Display selected options as comma-separated text
 
 ### Confirmation Mode
 1. **Pending Selection**: Use pending options before confirmation
 2. **Apply Selection**: Apply pending selections
 3. **Cancel Selection**: Cancel pending selections
 4. **Dropdown Behavior**: Close dropdown after apply/cancel
-5. **Chip Behavior**: Cannot remove chips in confirmation mode
+5. **Text Behavior**: Cannot remove individual options in confirmation mode
 
 ### Form Integration
 1. **Template Forms**: Work with [(ngModel)]

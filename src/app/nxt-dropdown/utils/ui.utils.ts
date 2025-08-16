@@ -1,12 +1,23 @@
+/**
+ * UI Utilities
+ * 
+ * This module contains utility functions for UI-related operations
+ * in the dropdown component. It handles icon sanitization, keyboard
+ * navigation, and performance optimization functions.
+ */
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NxtDropdownOption } from '../interfaces';
 
 /**
  * Sanitizes and returns the icon HTML for safe rendering
- * Supports both string icons (emoji, unicode) and HTML elements (font icons)
- * @param icon - Icon string or HTML
- * @param sanitizer - Angular DomSanitizer instance
- * @returns Sanitized HTML
+ * 
+ * This function safely renders icons that can be either string-based
+ * (emoji, unicode) or HTML-based (font icons). It uses Angular's
+ * DomSanitizer to prevent XSS attacks when rendering HTML icons.
+ * 
+ * @param icon - Icon string or HTML content to sanitize
+ * @param sanitizer - Angular DomSanitizer instance for safe HTML rendering
+ * @returns Sanitized HTML that can be safely rendered in templates
  */
 export function getSanitizedIcon(icon: string, sanitizer: DomSanitizer): SafeHtml {
   if (!icon) {
@@ -24,9 +35,14 @@ export function getSanitizedIcon(icon: string, sanitizer: DomSanitizer): SafeHtm
 
 /**
  * Track function for ngFor optimization
- * @param index - Index of the item
- * @param option - Option object
- * @returns Value to track
+ * 
+ * This function provides a tracking value for Angular's ngFor directive
+ * to optimize rendering performance. It uses the option's value as the
+ * unique identifier for change detection.
+ * 
+ * @param index - Index of the item in the array
+ * @param option - Option object containing the value to track
+ * @returns The option's value to use for change detection
  */
 export function trackByValue(index: number, option: NxtDropdownOption): any {
   return option.value;
@@ -34,10 +50,15 @@ export function trackByValue(index: number, option: NxtDropdownOption): any {
 
 /**
  * Handles keyboard navigation for dropdown
- * @param event - Keyboard event
- * @param isDisabled - Whether dropdown is disabled
- * @param isOpen - Whether dropdown is open
- * @param handlers - Object containing handler functions
+ * 
+ * This function processes keyboard events for the dropdown trigger element.
+ * It supports standard keyboard navigation patterns including Enter, Space,
+ * Escape, and arrow keys for opening/closing the dropdown.
+ * 
+ * @param event - Keyboard event object from the trigger element
+ * @param isDisabled - Whether the dropdown is currently disabled
+ * @param isOpen - Whether the dropdown is currently open
+ * @param handlers - Object containing handler functions for dropdown actions
  */
 export function handleDropdownKeyDown(
   event: KeyboardEvent,
@@ -76,8 +97,13 @@ export function handleDropdownKeyDown(
 
 /**
  * Handles search input keyboard events
- * @param event - Keyboard event
- * @param handlers - Object containing handler functions
+ * 
+ * This function processes keyboard events specifically for the search input
+ * within the dropdown. It handles Escape to close the dropdown and Enter
+ * to select the first available option.
+ * 
+ * @param event - Keyboard event object from the search input
+ * @param handlers - Object containing handler functions for search actions
  */
 export function handleSearchKeyDown(
   event: KeyboardEvent,

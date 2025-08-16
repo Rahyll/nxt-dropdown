@@ -73,10 +73,10 @@ describe('NxtDropdownComponent', () => {
       component.config = config;
       component.ngOnInit();
       
-      expect(component.currentOptions).toEqual(mockOptions);
-      expect(component.currentPlaceholder).toBe('Custom placeholder');
-      expect(component.currentMultiple).toBeTrue();
-      expect(component.currentSearchable).toBeTrue();
+      expect(component.options).toEqual(mockOptions);
+      expect(component.placeholder).toBe('Custom placeholder');
+      expect(component.multiple).toBeTrue();
+      expect(component.searchable).toBeTrue();
     });
 
     it('should prioritize direct inputs over config when not in strict mode', () => {
@@ -90,8 +90,8 @@ describe('NxtDropdownComponent', () => {
       component.multiple = false;
       component.ngOnInit();
       
-      expect(component.currentPlaceholder).toBe('Direct placeholder');
-      expect(component.currentMultiple).toBeFalse();
+      expect(component.placeholder).toBe('Direct placeholder');
+      expect(component.multiple).toBeFalse();
     });
 
     it('should use only config when in strict mode', () => {
@@ -106,8 +106,8 @@ describe('NxtDropdownComponent', () => {
       component.multiple = false;
       component.ngOnInit();
       
-      expect(component.currentPlaceholder).toBe('Config placeholder');
-      expect(component.currentMultiple).toBeTrue();
+      expect(component.placeholder).toBe('Config placeholder');
+      expect(component.multiple).toBeTrue();
     });
 
     it('should throw error when strict mode is enabled but no config provided', () => {
@@ -419,36 +419,6 @@ describe('NxtDropdownComponent', () => {
     });
   });
 
-  describe('Chip Removal', () => {
-    beforeEach(() => {
-      component.multiple = true;
-      fixture.detectChanges();
-    });
-
-    it('should remove option when chip is clicked', () => {
-      const option = mockOptions[0];
-      component.selectOption(option);
-      expect(component.selectedOptions).toEqual([option]);
-      
-      const event = new MouseEvent('click');
-      component.removeOption(event, option);
-      
-      expect(component.selectedOptions).toEqual([]);
-    });
-
-    it('should not remove option in confirmation mode', () => {
-      component.confirmation = true;
-      const option = mockOptions[0];
-      component.selectOption(option);
-      expect(component.selectedOptions).toEqual([option]);
-      
-      const event = new MouseEvent('click');
-      component.removeOption(event, option);
-      
-      expect(component.selectedOptions).toEqual([option]);
-    });
-  });
-
   describe('Form Integration', () => {
     it('should work with ngModel', fakeAsync(() => {
       component.writeValue('option1');
@@ -706,62 +676,62 @@ describe('NxtDropdownComponent', () => {
   });
 
   describe('Configuration Getters', () => {
-    it('should return correct current options', () => {
-      expect(component.currentOptions).toEqual(mockOptions);
+    it('should return correct options', () => {
+      expect(component.options).toEqual(mockOptions);
     });
 
-    it('should return correct current placeholder', () => {
-      expect(component.currentPlaceholder).toBe('Select an option');
+    it('should return correct placeholder', () => {
+      expect(component.placeholder).toBe('Select an option');
     });
 
-    it('should return correct current disabled state', () => {
-      expect(component.currentDisabled).toBeFalse();
+    it('should return correct disabled state', () => {
+      expect(component.disabled).toBeFalse();
     });
 
-    it('should return correct current required state', () => {
-      expect(component.currentRequired).toBeFalse();
+    it('should return correct required state', () => {
+      expect(component.required).toBeFalse();
     });
 
-    it('should return correct current multiple state', () => {
-      expect(component.currentMultiple).toBeFalse();
+    it('should return correct multiple state', () => {
+      expect(component.multiple).toBeFalse();
     });
 
-    it('should return correct current confirmation state', () => {
-      expect(component.currentConfirmation).toBeFalse();
+    it('should return correct confirmation state', () => {
+      expect(component.confirmation).toBeFalse();
     });
 
-    it('should return correct current panel class', () => {
-      expect(component.currentPanelClass).toBe('');
+    it('should return correct panel class', () => {
+      expect(component.panelClass).toBe('');
     });
 
-    it('should return correct current searchable state', () => {
-      expect(component.currentSearchable).toBeFalse();
+    it('should return correct searchable state', () => {
+      expect(component.searchable).toBeFalse();
     });
 
-    it('should return correct current search placeholder', () => {
-      expect(component.currentSearchPlaceholder).toBe('Search options...');
+    it('should return correct search placeholder', () => {
+      expect(component.searchPlaceholder).toBe('Search options...');
     });
 
-    it('should return correct current min search length', () => {
-      expect(component.currentMinSearchLength).toBe(0);
+    it('should return correct min search length', () => {
+      expect(component.minSearchLength).toBe(0);
     });
 
-    it('should return correct current icon type', () => {
-      expect(component.currentIconType).toBe('caret');
+    it('should return correct icon type', () => {
+      expect(component.iconType).toBe('caret');
     });
   });
 
   describe('Icon Type Feature', () => {
     it('should default to caret icon type', () => {
       expect(component.iconType).toBe('caret');
-      expect(component.currentIconType).toBe('caret');
+      expect(component.iconType).toBe('caret');
     });
 
     it('should set arrow icon type via direct input', () => {
       component.iconType = 'arrow';
       component.ngOnInit();
       
-      expect(component.currentIconType).toBe('arrow');
+      expect(component.iconType).toBe('arrow');
     });
 
     it('should set icon type via configuration object', () => {
@@ -773,7 +743,7 @@ describe('NxtDropdownComponent', () => {
       component.config = config;
       component.ngOnInit();
       
-      expect(component.currentIconType).toBe('arrow');
+      expect(component.iconType).toBe('arrow');
     });
 
     it('should prioritize direct input over config when not in strict mode', () => {
@@ -785,7 +755,7 @@ describe('NxtDropdownComponent', () => {
       component.iconType = 'caret';
       component.ngOnInit();
       
-      expect(component.currentIconType).toBe('caret');
+      expect(component.iconType).toBe('caret');
     });
 
     it('should use config icon type when in strict mode', () => {
@@ -797,7 +767,7 @@ describe('NxtDropdownComponent', () => {
       component.strictConfigMode = true;
       component.ngOnInit();
       
-      expect(component.currentIconType).toBe('arrow');
+      expect(component.iconType).toBe('arrow');
     });
 
     it('should update trigger properties with icon type', () => {

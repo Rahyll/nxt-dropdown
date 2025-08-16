@@ -1,3 +1,10 @@
+/**
+ * Dropdown Demo Component
+ * 
+ * This component demonstrates all the features and capabilities of the NXT Dropdown component.
+ * It provides examples of different configurations, use cases, and integration patterns.
+ * The component includes both template-driven and reactive form examples.
+ */
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NxtDropdownOption, NxtDropdownConfig } from '../nxt-dropdown/interfaces';
@@ -8,78 +15,295 @@ import { NxtDropdownOption, NxtDropdownConfig } from '../nxt-dropdown/interfaces
   styleUrls: ['./nxt-dropdown-demo.component.scss']
 })
 export class NxtDropdownDemoComponent implements OnInit {
-  // Tab management
+  
+  // ==================== TAB MANAGEMENT ====================
+  
+  /**
+   * Currently active tab in the demo interface
+   * Controls whether to show the demo examples or the usage guide
+   * Default: 'demo'
+   */
   activeTab: 'demo' | 'guide' = 'demo';
 
-  // Template-driven form values
+  // ==================== TEMPLATE-DRIVEN FORM VALUES ====================
+  
+  /**
+   * Single selection value for basic dropdown demo
+   * Default: null (no selection)
+   */
   selectedValue: any = null;
+  
+  /**
+   * Multiple selection values for multiple dropdown demo
+   * Default: empty array (no selections)
+   */
   selectedMultipleValues: any[] = [];
+  
+  /**
+   * Multiple selection values with confirmation mode
+   * Default: empty array (no selections)
+   */
   selectedMultipleValuesWithConfirmation: any[] = [];
+  
+  /**
+   * Required field value for validation demo
+   * Default: null (no selection)
+   */
   requiredValue: any = null;
 
-  // Advanced demo values
+  // ==================== ADVANCED DEMO VALUES ====================
+  
+  /**
+   * Values for large dataset demo (50+ options)
+   * Default: empty array
+   */
   largeDatasetValue: any[] = [];
+  
+  /**
+   * Value for disabled options demo
+   * Default: null
+   */
   disabledOptionsValue: any = null;
+  
+  /**
+   * Value for country selection demo
+   * Default: null
+   */
   countryValue: any = null;
+  
+  /**
+   * Values for category selection demo (multiple selection)
+   * Default: empty array
+   */
   categoryValue: any[] = [];
 
-  // State demo values
+  // ==================== STATE DEMO VALUES ====================
+  
+  /**
+   * Value for empty options demo
+   * Default: null
+   */
   emptyOptionsValue: any = null;
+  
+  /**
+   * Pre-selected values for demo
+   * Default: ['option1', 'option3']
+   */
   preSelectedValue: any[] = ['option1', 'option3'];
+  
+  /**
+   * Value for dynamic options demo
+   * Default: null
+   */
   dynamicValue: any = null;
+  
+  /**
+   * Dynamic options array that can be modified at runtime
+   * Default: 2 initial options
+   */
   dynamicOptions: NxtDropdownOption[] = [
     { value: 'dynamic1', label: 'Dynamic Option 1' },
     { value: 'dynamic2', label: 'Dynamic Option 2' }
   ];
 
-  // Responsive demo values
+  // ==================== RESPONSIVE DEMO VALUES ====================
+  
+  /**
+   * Values for responsive design demo
+   * Default: empty array
+   */
   responsiveValue: any[] = [];
+  
+  /**
+   * Value for compact dropdown demo
+   * Default: null
+   */
   compactValue: any = null;
+  
+  /**
+   * Value for wide dropdown demo
+   * Default: null
+   */
   wideValue: any = null;
 
-  // Performance demo values
+  // ==================== PERFORMANCE DEMO VALUES ====================
+  
+  /**
+   * Value for virtual scroll demo (1000+ options)
+   * Default: null
+   */
   virtualScrollValue: any = null;
+  
+  /**
+   * Values for search performance demo (500 options)
+   * Default: empty array
+   */
   searchPerformanceValue: any[] = [];
 
-  // Search functionality demo values
+  // ==================== SEARCH FUNCTIONALITY DEMO VALUES ====================
+  
+  /**
+   * Value for searchable single selection demo
+   * Default: null
+   */
   searchableSingleValue: any = null;
+  
+  /**
+   * Values for searchable multiple selection demo
+   * Default: empty array
+   */
   searchableMultipleValue: any[] = [];
+  
+  /**
+   * Value for minimum search length demo
+   * Default: null
+   */
   searchMinLengthValue: any = null;
+  
+  /**
+   * Values for searchable confirmation mode demo
+   * Default: empty array
+   */
   searchableConfirmationValue: any[] = [];
 
-  // Configuration object demo values
+  // ==================== CONFIGURATION OBJECT DEMO VALUES ====================
+  
+  /**
+   * Value for configuration-based single selection demo
+   * Default: null
+   */
   configBasedValue: any = null;
+  
+  /**
+   * Values for configuration-based multiple selection demo
+   * Default: empty array
+   */
   configBasedMultipleValue: any[] = [];
+  
+  /**
+   * Values for mixed configuration demo
+   * Default: empty array
+   */
   configBasedMixedValue: any[] = [];
+  
+  /**
+   * Value for invalid mixed configuration demo
+   * Default: null
+   */
   invalidMixedValue: any = null;
 
-  // Content projection demo values
+  // ==================== CONTENT PROJECTION DEMO VALUES ====================
+  
+  /**
+   * Value for content projection single selection demo
+   * Default: null
+   */
   contentProjectionValue: any = null;
+  
+  /**
+   * Values for content projection multiple selection demo
+   * Default: empty array
+   */
   contentProjectionMultipleValue: any[] = [];
+  
+  /**
+   * Value for content projection group demo
+   * Default: null
+   */
   contentProjectionGroupValue: any = null;
+  
+  /**
+   * Values for content projection search demo
+   * Default: empty array
+   */
   contentProjectionSearchValue: any[] = [];
 
-  // Icon type demo values
+  // ==================== ICON TYPE DEMO VALUES ====================
+  
+  /**
+   * Value for caret icon demo
+   * Default: null
+   */
   caretIconValue: any = null;
+  
+  /**
+   * Value for arrow icon demo
+   * Default: null
+   */
   arrowIconValue: any = null;
+  
+  /**
+   * Value for config-based icon demo
+   * Default: null
+   */
   configIconValue: any = null;
+  
+  /**
+   * Value for sharp caret icon demo
+   * Default: null
+   */
   sharpCaretIconValue: any = null;
+  
+  /**
+   * Value for inverted triangle icon demo
+   * Default: null
+   */
   invertedTriangleIconValue: any = null;
 
-  // Custom trigger demo values
+  // ==================== CUSTOM TRIGGER DEMO VALUES ====================
+  
+  /**
+   * Value for custom trigger demo
+   * Default: null
+   */
   customTriggerValue: any = null;
+  
+  /**
+   * Value for custom trigger with status demo
+   * Default: null
+   */
   customTriggerStatusValue: any = null;
+  
+  /**
+   * Value for custom trigger without arrow demo
+   * Default: null
+   */
   customTriggerNoArrowValue: any = null;
+  
+  /**
+   * Value for rich custom trigger demo
+   * Default: null
+   */
   customTriggerRichValue: any = null;
 
-  // Custom confirmation buttons demo values
+  // ==================== CUSTOM CONFIRMATION BUTTONS DEMO VALUES ====================
+  
+  /**
+   * Values for custom confirmation buttons demo
+   * Default: empty array
+   */
   customConfirmationValue: any[] = [];
+  
+  /**
+   * Values for custom confirmation buttons with icons demo
+   * Default: empty array
+   */
   customConfirmationWithIconsValue: any[] = [];
 
-  // Reactive form
+  // ==================== REACTIVE FORM ====================
+  
+  /**
+   * Reactive form instance for form integration demos
+   * Contains form controls for various dropdown configurations
+   */
   reactiveForm: FormGroup;
 
-  // Sample options
+  // ==================== SAMPLE OPTIONS ====================
+  
+  /**
+   * Basic sample options for various demos
+   * Contains 10 options with one disabled option
+   */
   options: NxtDropdownOption[] = [
     { value: 'option1', label: 'Option 1' },
     { value: 'option2', label: 'Option 2' },
@@ -93,13 +317,23 @@ export class NxtDropdownDemoComponent implements OnInit {
     { value: 'option10', label: 'Option 10' }
   ];
 
-  // Large dataset options
+  // ==================== LARGE DATASET OPTIONS ====================
+  
+  /**
+   * Large dataset options for performance testing (50 options)
+   * Generated dynamically using Array.from
+   */
   largeDatasetOptions: NxtDropdownOption[] = Array.from({ length: 50 }, (_, i) => ({
     value: `large${i + 1}`,
     label: `Large Dataset Option ${i + 1}`
   }));
 
-  // Options with disabled items
+  // ==================== OPTIONS WITH DISABLED ITEMS ====================
+  
+  /**
+   * Options array with disabled items for accessibility demo
+   * Contains both enabled and disabled options
+   */
   optionsWithDisabled: NxtDropdownOption[] = [
     { value: 'enabled1', label: 'Enabled Option 1' },
     { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
@@ -108,7 +342,12 @@ export class NxtDropdownDemoComponent implements OnInit {
     { value: 'enabled3', label: 'Enabled Option 3' }
   ];
 
-  // Country options
+  // ==================== COUNTRY OPTIONS ====================
+  
+  /**
+   * Country options for real-world usage demo
+   * Contains country codes and full country names
+   */
   countryOptions: NxtDropdownOption[] = [
     { value: 'us', label: 'United States' },
     { value: 'uk', label: 'United Kingdom' },
@@ -122,7 +361,12 @@ export class NxtDropdownDemoComponent implements OnInit {
     { value: 'mx', label: 'Mexico' }
   ];
 
-  // Category options
+  // ==================== CATEGORY OPTIONS ====================
+  
+  /**
+   * Category options for multiple selection demo
+   * Contains various business categories
+   */
   categoryOptions: NxtDropdownOption[] = [
     { value: 'tech', label: 'Technology' },
     { value: 'health', label: 'Healthcare' },
@@ -134,19 +378,34 @@ export class NxtDropdownDemoComponent implements OnInit {
     { value: 'food', label: 'Food & Dining' }
   ];
 
-  // Virtual scroll options (1000+ items)
+  // ==================== VIRTUAL SCROLL OPTIONS ====================
+  
+  /**
+   * Virtual scroll options for performance testing (1000+ items)
+   * Generated dynamically using Array.from
+   */
   virtualScrollOptions: NxtDropdownOption[] = Array.from({ length: 1000 }, (_, i) => ({
     value: `virtual${i + 1}`,
     label: `Virtual Option ${i + 1}`
   }));
 
-  // Search performance options (500 items)
+  // ==================== SEARCH PERFORMANCE OPTIONS ====================
+  
+  /**
+   * Search performance options for search functionality testing (500 items)
+   * Generated dynamically using Array.from
+   */
   searchPerformanceOptions: NxtDropdownOption[] = Array.from({ length: 500 }, (_, i) => ({
     value: `search${i + 1}`,
     label: `Search Option ${i + 1}`
   }));
 
-  // Configuration objects for demo
+  // ==================== CONFIGURATION OBJECTS FOR DEMO ====================
+  
+  /**
+   * Configuration object for single selection demo
+   * Demonstrates configuration-based setup with search functionality
+   */
   singleSelectConfig: NxtDropdownConfig = {
     options: [
       { value: 'config1', label: 'Config Option 1' },
@@ -161,6 +420,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     searchPlaceholder: 'Search config options...'
   };
 
+  /**
+   * Configuration object for multiple selection with confirmation demo
+   * Demonstrates complex configuration with multiple features enabled
+   */
   multipleSelectConfig: NxtDropdownConfig = {
     options: [
       { value: 'multi1', label: 'Multi Option 1' },
@@ -180,6 +443,12 @@ export class NxtDropdownDemoComponent implements OnInit {
     minSearchLength: 1
   };
 
+  // ==================== CONSTRUCTOR ====================
+  
+  /**
+   * Constructor - initializes the reactive form with form controls
+   * @param fb - FormBuilder service for creating reactive forms
+   */
   constructor(private fb: FormBuilder) {
     this.reactiveForm = this.fb.group({
       singleSelect: ['', Validators.required],
@@ -189,21 +458,45 @@ export class NxtDropdownDemoComponent implements OnInit {
     });
   }
 
+  // ==================== LIFECYCLE METHODS ====================
+  
+  /**
+   * Lifecycle hook called after component initialization
+   * Logs configuration objects for debugging purposes
+   */
   ngOnInit(): void {
     // Initialize any additional setup
     console.log('[Demo] singleSelectConfig:', this.singleSelectConfig);
     console.log('[Demo] multipleSelectConfig:', this.multipleSelectConfig);
   }
 
-  // Tab management method
+  // ==================== TAB MANAGEMENT METHODS ====================
+  
+  /**
+   * Sets the active tab in the demo interface
+   * @param tab - The tab to activate ('demo' or 'guide')
+   */
   setActiveTab(tab: 'demo' | 'guide'): void {
     this.activeTab = tab;
   }
 
+  // ==================== EVENT HANDLERS ====================
+  
+  /**
+   * Handles selection change events from dropdown components
+   * Logs the new value for debugging purposes
+   * @param value - The new selected value(s)
+   */
   onSelectionChange(value: any): void {
     console.log('Selection changed:', value);
   }
 
+  // ==================== FORM METHODS ====================
+  
+  /**
+   * Handles form submission
+   * Validates the reactive form and shows success/error messages
+   */
   onSubmit(): void {
     if (this.reactiveForm.valid) {
       alert('Form submitted successfully!');
@@ -213,6 +506,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     }
   }
 
+  /**
+   * Resets all form values and demo state to initial values
+   * Clears all selections and resets the reactive form
+   */
   resetForm(): void {
     this.reactiveForm.reset();
     this.selectedValue = null;
@@ -252,6 +549,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.customTriggerRichValue = null;
   }
 
+  /**
+   * Fills the reactive form with sample values
+   * Demonstrates programmatic form control
+   */
   fillForm(): void {
     this.reactiveForm.patchValue({
       singleSelect: 'option1',
@@ -261,6 +562,12 @@ export class NxtDropdownDemoComponent implements OnInit {
     });
   }
 
+  // ==================== DYNAMIC OPTIONS METHODS ====================
+  
+  /**
+   * Adds a new dynamic option to the dynamicOptions array
+   * Demonstrates runtime option modification
+   */
   addDynamicOption(): void {
     const newIndex = this.dynamicOptions.length + 1;
     this.dynamicOptions.push({
@@ -269,6 +576,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     });
   }
 
+  /**
+   * Removes the last dynamic option from the array
+   * Ensures at least one option remains and clears selection if needed
+   */
   removeDynamicOption(): void {
     if (this.dynamicOptions.length > 1) {
       this.dynamicOptions.pop();

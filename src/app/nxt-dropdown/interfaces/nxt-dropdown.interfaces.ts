@@ -2,9 +2,7 @@ export interface NxtDropdownOption {
   value: any;
   label: string;
   disabled?: boolean;
-  description?: string;
   group?: string;
-  icon?: string;
 }
 
 export interface NxtDropdownConfig {

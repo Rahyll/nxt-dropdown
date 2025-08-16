@@ -1,11 +1,23 @@
+/**
+ * Display Utilities
+ * 
+ * This module contains utility functions for formatting and displaying
+ * dropdown options and selections. It handles text formatting for both
+ * single and multiple selection modes.
+ */
 import { NxtDropdownOption } from '../interfaces';
 
 /**
  * Gets display text for selected options
- * @param selectedOptions - Array of selected options
- * @param placeholder - Placeholder text to show when no options selected
- * @param multiple - Whether multiple selection is enabled
- * @returns Display text
+ * 
+ * This function formats the display text for the dropdown trigger based on
+ * the currently selected options. It handles both single and multiple
+ * selection modes with appropriate formatting.
+ * 
+ * @param selectedOptions - Array of currently selected options
+ * @param placeholder - Placeholder text to show when no options are selected
+ * @param multiple - Whether multiple selection mode is enabled
+ * @returns Formatted display text for the dropdown trigger
  */
 export function getDisplayText(
   selectedOptions: NxtDropdownOption[],
@@ -28,10 +40,15 @@ export function getDisplayText(
 
 /**
  * Gets display text for pending options (confirmation mode)
- * @param pendingOptions - Array of pending options
- * @param placeholder - Placeholder text to show when no options selected
- * @param multiple - Whether multiple selection is enabled
- * @returns Display text
+ * 
+ * This function formats the display text for pending selections in confirmation mode.
+ * It works similarly to getDisplayText but uses pending options instead of
+ * confirmed selections.
+ * 
+ * @param pendingOptions - Array of pending options (not yet confirmed)
+ * @param placeholder - Placeholder text to show when no options are selected
+ * @param multiple - Whether multiple selection mode is enabled
+ * @returns Formatted display text for pending selections
  */
 export function getPendingDisplayText(
   pendingOptions: NxtDropdownOption[],
@@ -54,9 +71,13 @@ export function getPendingDisplayText(
 
 /**
  * Formats option count for display
- * @param count - Number of selected options
- * @param total - Total number of options
- * @returns Formatted string
+ * 
+ * This function creates a human-readable string showing the count of
+ * selected options relative to the total number of options.
+ * 
+ * @param count - Number of currently selected options
+ * @param total - Total number of available options
+ * @returns Formatted string showing selection count (e.g., "3 of 10 selected")
  */
 export function formatOptionCount(count: number, total: number): string {
   if (count === 0) {

@@ -6,7 +6,7 @@ This demo showcases all the different types and capabilities of the NXT Dropdown
 
 ### 1. Basic Demos
 - **Single Selection**: Simple dropdown with single option selection
-- **Multiple Selection**: Multi-select with chips display and "Select All" functionality
+- **Multiple Selection**: Multi-select with comma-separated display and "Select All" functionality
 - **With Confirmation**: Multi-select with Apply/Cancel confirmation workflow
 - **Required Field**: Form validation with required field indicator
 

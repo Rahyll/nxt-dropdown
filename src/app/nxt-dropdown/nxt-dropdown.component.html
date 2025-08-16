@@ -21,18 +21,18 @@
        [attr.aria-label]="placeholder">
     
     <div class="nxt-dropdown-value">
-      <div class="nxt-dropdown-placeholder" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length === 0">
+      <div class="nxt-dropdown-placeholder" *ngIf="selectedOptions.length === 0">
         {{ placeholder }}
       </div>
       
-      <div class="nxt-dropdown-selected" *ngIf="(confirmation && multiple ? pendingOptions : selectedOptions).length > 0">
+      <div class="nxt-dropdown-selected" *ngIf="selectedOptions.length > 0">
         <div class="nxt-dropdown-single" *ngIf="!multiple">
           {{ getDisplayText() }}
         </div>
         
         <div class="nxt-dropdown-multiple" *ngIf="multiple">
           <div class="nxt-dropdown-text">
-            {{ confirmation && multiple ? getPendingDisplayText() : getDisplayText() }}
+            {{ getDisplayText() }}
           </div>
         </div>
       </div>
@@ -150,10 +150,6 @@
             
             <div class="nxt-dropdown-option-label">
               {{ option.label }}
-            </div>
-            
-            <div class="nxt-dropdown-option-description" *ngIf="option.description">
-              {{ option.description }}
             </div>
           </div>
         </div>

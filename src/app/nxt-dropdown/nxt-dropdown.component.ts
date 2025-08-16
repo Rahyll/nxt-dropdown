@@ -1,3 +1,17 @@
+/**
+ * Main Dropdown Component
+ * 
+ * This component provides a comprehensive dropdown/select functionality with the following features:
+ * - Single and multiple selection modes
+ * - Search functionality with configurable minimum search length
+ * - Confirmation mode for multiple selections
+ * - Content projection support for custom options and triggers
+ * - Form integration via ControlValueAccessor
+ * - Keyboard navigation support
+ * - Responsive positioning (above/below trigger)
+ * - Customizable icons and styling
+ * - Strict configuration mode for validation
+ */
 import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -11,6 +25,16 @@ import { getDisplayText, getPendingDisplayText } from './utils/display.utils';
 import { filterOptionsBySearch, clearSearchState } from './utils/search.utils';
 import { getSanitizedIcon, trackByValue, handleDropdownKeyDown, handleSearchKeyDown } from './utils/ui.utils';
 
+/**
+ * Component decorator with metadata
+ * - selector: Custom HTML tag for the component
+ * - templateUrl: Path to the HTML template
+ * - styleUrls: Array of CSS files for styling
+ * - providers: Array of dependency injection providers
+ *   - NG_VALUE_ACCESSOR: Enables form integration by providing ControlValueAccessor implementation
+ *   - forwardRef: Resolves circular dependency by deferring the class reference
+ *   - multi: true: Allows multiple providers for the same token
+ */
 @Component({
   selector: 'nxt-dropdown',
   templateUrl: './nxt-dropdown.component.html',
@@ -24,80 +48,268 @@ import { getSanitizedIcon, trackByValue, handleDropdownKeyDown, handleSearchKeyD
   ]
 })
 export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnChanges, AfterContentInit {
-  // Direct input properties
+  
+  // ==================== INPUT PROPERTIES ====================
+  
+  /**
+   * Array of options to display in the dropdown
+   * Each option should have value, label, and optional disabled property
+   */
   @Input() options: NxtDropdownOption[] = [];
+  
+  /**
+   * Placeholder text shown when no option is selected
+   * Default: 'Select an option'
+   */
   @Input() placeholder: string = 'Select an option';
+  
+  /**
+   * Whether the dropdown is disabled and cannot be interacted with
+   * Default: false
+   */
   @Input() disabled: boolean = false;
+  
+  /**
+   * Whether the dropdown is required (for form validation)
+   * Default: false
+   */
   @Input() required: boolean = false;
+  
+  /**
+   * Whether multiple options can be selected
+   * Default: false (single selection mode)
+   */
   @Input() multiple: boolean = false;
+  
+  /**
+   * Whether to show confirmation buttons for multiple selections
+   * Only applies when multiple is true
+   * Default: false
+   */
   @Input() confirmation: boolean = false;
+  
+  /**
+   * CSS class to apply to the dropdown panel for custom styling
+   * Default: empty string
+   */
   @Input() panelClass: string = '';
+  
+  /**
+   * Whether to show a search input for filtering options
+   * Default: false
+   */
   @Input() searchable: boolean = false;
+  
+  /**
+   * Placeholder text for the search input
+   * Default: 'Search options...'
+   */
   @Input() searchPlaceholder: string = 'Search options...';
+  
+  /**
+   * Minimum number of characters required before search filtering begins
+   * Default: 0 (search starts immediately)
+   */
   @Input() minSearchLength: number = 0;
+  
+  /**
+   * Type of icon to display in the dropdown trigger
+   * Options: 'caret', 'arrow', 'sharp-caret', 'inverted-triangle'
+   * Default: 'caret'
+   */
   @Input() iconType: 'caret' | 'arrow' | 'sharp-caret' | 'inverted-triangle' = 'caret';
   
-  // Confirmation button customization
+  // ==================== CONFIRMATION BUTTON CUSTOMIZATION ====================
+  
+  /**
+   * Text for the apply button in confirmation mode
+   * Default: 'Apply'
+   */
   @Input() applyButtonText: string = 'Apply';
+  
+  /**
+   * Icon for the apply button (can be emoji, unicode, or HTML)
+   * Default: empty string
+   */
   @Input() applyButtonIcon: string = '';
+  
+  /**
+   * Text for the cancel button in confirmation mode
+   * Default: 'Cancel'
+   */
   @Input() cancelButtonText: string = 'Cancel';
+  
+  /**
+   * Icon for the cancel button (can be emoji, unicode, or HTML)
+   * Default: empty string
+   */
   @Input() cancelButtonIcon: string = '';
 
-  // Configuration object input
+  // ==================== CONFIGURATION OBJECT INPUT ====================
+  
+  /**
+   * Configuration object that can override individual input properties
+   * Provides a centralized way to configure the dropdown
+   * Default: empty object
+   */
   @Input() config: NxtDropdownConfig = {};
   
-  // Strict configuration mode - when true, only config object is allowed
+  /**
+   * When true, only the config object is allowed and direct inputs are ignored
+   * Provides strict validation to prevent mixed configuration approaches
+   * Default: false
+   */
   @Input() strictConfigMode: boolean = false;
 
+  // ==================== OUTPUT EVENTS ====================
+  
+  /**
+   * Event emitted when the selection changes
+   * Emits the selected value(s) to parent components
+   */
   @Output() selectionChange = new EventEmitter<any>();
 
-  // Content projection support
+  // ==================== CONTENT PROJECTION SUPPORT ====================
+  
+  /**
+   * Query list of projected nxt-option components
+   * Allows users to define options using content projection instead of the options input
+   */
   @ContentChildren(NxtOptionComponent) optionComponents?: QueryList<NxtOptionComponent>;
+  
+  /**
+   * Query list of projected nxt-option-group components
+   * Allows users to group options using content projection
+   */
   @ContentChildren(NxtOptionGroupComponent) optionGroupComponents?: QueryList<NxtOptionGroupComponent>;
+  
+  /**
+   * Single projected nxt-dropdown-trigger component
+   * Allows users to provide a custom trigger element
+   */
   @ContentChild(NxtDropdownTriggerComponent) customTrigger?: NxtDropdownTriggerComponent;
 
-  value: any;
-  isDisabled: boolean = false;
-  isOpen: boolean = false;
-  selectedOptions: NxtDropdownOption[] = [];
-  pendingOptions: NxtDropdownOption[] = []; // For confirmation mode
+  // ==================== INTERNAL STATE PROPERTIES ====================
   
-  // Store pending value when options are not yet available
-  // This handles the case where writeValue is called before options are loaded
+  /**
+   * Current value of the dropdown (single value or array for multiple)
+   * This is the actual value that gets passed to forms and emitted
+   */
+  value: any;
+  
+  /**
+   * Internal disabled state (can be set by both input and form control)
+   */
+  isDisabled: boolean = false;
+  
+  /**
+   * Whether the dropdown panel is currently open
+   */
+  isOpen: boolean = false;
+  
+  /**
+   * Array of currently selected option objects
+   * Contains full option objects, not just values
+   */
+  selectedOptions: NxtDropdownOption[] = [];
+  
+  /**
+   * Array of pending option selections in confirmation mode
+   * Used to store temporary selections before applying them
+   */
+  pendingOptions: NxtDropdownOption[] = [];
+  
+  /**
+   * Store pending value when options are not yet available
+   * This handles the case where writeValue is called before options are loaded
+   * Prevents losing the initial value when options are loaded asynchronously
+   */
   private pendingValue: any = null;
   
-  // Search functionality
+  // ==================== SEARCH FUNCTIONALITY ====================
+  
+  /**
+   * Current search text entered by the user
+   */
   searchText: string = '';
+  
+  /**
+   * Options filtered based on the current search text
+   * This is what gets displayed in the dropdown panel
+   */
   filteredOptions: NxtDropdownOption[] = [];
+  
+  /**
+   * Whether to show the search input in the dropdown panel
+   * Controlled by searchable input and dropdown state
+   */
   showSearchInput: boolean = false;
+  
+  /**
+   * Whether the dropdown should be positioned above the trigger
+   * Calculated based on available space below the trigger
+   */
   shouldPositionAbove: boolean = false;
 
-  // ControlValueAccessor implementation
+  // ==================== CONTROL VALUE ACCESSOR IMPLEMENTATION ====================
+  
+  /**
+   * Callback function provided by Angular forms to handle value changes
+   * Called whenever the internal value changes
+   */
   private onChange = (value: any) => {};
+  
+  /**
+   * Callback function provided by Angular forms to handle touch events
+   * Called when the user interacts with the dropdown
+   */
   private onTouched = () => {};
 
+  /**
+   * Constructor - initializes dependencies
+   * @param elementRef - Reference to the component's DOM element for positioning calculations
+   * @param sanitizer - Service for sanitizing HTML content (used for icons)
+   */
   constructor(
     private elementRef: ElementRef,
     private sanitizer: DomSanitizer
   ) {}
 
+  /**
+   * Lifecycle hook called after data-bound properties are initialized
+   * Sets up initial state and configuration
+   */
   ngOnInit() {
+    // Update configuration by merging config object with direct inputs
     this.updateConfiguration();
+    
+    // Set initial disabled state
     this.isDisabled = this.disabled;
+    
+    // Update selected options based on current value
     this.updateSelectedOptions();
+    
+    // Initialize filtered options (same as all options initially)
     this.updateFilteredOptions();
+    
+    // In confirmation mode with multiple selection, initialize pending options
     if (this.confirmation && this.multiple) {
       this.pendingOptions = [...this.selectedOptions];
     }
   }
 
+  /**
+   * Lifecycle hook called after content projection is complete
+   * Processes projected content and sets up custom trigger
+   */
   ngAfterContentInit() {
     // Process content projected options with a small delay to ensure all components are initialized
+    // This handles cases where projected content might not be immediately available
     setTimeout(() => {
       this.processContentProjectedOptions();
     });
     
-    // Subscribe to content changes
+    // Subscribe to content changes for dynamic content projection
     if (this.optionComponents) {
       this.optionComponents.changes.subscribe(() => {
         this.processContentProjectedOptions();
@@ -110,12 +322,18 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       });
     }
 
-    // Setup custom trigger if provided
+    // Setup custom trigger if provided via content projection
     this.setupCustomTrigger();
   }
 
+  /**
+   * Lifecycle hook called when input properties change
+   * Handles configuration updates and content projection changes
+   * @param changes - Object containing information about what changed
+   */
   ngOnChanges(changes: SimpleChanges) {
     // Handle changes to both direct inputs and config object
+    // This ensures the component stays in sync when inputs are modified
     if (changes['config'] || changes['options'] || changes['placeholder'] || 
         changes['disabled'] || changes['required'] || changes['multiple'] || 
         changes['confirmation'] || changes['panelClass'] || changes['searchable'] || 
@@ -132,6 +350,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Processes content projected options and groups them into the options array
+   * This allows users to define options using HTML instead of JavaScript arrays
+   */
   private processContentProjectedOptions(): void {
     // If content projected options are available, use them instead of the options input
     const hasDirectOptions = this.optionComponents && this.optionComponents.length > 0;
@@ -140,7 +362,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (hasDirectOptions || hasGroupedOptions) {
       const projectedOptions: NxtDropdownOption[] = [];
       
-      // Process direct options
+      // Process direct options (nxt-option components)
       if (hasDirectOptions) {
         this.optionComponents!.forEach(optionComp => {
           projectedOptions.push({
@@ -151,7 +373,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
         });
       }
       
-      // Process grouped options
+      // Process grouped options (nxt-option-group components)
       if (hasGroupedOptions) {
         this.optionGroupComponents!.forEach(groupComp => {
           // Get options from each group component
@@ -171,22 +393,31 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Sets up event handling for custom trigger component
+   * Subscribes to trigger events and updates trigger properties
+   */
   private setupCustomTrigger(): void {
     if (!this.customTrigger) return;
     
-    // Subscribe to trigger events
+    // Subscribe to trigger click events
     this.customTrigger.triggerClick.subscribe((event: Event) => {
       this.toggleDropdown();
     });
 
+    // Subscribe to trigger keyboard events
     this.customTrigger.keyDown.subscribe((event: KeyboardEvent) => {
       this.onKeyDown(event);
     });
 
-    // Update trigger properties
+    // Update trigger properties to reflect current state
     this.updateTriggerProperties();
   }
 
+  /**
+   * Updates the custom trigger component with current state properties
+   * Ensures the trigger reflects the current disabled, open, and other states
+   */
   private updateTriggerProperties(): void {
     if (!this.customTrigger) return;
     
@@ -198,7 +429,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.customTrigger.iconType = this.iconType;
   }
 
+  /**
+   * Updates the component configuration by merging config object with direct inputs
+   * Handles validation and applies the merged configuration
+   */
   private updateConfiguration(): void {
+    // Collect all direct input values into an object for validation and merging
     const directInputs = {
       options: this.options,
       placeholder: this.placeholder,
@@ -217,20 +453,20 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       cancelButtonIcon: this.cancelButtonIcon
     };
 
-    // Validate configuration
+    // Validate configuration to ensure no conflicts between config object and direct inputs
     const validation = validateStrictConfiguration(this.config, directInputs, this.strictConfigMode);
     if (!validation.isValid) {
       console.error('[NXT Dropdown] Configuration Error:', validation.errorMessage);
       return;
     }
 
-    // Merge configuration
+    // Merge configuration object with direct inputs
     const mergedConfig = mergeConfiguration(this.config, directInputs, this.strictConfigMode);
     
     // Apply merged configuration directly to input properties
     Object.assign(this, mergedConfig);
     
-    // Handle confirmation buttons
+    // Handle confirmation buttons with fallback to config or defaults
     this.applyButtonText = this.config.confirmationButtons?.apply?.text || this.applyButtonText || 'Apply';
     this.applyButtonIcon = this.config.confirmationButtons?.apply?.icon || this.applyButtonIcon || '';
     this.cancelButtonText = this.config.confirmationButtons?.cancel?.text || this.cancelButtonText || 'Cancel';
@@ -242,6 +478,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Handles a pending value that was stored before options were available
+   * Applies the pending value now that options are loaded
+   */
   private handlePendingValue(): void {
     // Apply the pending value now that options are available
     this.value = this.pendingValue;
@@ -256,10 +496,18 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.pendingValue = null;
   }
 
+  /**
+   * Getter to check if a custom trigger is being used
+   * @returns true if a custom trigger component is projected
+   */
   get hasCustomTrigger(): boolean {
     return !!this.customTrigger;
   }
 
+  /**
+   * Host listener for document clicks to close dropdown when clicking outside
+   * @param event - The click event
+   */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
@@ -267,6 +515,13 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  // ==================== CONTROL VALUE ACCESSOR METHODS ====================
+  
+  /**
+   * ControlValueAccessor method called by Angular forms to set the value
+   * Handles both single values and arrays for multiple selection
+   * @param value - The value to set (can be single value or array)
+   */
   writeValue(value: any): void {
     this.value = value;
     
@@ -288,27 +543,48 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * ControlValueAccessor method to register the onChange callback
+   * @param fn - The callback function to call when value changes
+   */
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
+  /**
+   * ControlValueAccessor method to register the onTouched callback
+   * @param fn - The callback function to call when the control is touched
+   */
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
+  /**
+   * ControlValueAccessor method to set the disabled state
+   * @param isDisabled - Whether the control should be disabled
+   */
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
     this.updateTriggerProperties();
   }
 
+  // ==================== DROPDOWN INTERACTION METHODS ====================
+  
+  /**
+   * Toggles the dropdown open/closed state
+   * Handles search input focus and position calculation
+   */
   toggleDropdown(): void {
     if (!this.isDisabled) {
       this.isOpen = !this.isOpen;
       this.updateTriggerProperties();
       
       if (this.isOpen) {
+        // Calculate position when opening
         this.calculateDropdownPosition();
         this.onTouched();
+        
+        // Show and focus search input if searchable
         if (this.searchable) {
           this.showSearchInput = true;
           // Focus search input after a short delay to ensure it's rendered
@@ -320,11 +596,16 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
           }, 100);
         }
       } else {
+        // Clear search when closing
         this.clearSearch();
       }
     }
   }
 
+  /**
+   * Calculates whether the dropdown should be positioned above or below the trigger
+   * Based on available viewport space and dropdown content height
+   */
   private calculateDropdownPosition(): void {
     const triggerElement = this.elementRef.nativeElement.querySelector('.nxt-dropdown-trigger');
     if (!triggerElement) return;
@@ -341,6 +622,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.shouldPositionAbove = spaceBelow < (dropdownMaxHeight + buffer);
   }
 
+  /**
+   * Host listener for window resize events
+   * Recalculates dropdown position when window is resized
+   */
   @HostListener('window:resize')
   onWindowResize(): void {
     if (this.isOpen) {
@@ -348,6 +633,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Host listener for window scroll events
+   * Recalculates dropdown position when page is scrolled
+   */
   @HostListener('window:scroll')
   onWindowScroll(): void {
     if (this.isOpen) {
@@ -355,19 +644,33 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Closes the dropdown and clears search state
+   */
   closeDropdown(): void {
     this.isOpen = false;
     this.updateTriggerProperties();
     this.clearSearch();
   }
 
-  // Search functionality methods
+  // ==================== SEARCH FUNCTIONALITY METHODS ====================
+  
+  /**
+   * Handles search input changes
+   * Updates search text and filters options accordingly
+   * @param event - The input event from the search field
+   */
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.searchText = target.value;
     this.updateFilteredOptions();
   }
 
+  /**
+   * Handles keyboard events in the search input
+   * Supports Enter to select first option and Escape to close dropdown
+   * @param event - The keyboard event
+   */
   onSearchKeyDown(event: KeyboardEvent): void {
     handleSearchKeyDown(event, {
       closeDropdown: () => this.closeDropdown(),
@@ -380,6 +683,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     });
   }
 
+  /**
+   * Clears the search state and resets filtered options
+   */
   clearSearch(): void {
     const clearedState = clearSearchState();
     this.searchText = clearedState.searchText;
@@ -387,6 +693,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.updateFilteredOptions();
   }
 
+  /**
+   * Updates the filtered options based on current search text
+   * Also recalculates dropdown position if open
+   */
   updateFilteredOptions(): void {
     this.filteredOptions = filterOptionsBySearch(this.options, this.searchText, this.searchable, this.minSearchLength);
     
@@ -396,6 +706,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  // ==================== OPTION SELECTION METHODS ====================
+  
+  /**
+   * Handles option selection based on current mode (single/multiple, confirmation)
+   * @param option - The option to select
+   */
   selectOption(option: NxtDropdownOption): void {
     if (option.disabled) return;
 
@@ -410,6 +726,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Handles "Select All" functionality for multiple selection
+   * Works differently in confirmation mode vs normal mode
+   */
   selectAll(): void {
     if (!this.multiple) return;
 
@@ -420,6 +740,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Toggles select all functionality in normal mode (no confirmation)
+   * Selects all available options or deselects all if all are selected
+   */
   private toggleSelectAll(): void {
     const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
@@ -441,6 +765,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.selectionChange.emit(this.value);
   }
 
+  /**
+   * Toggles select all functionality in confirmation mode
+   * Only affects pending options, not the actual selection
+   */
   private togglePendingSelectAll(): void {
     const availableOptions = this.filteredOptions.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
@@ -456,6 +784,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Toggles an option in the pending selection (confirmation mode)
+   * @param option - The option to toggle
+   */
   private togglePendingSelection(option: NxtDropdownOption): void {
     const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
     
@@ -466,19 +798,37 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Checks if all visible options are selected
+   * @returns true if all filtered options are selected
+   */
   isAllSelected(): boolean {
     return isAllSelected(this.filteredOptions, this.confirmation ? this.pendingOptions : this.selectedOptions, this.multiple);
   }
 
+  /**
+   * Checks if some (but not all) visible options are selected
+   * @returns true if some filtered options are selected but not all
+   */
   isPartiallySelected(): boolean {
     return isPartiallySelected(this.filteredOptions, this.confirmation ? this.pendingOptions : this.selectedOptions, this.multiple);
   }
 
+  /**
+   * Checks if a specific option is selected
+   * @param option - The option to check
+   * @returns true if the option is selected
+   */
   isOptionSelected(option: NxtDropdownOption): boolean {
     const optionsToCheck = this.confirmation && this.multiple ? this.pendingOptions : this.selectedOptions;
     return isOptionSelected(option, optionsToCheck);
   }
 
+  /**
+   * Selects a single option (single selection mode)
+   * Immediately applies the selection and closes the dropdown
+   * @param option - The option to select
+   */
   private selectSingleOption(option: NxtDropdownOption): void {
     this.value = option.value;
     this.selectedOptions = [option];
@@ -488,6 +838,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.closeDropdown();
   }
 
+  /**
+   * Toggles an option in multiple selection mode (no confirmation)
+   * @param option - The option to toggle
+   */
   private toggleMultipleSelection(option: NxtDropdownOption): void {
     this.selectedOptions = toggleOptionSelection(option, this.selectedOptions);
     this.value = getValuesFromSelectedOptions(this.selectedOptions, this.multiple);
@@ -496,33 +850,41 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.selectionChange.emit(this.value);
   }
 
+  /**
+   * Updates the selectedOptions array based on the current value
+   * Maps value(s) back to full option objects
+   */
   private updateSelectedOptions(): void {
     this.selectedOptions = updateSelectedOptions(this.value, this.options, this.multiple);
   }
 
+  // ==================== DISPLAY METHODS ====================
+  
+  /**
+   * Gets the display text for the current selection
+   * @returns Formatted string showing selected options or placeholder
+   */
   getDisplayText(): string {
     return getDisplayText(this.selectedOptions, this.placeholder, this.multiple);
   }
 
+  /**
+   * Gets the display text for pending selections in confirmation mode
+   * @returns Formatted string showing pending options or placeholder
+   */
   getPendingDisplayText(): string {
     return getPendingDisplayText(this.pendingOptions, this.placeholder, this.multiple);
   }
 
-  removeOption(event: Event, option: NxtDropdownOption): void {
-    event.stopPropagation();
-    
-    if (this.confirmation && this.multiple) {
-      // In confirmation mode, remove from pending options
-      const index = this.pendingOptions.findIndex(opt => opt.value === option.value);
-      if (index > -1) {
-        this.pendingOptions.splice(index, 1);
-      }
-    } else {
-      // Normal mode, toggle the option
-      this.selectOption(option);
-    }
-  }
 
+
+  // ==================== KEYBOARD NAVIGATION ====================
+  
+  /**
+   * Handles keyboard events for the dropdown trigger
+   * Supports Enter, Space, Escape, and arrow keys
+   * @param event - The keyboard event
+   */
   onKeyDown(event: KeyboardEvent): void {
     handleDropdownKeyDown(event, this.isDisabled, this.isOpen, {
       toggleDropdown: () => this.toggleDropdown(),
@@ -530,10 +892,25 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     });
   }
 
+  // ==================== UTILITY METHODS ====================
+  
+  /**
+   * TrackBy function for ngFor optimization
+   * @param index - The index of the item
+   * @param option - The option object
+   * @returns The value to track (option value)
+   */
   trackByValue(index: number, option: NxtDropdownOption): any {
     return trackByValue(index, option);
   }
 
+  /**
+   * Determines if a group header should be shown for an option
+   * Shows header only for the first option in each group
+   * @param option - The current option
+   * @param index - The index of the current option
+   * @returns true if a group header should be shown
+   */
   shouldShowGroupHeader(option: NxtDropdownOption, index: number): boolean {
     if (!option.group) {
       return false;
@@ -549,6 +926,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     return true;
   }
 
+  // ==================== CONFIRMATION MODE METHODS ====================
+  
+  /**
+   * Applies pending selections in confirmation mode
+   * Updates the actual selection and closes the dropdown
+   */
   applySelection(): void {
     if (!this.confirmation || !this.multiple) return;
 
@@ -560,6 +943,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.closeDropdown();
   }
 
+  /**
+   * Cancels pending selections in confirmation mode
+   * Resets pending options to match current selection and closes dropdown
+   */
   cancelSelection(): void {
     if (!this.confirmation || !this.multiple) return;
 
@@ -571,6 +958,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   /**
    * Sanitizes and returns the icon HTML for safe rendering
    * Supports both string icons (emoji, unicode) and HTML elements (font icons)
+   * @param icon - The icon string to sanitize
+   * @returns SafeHtml object that can be rendered in the template
    */
   getSanitizedIcon(icon: string): SafeHtml {
     return getSanitizedIcon(icon, this.sanitizer);
