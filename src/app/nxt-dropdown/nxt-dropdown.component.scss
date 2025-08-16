@@ -22,6 +22,84 @@
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
   }
 
+  // Infield label mode styling
+  &.infield-label {
+    .nxt-dropdown-trigger {
+      position: relative;
+      padding-bottom: 8px;
+    }
+    
+    // Infield label position (floating inside)
+    &.infield-label-infield .nxt-dropdown-trigger {
+      padding-top: 20px; // Extra padding for the floating label
+    }
+    
+    // Above label position (static above)
+    &.infield-label-above .nxt-dropdown-trigger {
+      padding-top: 8px; // Normal padding since label is outside
+    }
+
+    .nxt-dropdown-infield-label {
+      position: absolute;
+      top: 2px;
+      left: 8px;
+      font-size: 12px;
+      color: #6a737d;
+      background-color: #ffffff;
+      padding: 0 4px;
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 1;
+      transform-origin: left top;
+      transform: translateY(0) scale(1);
+      opacity: 0.7;
+
+      &.active {
+        color: #1976d2;
+        // transform: translateY(-8px) scale(0.85);
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+
+    .nxt-dropdown-value.infield-label-mode {
+      padding-top: 4px; // Add some space below the floating label
+    }
+
+    // When dropdown is open, ensure label stays active
+    &.open .nxt-dropdown-infield-label {
+      color: #1976d2;
+      // transform: translateY(-8px) scale(0.85);
+      opacity: 1;
+      font-weight: 500;
+    }
+
+    // When disabled, adjust label opacity
+    &.disabled .nxt-dropdown-infield-label {
+      opacity: 0.4;
+      color: #999;
+    }
+    
+    // Above label styling
+    .nxt-dropdown-above-label {
+      position: absolute;
+      top: -8px;
+      left: 8px;
+      font-size: 12px;
+      color: #6a737d;
+      background-color: #ffffff;
+      padding: 0 4px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    // When disabled, adjust above label opacity
+    &.disabled .nxt-dropdown-above-label {
+      opacity: 0.4;
+      color: #999;
+    }
+  }
+
   // Custom trigger styling
   nxt-dropdown-trigger {
     display: block;
@@ -62,6 +140,11 @@
   &:focus {
     border-color: #1976d2;
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+
+  // Infield label mode specific styling
+  &.infield-label-mode {
+    align-items: flex-end; // Align content to bottom when label is floating
   }
 }
 
@@ -115,6 +198,13 @@
 
   .open & {
     transform: rotate(180deg);
+  }
+
+  .infield-label-mode & {
+    align-items: flex-start;
+  }
+  .open .infield-label-mode & {
+    align-items: flex-end;
   }
 }
 

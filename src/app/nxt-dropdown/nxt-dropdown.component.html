@@ -1,8 +1,11 @@
-<div class="nxt-dropdown-container" 
+  <div class="nxt-dropdown-container" 
      [class.disabled]="isDisabled"
      [class.open]="isOpen"
      [class.required]="required"
-     [class.multiple]="multiple">
+     [class.multiple]="multiple"
+     [class.infield-label]="infieldLabel"
+     [class.infield-label-above]="infieldLabel && infieldLabelPosition === 'above'"
+     [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'">
   
   <!-- Custom Trigger (if provided) -->
   <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
@@ -12,6 +15,7 @@
   <!-- Default Trigger (if no custom trigger provided) -->
   <div class="nxt-dropdown-trigger" 
        *ngIf="!hasCustomTrigger"
+       [class.infield-label-mode]="infieldLabel"
        (click)="toggleDropdown()"
        (keydown)="onKeyDown($event)"
        tabindex="0"
@@ -20,8 +24,22 @@
        [attr.aria-haspopup]="true"
        [attr.aria-label]="placeholder">
     
-    <div class="nxt-dropdown-value">
-      <div class="nxt-dropdown-placeholder" *ngIf="selectedOptions.length === 0">
+    <!-- Infield Label -->
+    <div class="nxt-dropdown-infield-label" 
+         *ngIf="infieldLabel && infieldLabelPosition === 'infield'"
+         [class.active]="isOpen || selectedOptions.length > 0">
+      {{ getInfieldLabelText() }}
+    </div>
+    
+    <!-- Above Label -->
+    <div class="nxt-dropdown-above-label" 
+         *ngIf="infieldLabel && infieldLabelPosition === 'above'">
+      {{ getInfieldLabelText() }}
+    </div>
+    
+    <div class="nxt-dropdown-value" [class.infield-label-mode]="infieldLabel">
+      <div class="nxt-dropdown-placeholder" 
+           *ngIf="selectedOptions.length === 0 && !infieldLabel">
         {{ placeholder }}
       </div>
       

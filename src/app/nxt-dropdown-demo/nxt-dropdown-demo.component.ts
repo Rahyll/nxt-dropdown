@@ -588,4 +588,15 @@ export class NxtDropdownDemoComponent implements OnInit {
       }
     }
   }
+
+  // Infield Label Demo Values
+  infieldLabelValue: any = null;
+  customInfieldLabelValue: any = null;
+  infieldLabelMultipleValue: any[] = [];
+  infieldLabelConfigValue: any = null;
+  infieldLabelSearchValue: any = null;
+  infieldLabelConfirmationValue: any[] = [];
+  aboveLabelValue: any = null;
+  aboveLabelConfigValue: any = null;
+  aboveLabelMultipleConfirmationValue: any[] = [];
 } 

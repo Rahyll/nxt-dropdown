@@ -145,6 +145,30 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   @Input() cancelButtonIcon: string = '';
 
+  // ==================== INFIELD LABEL FEATURE ====================
+  
+  /**
+   * Whether to use infield label mode instead of regular dropdown
+   * When true, the label appears inside the field and animates when focused/selected
+   * Default: false
+   */
+  @Input() infieldLabel: boolean = false;
+  
+  /**
+   * Label text to display in infield label mode
+   * If not provided, uses the placeholder text
+   * Default: empty string (falls back to placeholder)
+   */
+  @Input() infieldLabelText: string = '';
+  
+  /**
+   * Position of the infield label
+   * 'infield': Label appears inside the field and animates when focused/selected
+   * 'above': Label appears above the field as a static label
+   * Default: 'infield'
+   */
+  @Input() infieldLabelPosition: 'infield' | 'above' = 'infield';
+
   // ==================== CONFIGURATION OBJECT INPUT ====================
   
   /**
@@ -359,7 +383,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Check if any configuration-related properties changed
     const configProperties = ['config', 'options', 'placeholder', 'disabled', 'required', 
       'multiple', 'confirmation', 'panelClass', 'searchable', 'searchPlaceholder', 
-      'minSearchLength', 'iconType', 'strictConfigMode'];
+      'minSearchLength', 'iconType', 'infieldLabel', 'infieldLabelText', 'infieldLabelPosition', 'strictConfigMode'];
     
     const hasConfigChanges = configProperties.some(prop => changes[prop]);
     
@@ -472,7 +496,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       applyButtonText: this.applyButtonText,
       applyButtonIcon: this.applyButtonIcon,
       cancelButtonText: this.cancelButtonText,
-      cancelButtonIcon: this.cancelButtonIcon
+      cancelButtonIcon: this.cancelButtonIcon,
+      infieldLabel: this.infieldLabel,
+      infieldLabelText: this.infieldLabelText,
+      infieldLabelPosition: this.infieldLabelPosition
     };
 
     // Validate configuration to ensure no conflicts between config object and direct inputs
@@ -632,7 +659,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     const triggerRect = triggerElement.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const dropdownMaxHeight = this.confirmation ? 300 : 200; // Adjust based on confirmation mode
-    const buffer = 0; // Additional buffer space as requested
+    const buffer = 50; // Additional buffer space as requested
     
     // Calculate available space below the trigger
     const spaceBelow = viewportHeight - triggerRect.bottom;
@@ -898,7 +925,14 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     return getPendingDisplayText(this.pendingOptions, this.placeholder, this.multiple);
   }
 
-
+  /**
+   * Gets the text to display for the infield label
+   * Uses infieldLabelText if provided, otherwise falls back to placeholder
+   * @returns The label text for infield label mode
+   */
+  getInfieldLabelText(): string {
+    return this.infieldLabelText || this.placeholder;
+  }
 
   // ==================== KEYBOARD NAVIGATION ====================
   

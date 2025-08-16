@@ -1088,6 +1088,190 @@
         </div>
       </div>
     </div>
+
+    <!-- Add this to the demo section -->
+
+    <div class="demo-section">
+      <h2>️ Infield Label Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Basic Infield Label</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="infieldLabelValue"
+              [options]="options"
+              [infieldLabel]="true"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ infieldLabelValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Infield label mode with default placeholder as label</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Custom Infield Label Text</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customInfieldLabelValue"
+              [options]="options"
+              [infieldLabel]="true"
+              infieldLabelText="Choose your option"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customInfieldLabelValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom infield label text different from placeholder</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Infield Label with Multiple Selection</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="infieldLabelMultipleValue"
+              [options]="options"
+              [infieldLabel]="true"
+              [multiple]="true"
+              infieldLabelText="Select multiple options"
+              placeholder="Choose options"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ infieldLabelMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Infield label with multiple selection support</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Infield Label via Config</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="infieldLabelConfigValue"
+              [strictConfigMode]="true"
+              [config]="{
+                options: options,
+                infieldLabel: true,
+                infieldLabelText: 'Configured Label',
+                placeholder: 'Select via config'
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ infieldLabelConfigValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Infield label configured via configuration object</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Infield Label with Search</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="infieldLabelSearchValue"
+              [options]="countryOptions"
+              [infieldLabel]="true"
+              [searchable]="true"
+              infieldLabelText="Search Countries"
+              placeholder="Type to search..."
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ infieldLabelSearchValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Infield label with search functionality</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Infield Label with Confirmation</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="infieldLabelConfirmationValue"
+              [options]="options"
+              [infieldLabel]="true"
+              [multiple]="true"
+              [confirmation]="true"
+              infieldLabelText="Select with confirmation"
+              placeholder="Choose and confirm"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ infieldLabelConfirmationValue.length }} items</p>
+          <div class="code-example">
+            <small>Infield label with multiple selection and confirmation</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Above Label Position</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="aboveLabelValue"
+              [options]="options"
+              [infieldLabel]="true"
+              infieldLabelPosition="above"
+              infieldLabelText="Above Label"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ aboveLabelValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Label positioned above the field (static position)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Above Label via Config</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="aboveLabelConfigValue"
+              [strictConfigMode]="true"
+              [config]="{
+                options: options,
+                infieldLabel: true,
+                infieldLabelPosition: 'above',
+                infieldLabelText: 'Above Label via Config',
+                placeholder: 'Select via config'
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ aboveLabelConfigValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Above label configured via configuration object</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Above Label with Multiple and Confirmation</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="aboveLabelMultipleConfirmationValue"
+              [options]="options"
+              [infieldLabel]="true"
+              infieldLabelPosition="above"
+              [multiple]="true"
+              [confirmation]="true"
+              infieldLabelText="Select multiple with confirmation"
+              placeholder="Choose options and confirm"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ aboveLabelMultipleConfirmationValue.length }} items</p>
+          <div class="code-example">
+            <small>Above label with multiple selection and confirmation mode</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Guide Tab Content -->
@@ -1230,6 +1414,24 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
                 <td><code>string</code></td>
                 <td><code>''</code></td>
                 <td>Additional CSS class for dropdown panel</td>
+              </tr>
+              <tr>
+                <td><code>infieldLabel</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Enable infield label mode (floating label inside the field)</td>
+              </tr>
+              <tr>
+                <td><code>infieldLabelText</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Text for the infield label (falls back to placeholder if empty)</td>
+              </tr>
+              <tr>
+                <td><code>infieldLabelPosition</code></td>
+                <td><code>'infield' | 'above'</code></td>
+                <td><code>'infield'</code></td>
+                <td>Position of the infield label: 'infield' for floating inside, 'above' for static above the field</td>
               </tr>
               <tr>
                 <td><code>config</code></td>

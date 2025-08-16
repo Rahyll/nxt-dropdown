@@ -46,7 +46,10 @@ export function hasDirectInputValues(directInputs: any): boolean {
     directInputs.searchable === true ||
     directInputs.searchPlaceholder !== 'Search options...' ||
     directInputs.minSearchLength !== 0 ||
-    directInputs.iconType !== 'caret'
+    directInputs.iconType !== 'caret' ||
+    directInputs.infieldLabel === true ||
+    directInputs.infieldLabelText !== '' ||
+    directInputs.infieldLabelPosition !== 'infield'
   );
 }
 
@@ -71,7 +74,10 @@ export function hasConfigValues(config: NxtDropdownConfig): boolean {
     config.searchable !== undefined ||
     config.searchPlaceholder ||
     config.minSearchLength !== undefined ||
-    config.iconType !== undefined
+    config.iconType !== undefined ||
+    config.infieldLabel !== undefined ||
+    config.infieldLabelText ||
+    config.infieldLabelPosition !== undefined
   );
 }
 
@@ -100,7 +106,10 @@ export function mergeConfiguration(
       searchable: config.searchable !== undefined ? config.searchable : (directInputs.searchable || false),
       searchPlaceholder: config.searchPlaceholder || directInputs.searchPlaceholder || 'Search options...',
       minSearchLength: config.minSearchLength !== undefined ? config.minSearchLength : (directInputs.minSearchLength || 0),
-      iconType: config.iconType || directInputs.iconType || 'caret'
+      iconType: config.iconType || directInputs.iconType || 'caret',
+      infieldLabel: config.infieldLabel !== undefined ? config.infieldLabel : (directInputs.infieldLabel || false),
+      infieldLabelText: config.infieldLabelText || directInputs.infieldLabelText || '',
+      infieldLabelPosition: config.infieldLabelPosition || directInputs.infieldLabelPosition || 'infield'
     };
   } else {
     // In non-strict mode, direct inputs override config object
@@ -115,7 +124,10 @@ export function mergeConfiguration(
       searchable: directInputs.searchable !== undefined ? directInputs.searchable : (config.searchable || false),
       searchPlaceholder: directInputs.searchPlaceholder !== 'Search options...' ? directInputs.searchPlaceholder : (config.searchPlaceholder || 'Search options...'),
       minSearchLength: directInputs.minSearchLength !== undefined ? directInputs.minSearchLength : (config.minSearchLength || 0),
-      iconType: directInputs.iconType !== 'caret' ? directInputs.iconType : (config.iconType || 'caret')
+      iconType: directInputs.iconType !== 'caret' ? directInputs.iconType : (config.iconType || 'caret'),
+      infieldLabel: directInputs.infieldLabel !== undefined ? directInputs.infieldLabel : (config.infieldLabel || false),
+      infieldLabelText: directInputs.infieldLabelText !== '' ? directInputs.infieldLabelText : (config.infieldLabelText || ''),
+      infieldLabelPosition: directInputs.infieldLabelPosition !== 'infield' ? directInputs.infieldLabelPosition : (config.infieldLabelPosition || 'infield')
     };
   }
 } 
