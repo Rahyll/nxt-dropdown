@@ -275,6 +275,18 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     private sanitizer: DomSanitizer
   ) {}
 
+  // ==================== PRIVATE HELPER METHODS ====================
+
+  /**
+   * Resets pending options to match current selected options in confirmation mode
+   * This eliminates the repeated logic for resetting pending options
+   */
+  private resetPendingOptions(): void {
+    if (this.confirmation && this.multiple) {
+      this.pendingOptions = [...this.selectedOptions];
+    }
+  }
+
   /**
    * Lifecycle hook called after data-bound properties are initialized
    * Sets up initial state and configuration
@@ -292,10 +304,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Initialize filtered options (same as all options initially)
     this.updateFilteredOptions();
     
-    // In confirmation mode with multiple selection, initialize pending options
-    if (this.confirmation && this.multiple) {
-      this.pendingOptions = [...this.selectedOptions];
-    }
+    // Initialize pending options in confirmation mode
+    this.resetPendingOptions();
   }
 
   /**
@@ -487,10 +497,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.value = this.pendingValue;
     this.updateSelectedOptions();
     
-    // In confirmation mode, also update pending options to match selected options
-    if (this.confirmation && this.multiple) {
-      this.pendingOptions = [...this.selectedOptions];
-    }
+    // Reset pending options in confirmation mode
+    this.resetPendingOptions();
     
     // Clear the pending value since we've processed it
     this.pendingValue = null;
@@ -537,10 +545,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     
     this.updateSelectedOptions();
     
-    // In confirmation mode, also update pending options to match selected options
-    if (this.confirmation && this.multiple) {
-      this.pendingOptions = [...this.selectedOptions];
-    }
+    // Reset pending options in confirmation mode
+    this.resetPendingOptions();
   }
 
   /**
@@ -583,6 +589,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
         // Calculate position when opening
         this.calculateDropdownPosition();
         this.onTouched();
+        
+        // Initialize pending options in confirmation mode
+        this.resetPendingOptions();
         
         // Show and focus search input if searchable
         if (this.searchable) {
@@ -651,6 +660,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.isOpen = false;
     this.updateTriggerProperties();
     this.clearSearch();
+    
+    // Reset pending options in confirmation mode
+    this.resetPendingOptions();
   }
 
   // ==================== SEARCH FUNCTIONALITY METHODS ====================
@@ -951,7 +963,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (!this.confirmation || !this.multiple) return;
 
     // Reset pending options to match current selected options
-    this.pendingOptions = [...this.selectedOptions];
+    this.resetPendingOptions();
     this.closeDropdown();
   }
 

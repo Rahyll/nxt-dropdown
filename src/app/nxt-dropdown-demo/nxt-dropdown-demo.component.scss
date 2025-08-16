@@ -413,10 +413,18 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    position: relative; // Create stacking context
+    z-index: 1; // Base z-index
 
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transform: translateY(-2px);
+      z-index: 10; // Higher z-index on hover
+    }
+
+    // When dropdown is open, ensure this card has highest z-index
+    &:has(nxt-dropdown.open) {
+      z-index: 100;
     }
 
     &.full-width {
@@ -460,6 +468,11 @@
         font-weight: 500;
       }
     }
+  }
+
+  // Add specific styling for when dropdown is open
+  .demo-card:focus-within {
+    z-index: 100; // Highest z-index when dropdown is focused/open
   }
 
   // Select Wrapper - Fix container overflow issues
