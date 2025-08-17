@@ -37,7 +37,8 @@
       {{ getInfieldLabelText() }}
     </div>
     
-    <div class="nxt-dropdown-value" [class.infield-label-mode]="infieldLabel">
+    <div class="nxt-dropdown-value" [class.infield-label-mode]="infieldLabel"
+    [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'">
       <div class="nxt-dropdown-placeholder" 
            *ngIf="selectedOptions.length === 0 && !infieldLabel">
         {{ placeholder }}

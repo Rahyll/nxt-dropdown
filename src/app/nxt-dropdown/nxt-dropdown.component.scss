@@ -1,8 +1,64 @@
+// Variables
+$primary-color: #1976d2;
+$primary-hover: #1565c0;
+$primary-light: #e3f2fd;
+$border-color: #d0d7de;
+$border-hover: #1976d2;
+$text-primary: #24292f;
+$text-secondary: #6a737d;
+$text-muted: #9ca3af;
+$bg-white: #ffffff;
+$bg-light: #f6f8fa;
+$bg-lighter: #f8f9fa;
+$border-radius: 6px;
+$border-radius-sm: 4px;
+$transition: all 0.2s ease;
+$box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+$min-width: 200px;
+$min-height: 40px;
+
+// Dark mode variables
+$dark-bg: #1f2937;
+$dark-border: #374151;
+$dark-text: #f9fafb;
+$dark-primary: #3b82f6;
+$dark-primary-hover: #2563eb;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin focus-state {
+  border-color: $primary-color;
+  box-shadow: $box-shadow;
+}
+
+@mixin disabled-state {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// Base container
 .nxt-dropdown-container {
   position: relative;
   width: 100%;
   max-width: 100%;
-  min-width: 200px; // Add minimum width to prevent dropdown from becoming too narrow
+  min-width: $min-width;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
@@ -18,196 +74,151 @@
   }
 
   &.open .nxt-dropdown-trigger {
-    border-color: #1976d2;
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    @include focus-state;
   }
 
-  // Infield label mode styling
+  // Infield label mode
   &.infield-label {
     .nxt-dropdown-trigger {
       position: relative;
-      padding-bottom: 8px;
     }
-    
-    // Infield label position (floating inside)
-    &.infield-label-infield .nxt-dropdown-trigger {
-      padding-top: 20px; // Extra padding for the floating label
-    }
-    
-    // Above label position (static above)
-    &.infield-label-above .nxt-dropdown-trigger {
-      padding-top: 8px; // Normal padding since label is outside
+
+    .nxt-dropdown-infield-label,
+    .nxt-dropdown-above-label {
+      position: absolute;
+      left: 8px;
+      font-size: 12px;
+      color: $text-secondary;
+      background-color: $bg-white;
+      padding: 0 4px;
+      pointer-events: none;
+      z-index: 1;
     }
 
     .nxt-dropdown-infield-label {
-      position: absolute;
       top: 2px;
-      left: 8px;
-      font-size: 12px;
-      color: #6a737d;
-      background-color: #ffffff;
-      padding: 0 4px;
-      transition: all 0.2s ease;
-      pointer-events: none;
-      z-index: 1;
+      transition: $transition;
       transform-origin: left top;
       transform: translateY(0) scale(1);
       opacity: 0.7;
 
-      &.active {
-        color: #1976d2;
-        // transform: translateY(-8px) scale(0.85);
+      &.active,
+      .open & {
+        color: $primary-color;
         opacity: 1;
         font-weight: 500;
       }
     }
 
-    .nxt-dropdown-value.infield-label-mode {
-      padding-top: 4px; // Add some space below the floating label
-    }
-
-    // When dropdown is open, ensure label stays active
-    &.open .nxt-dropdown-infield-label {
-      color: #1976d2;
-      // transform: translateY(-8px) scale(0.85);
-      opacity: 1;
-      font-weight: 500;
-    }
-
-    // When disabled, adjust label opacity
-    &.disabled .nxt-dropdown-infield-label {
-      opacity: 0.4;
-      color: #999;
-    }
-    
-    // Above label styling
     .nxt-dropdown-above-label {
-      position: absolute;
       top: -8px;
-      left: 8px;
-      font-size: 12px;
-      color: #6a737d;
-      background-color: #ffffff;
-      padding: 0 4px;
-      pointer-events: none;
-      z-index: 1;
     }
-    
-    // When disabled, adjust above label opacity
-    &.disabled .nxt-dropdown-above-label {
-      opacity: 0.4;
-      color: #999;
+
+    .nxt-dropdown-value.infield-label-infield-mode {
+      padding-top: 24px;
+      min-height: 22px;
+    }
+
+    &.disabled {
+      .nxt-dropdown-infield-label,
+      .nxt-dropdown-above-label {
+        opacity: 0.4;
+        color: #999;
+      }
     }
   }
 
-  // Custom trigger styling
-  nxt-dropdown-trigger {
+  // Custom trigger
+  nxt-dropdown-trigger,
+  .nxt-dropdown-custom-trigger-wrapper {
     display: block;
     width: 100%;
-    min-width: 200px; // Add minimum width to custom trigger component
+    min-width: $min-width;
   }
 
   .nxt-dropdown-custom-trigger-wrapper {
     position: relative;
-    width: 100%;
-    min-width: 200px; // Add minimum width to custom trigger wrapper
-    display: block;
   }
 }
 
+// Trigger
 .nxt-dropdown-trigger {
+  @include flex-between;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
   max-width: 100%;
-  min-width: 200px; // Add minimum width to trigger
-  min-height: 40px;
-  padding: 8px 12px;
-  background-color: #ffffff;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
+  min-width: $min-width;
+  min-height: $min-height;
+  background-color: $bg-white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: $transition;
   outline: none;
   box-sizing: border-box;
 
   &:hover:not(.disabled) {
-    border-color: #1976d2;
+    border-color: $border-hover;
   }
 
   &:focus {
-    border-color: #1976d2;
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    @include focus-state;
   }
 
-  // Infield label mode specific styling
   &.infield-label-mode {
-    align-items: flex-end; // Align content to bottom when label is floating
+    align-items: flex-end;
   }
 }
 
+// Value display
 .nxt-dropdown-value {
   flex: 1;
   min-width: 0;
   max-width: 100%;
-  display: flex;
-  align-items: center;
+  @include flex-start;
+  padding: 8px 0 8px 12px;
   overflow: hidden;
 }
 
 .nxt-dropdown-placeholder {
-  color: #6a737d;
+  color: $text-secondary;
   font-style: italic;
 }
 
-.nxt-dropdown-selected {
-  width: 100%;
-}
-
-.nxt-dropdown-single {
-  color: #24292f;
-  font-weight: 500;
-}
-
+.nxt-dropdown-selected,
 .nxt-dropdown-multiple {
   width: 100%;
 }
 
+.nxt-dropdown-single,
 .nxt-dropdown-text {
-  color: #24292f;
+  color: $text-primary;
   font-weight: 500;
+}
+
+.nxt-dropdown-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-
-
+// Arrow
 .nxt-dropdown-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   width: 20px;
-  height: 20px;
-  color: #6a737d;
+  color: $text-secondary;
+  padding: 8px 12px 8px 0;
   transition: transform 0.2s ease;
   flex-shrink: 0;
   margin-left: 8px;
+  align-self: stretch;
 
-  .open & {
+  .open & svg {
     transform: rotate(180deg);
-  }
-
-  .infield-label-mode & {
-    align-items: flex-start;
-  }
-  .open .infield-label-mode & {
-    align-items: flex-end;
   }
 }
 
+// Dropdown panel
 .nxt-dropdown-dropdown {
   position: absolute;
   top: 100%;
@@ -215,26 +226,24 @@
   right: 0;
   z-index: 1000;
   margin-top: 4px;
-  background-color: #ffffff;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
+  background-color: $bg-white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   max-height: 200px;
-  min-width: 200px; // Ensure dropdown panel has minimum width
+  min-width: $min-width;
   overflow-y: auto;
   overflow-x: hidden;
   animation: dropdownFadeIn 0.2s ease;
   box-sizing: border-box;
 
-  // When confirmation mode is enabled, use flexbox layout
   &.confirmation-mode {
     display: flex;
     flex-direction: column;
-    overflow: hidden; // Prevent overall scrolling
-    max-height: 300px; // Increase max height for confirmation mode
+    overflow: hidden;
+    max-height: 300px;
   }
 
-  // Position above the trigger when there's not enough space below
   &.position-above {
     top: auto;
     bottom: 100%;
@@ -244,38 +253,36 @@
   }
 }
 
-// Search functionality styles
+// Search
 .nxt-dropdown-search {
   padding: 8px 12px;
   border-bottom: 1px solid #e1e4e8;
-  background-color: #f8f9fa;
-  border-radius: 6px 6px 0 0;
+  background-color: $bg-lighter;
+  border-radius: $border-radius $border-radius 0 0;
 }
 
 .nxt-dropdown-search-container {
   position: relative;
-  display: flex;
-  align-items: center;
+  @include flex-center;
 }
 
 .nxt-dropdown-search-input {
   width: 100%;
   padding: 8px 32px 8px 12px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-sm;
   font-size: 14px;
   line-height: 1.5;
-  background-color: #ffffff;
+  background-color: $bg-white;
   outline: none;
   transition: border-color 0.2s ease;
 
   &:focus {
-    border-color: #1976d2;
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    @include focus-state;
   }
 
   &::placeholder {
-    color: #6a737d;
+    color: $text-secondary;
   }
 }
 
@@ -284,21 +291,19 @@
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   width: 16px;
   height: 16px;
   background: none;
   border: none;
   cursor: pointer;
-  color: #6a737d;
+  color: $text-secondary;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: $transition;
 
   &:hover {
     background-color: #e1e4e8;
-    color: #24292f;
+    color: $text-primary;
   }
 
   svg {
@@ -307,6 +312,7 @@
   }
 }
 
+// Animations
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;
@@ -329,52 +335,51 @@
   }
 }
 
+// Options
 .nxt-dropdown-options {
   padding: 4px 0;
 
-  // When in confirmation mode, make options scrollable
   .confirmation-mode & {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    min-height: 0; // Allow flex item to shrink
+    min-height: 0;
   }
 }
 
 .nxt-dropdown-option {
-  display: flex;
-  align-items: center;
+  @include flex-center;
   padding: 8px 12px;
   cursor: pointer;
   transition: background-color 0.15s ease;
   user-select: none;
 
   &:hover:not(.disabled) {
-    background-color: #f6f8fa;
+    background-color: $bg-light;
   }
 
   &.selected {
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: $primary-light;
+    color: $primary-color;
   }
 
   &.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    color: #6a737d;
+    @include disabled-state;
+    color: $text-secondary;
+  }
+
+  &.grouped {
+    padding-left: 20px;
   }
 }
 
 .nxt-dropdown-option-content {
-  display: flex;
-  align-items: center;
+  @include flex-center;
   width: 100%;
 }
 
 .nxt-dropdown-option-checkbox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   width: 16px;
   height: 16px;
   margin-right: 8px;
@@ -382,23 +387,17 @@
 }
 
 .nxt-dropdown-checkbox {
+  @include flex-center;
   width: 16px;
   height: 16px;
-  border: 2px solid #d0d7de;
+  border: 2px solid $border-color;
   border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  transition: $transition;
 
-  &.checked {
-    background-color: #1976d2;
-    border-color: #1976d2;
-  }
-
+  &.checked,
   &.partially {
-    background-color: #1976d2;
-    border-color: #1976d2;
+    background-color: $primary-color;
+    border-color: $primary-color;
   }
 }
 
@@ -413,14 +412,14 @@
 
   .nxt-dropdown-option-label {
     font-weight: 600;
-    color: #1976d2;
+    color: $primary-color;
   }
 
   &.partially-selected {
-    background-color: #e3f2fd;
+    background-color: $primary-light;
     
     .nxt-dropdown-option-label {
-      color: #1976d2;
+      color: $primary-color;
     }
   }
 }
@@ -443,20 +442,15 @@
   margin-top: 4px;
 }
 
-.nxt-dropdown-option.grouped {
-  padding-left: 20px; // Indent grouped options slightly
-}
-
+// Footer
 .nxt-dropdown-footer {
   border-top: 1px solid #e1e4e8;
   padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 0 0 6px 6px;
+  background-color: $bg-lighter;
+  border-radius: 0 0 $border-radius $border-radius;
 
-  // When in confirmation mode, keep footer at bottom
   .confirmation-mode & {
-    flex-shrink: 0; // Prevent footer from shrinking
-    border-radius: 0 0 6px 6px; // Ensure proper border radius
+    flex-shrink: 0;
   }
 }
 
@@ -467,18 +461,16 @@
 }
 
 .nxt-dropdown-btn {
+  @include flex-center;
   padding: 8px 16px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-sm;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: $transition;
   outline: none;
   min-width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 6px;
 
   &:hover {
@@ -488,49 +480,41 @@
   .nxt-dropdown-btn-icon {
     font-size: 16px;
     line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     
-    // Ensure Material Icons display properly
     .material-icons {
       font-size: 18px;
       width: 18px;
       height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include flex-center;
     }
     
-    // Ensure Font Awesome icons display properly
     i {
       font-size: 16px;
       width: 16px;
       height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include flex-center;
     }
   }
 
   &.nxt-dropdown-btn-cancel {
-    background-color: #ffffff;
-    color: #24292f;
+    background-color: $bg-white;
+    color: $text-primary;
 
     &:hover {
-      background-color: #f6f8fa;
-      border-color: #1976d2;
+      background-color: $bg-light;
+      border-color: $primary-color;
     }
   }
 
   &.nxt-dropdown-btn-apply {
-    background-color: #1976d2;
-    color: #ffffff;
-    border-color: #1976d2;
+    background-color: $primary-color;
+    color: $bg-white;
+    border-color: $primary-color;
 
     &:hover {
-      background-color: #1565c0;
-      border-color: #1565c0;
+      background-color: $primary-hover;
+      border-color: $primary-hover;
     }
   }
 }
@@ -538,7 +522,7 @@
 .nxt-dropdown-no-options {
   padding: 12px;
   text-align: center;
-  color: #6a737d;
+  color: $text-secondary;
   font-style: italic;
 }
 
@@ -549,90 +533,87 @@
   font-weight: 500;
 }
 
-// Responsive design
+// Responsive
 @media (max-width: 768px) {
   .nxt-dropdown-container {
-    font-size: 16px; // Prevent zoom on iOS
+    font-size: 16px;
   }
 
-  .nxt-dropdown-trigger {
-    min-height: 44px; // Better touch target
-  }
-
+  .nxt-dropdown-trigger,
   .nxt-dropdown-option {
-    min-height: 44px; // Better touch target
+    min-height: 44px;
   }
 }
 
-// Dark mode support
+// Dark mode
 @media (prefers-color-scheme: dark) {
   .nxt-dropdown-container {
     .nxt-dropdown-trigger {
-      background-color: #1f2937;
-      border-color: #374151;
-      color: #f9fafb;
+      background-color: $dark-bg;
+      border-color: $dark-border;
+      color: $dark-text;
 
       &:hover:not(.disabled) {
-        border-color: #3b82f6;
+        border-color: $dark-primary;
       }
 
       &:focus {
-        border-color: #3b82f6;
+        border-color: $dark-primary;
         box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
       }
     }
 
     .nxt-dropdown-placeholder {
-      color: #9ca3af;
+      color: $text-muted;
     }
 
     .nxt-dropdown-single,
     .nxt-dropdown-summary {
-      color: #f9fafb;
+      color: $dark-text;
     }
 
     .nxt-dropdown-dropdown {
-      background-color: #1f2937;
-      border-color: #374151;
+      background-color: $dark-bg;
+      border-color: $dark-border;
     }
 
     .nxt-dropdown-search {
-      border-bottom-color: #374151;
+      border-bottom-color: $dark-border;
       background-color: #111827;
     }
 
     .nxt-dropdown-search-input {
-      background-color: #374151;
+      background-color: $dark-border;
       border-color: #4b5563;
-      color: #f9fafb;
+      color: $dark-text;
 
       &:focus {
-        border-color: #3b82f6;
+        border-color: $dark-primary;
         box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
       }
 
       &::placeholder {
-        color: #9ca3af;
+        color: $text-muted;
       }
     }
 
     .nxt-dropdown-search-clear {
-      color: #9ca3af;
+      color: $text-muted;
 
       &:hover {
         background-color: #4b5563;
-        color: #f9fafb;
+        color: $dark-text;
       }
     }
 
     .nxt-dropdown-option {
       &:hover:not(.disabled) {
-        background-color: #374151;
+        background-color: $dark-border;
       }
 
       &.selected {
         background-color: #1e3a8a;
-        color: #3b82f6;
+        color: $dark-primary;
       }
 
       &.disabled {
@@ -642,141 +623,52 @@
 
     .nxt-dropdown-all-option {
       .nxt-dropdown-option-label {
-        color: #3b82f6;
+        color: $dark-primary;
       }
 
       &.partially-selected {
         background-color: #1e3a8a;
         
         .nxt-dropdown-option-label {
-          color: #3b82f6;
+          color: $dark-primary;
         }
       }
     }
 
     .nxt-dropdown-divider {
-      background-color: #374151;
+      background-color: $dark-border;
     }
 
     .nxt-dropdown-footer {
-      border-top-color: #374151;
-      background-color: #1f2937;
+      border-top-color: $dark-border;
+      background-color: $dark-bg;
     }
 
     .nxt-dropdown-btn {
       &.nxt-dropdown-btn-cancel {
-        background-color: #374151;
-        color: #f9fafb;
+        background-color: $dark-border;
+        color: $dark-text;
         border-color: #4b5563;
 
         &:hover {
           background-color: #4b5563;
-          border-color: #3b82f6;
+          border-color: $dark-primary;
         }
       }
 
       &.nxt-dropdown-btn-apply {
-        background-color: #3b82f6;
-        border-color: #3b82f6;
+        background-color: $dark-primary;
+        border-color: $dark-primary;
 
         &:hover {
-          background-color: #2563eb;
-          border-color: #2563eb;
+          background-color: $dark-primary-hover;
+          border-color: $dark-primary-hover;
         }
       }
     }
 
     .nxt-dropdown-no-options {
-      color: #9ca3af;
+      color: $text-muted;
     }
   }
 } 
-
-// Custom style overrides
-// .nxt-dropdown-trigger {
-//   padding: 0 !important;
-//   border: none !important;
-//   min-height: 0 !important;
-//   min-width: 100px;
-// }
-
-// .nxt-dropdown-trigger-content {
-//   min-width: 100px;
-//   padding: 0 !important;
-//   border: none !important;
-//   box-shadow: none !important;
-//   &:focus {
-//     border: none !important;
-//   }
-// }
-
-// .nxt-dropdown-option-label {
-//   font-size: 14px !important;
-//   font-weight: 600 !important;
-//   color: inherit;
-// }
-
-// .nxt-dropdown-options {
-//   padding: 0px !important;
-// }
-
-// .nxt-dropdown-option {
-//   padding-top: 16px !important;
-//   padding-bottom: 16px !important;
-//   color: #6f6f8d !important;
-//   &:hover {
-//     background-color: #f4f8ff !important;
-//     color: #17173a !important;
-//   }
-// }
-
-// .nxt-dropdown-dropdown {
-//   margin-top: 0px !important;
-//   max-height: 300px !important;
-//   box-shadow: none !important;
-//   border-radius: 4px !important;
-//   border: 1px solid #e1e4e8 !important;
-// }
-
-// .nxt-dropdown-all-option {
-//   margin-bottom: 0px !important;
-//   .nxt-dropdown-option-label {
-//     color: #17173a !important;
-//   }
-// }
-
-// .nxt-dropdown-checkbox {
-//   border-color: #6f6f8d !important;
-// }
-
-// .nxt-dropdown-divider {
-//   margin: 0px !important;
-// }
-
-// .nxt-dropdown-footer {
-//   background-color: #ffffff !important;
-// }
-
-// .nxt-dropdown-btn-apply {
-//   background-color: #143F93 !important;
-//   color: #ffffff !important;
-//   padding: 6px 12px !important;
-//   font-size: 14px !important;
-//   font-weight: 600 !important;
-//   border-radius: 4px !important;
-// }
-
-// .nxt-dropdown-btn-cancel {
-//   padding: 6px 12px !important;
-//   border: 1px solid #143F93 !important;
-//   color: #143F93 !important;
-//   font-size: 14px !important;
-//   font-weight: 600 !important;
-//   border-radius: 4px !important;
-// }
-
-// .nxt-dropdown-trigger-content .nxt-dropdown-arrow svg {
-//   width: 20px !important;
-//   height: 20px !important;
-//   color: #1976d2 !important;
-// } 
