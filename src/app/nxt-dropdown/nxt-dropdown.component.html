@@ -1,4 +1,4 @@
-  <div class="nxt-dropdown-container" 
+<div class="nxt-dropdown-container" 
      [class.disabled]="isDisabled"
      [class.open]="isOpen"
      [class.required]="required"
@@ -7,12 +7,12 @@
      [class.infield-label-above]="infieldLabel && infieldLabelPosition === 'above'"
      [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'">
   
-  <!-- Custom Trigger (if provided) -->
+  <!-- Custom Trigger -->
   <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
     <ng-content select="nxt-dropdown-trigger"></ng-content>
   </div>
   
-  <!-- Default Trigger (if no custom trigger provided) -->
+  <!-- Default Trigger -->
   <div class="nxt-dropdown-trigger" 
        *ngIf="!hasCustomTrigger"
        [class.infield-label-mode]="infieldLabel"
@@ -24,62 +24,75 @@
        [attr.aria-haspopup]="true"
        [attr.aria-label]="placeholder">
     
-    <!-- Infield Label -->
-    <div class="nxt-dropdown-infield-label" 
-         *ngIf="infieldLabel && infieldLabelPosition === 'infield'"
-         [class.active]="isOpen || selectedOptions.length > 0">
-      {{ getInfieldLabelText() }}
-    </div>
-    
-    <!-- Above Label -->
-    <div class="nxt-dropdown-above-label" 
-         *ngIf="infieldLabel && infieldLabelPosition === 'above'">
-      {{ getInfieldLabelText() }}
-    </div>
-    
-    <div class="nxt-dropdown-value" [class.infield-label-mode]="infieldLabel"
-    [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'">
-      <div class="nxt-dropdown-placeholder" 
-           *ngIf="selectedOptions.length === 0 && !infieldLabel">
-        {{ placeholder }}
+    <!-- Labels -->
+    <ng-container *ngIf="infieldLabel">
+      <div class="nxt-dropdown-infield-label" 
+           *ngIf="infieldLabelPosition === 'infield'"
+           [class.active]="isOpen || selectedOptions.length > 0">
+        {{ getInfieldLabelText() }}
       </div>
       
-      <div class="nxt-dropdown-selected" *ngIf="selectedOptions.length > 0">
-        <div class="nxt-dropdown-single" *ngIf="!multiple">
-          {{ getDisplayText() }}
-        </div>
-        
-        <div class="nxt-dropdown-multiple" *ngIf="multiple">
-          <div class="nxt-dropdown-text">
+      <div class="nxt-dropdown-above-label" 
+           *ngIf="infieldLabelPosition === 'above'">
+        {{ getInfieldLabelText() }}
+      </div>
+    </ng-container>
+    
+    <!-- Value Display -->
+    <div class="nxt-dropdown-value" 
+         [class.infield-label-mode]="infieldLabel"
+         [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'">
+      
+      <ng-container *ngIf="selectedOptions.length === 0 && !infieldLabel; else selectedContent">
+        <div class="nxt-dropdown-placeholder">{{ placeholder }}</div>
+      </ng-container>
+      
+      <ng-template #selectedContent>
+        <div class="nxt-dropdown-selected">
+          <div class="nxt-dropdown-single" *ngIf="!multiple">
             {{ getDisplayText() }}
           </div>
+          
+          <div class="nxt-dropdown-multiple" *ngIf="multiple">
+            <div class="nxt-dropdown-text">{{ getDisplayText() }}</div>
+          </div>
         </div>
-      </div>
+      </ng-template>
     </div>
     
+    <!-- Arrow Icon -->
     <div class="nxt-dropdown-arrow">
-      <!-- Down Caret Icon -->
-      <svg *ngIf="iconType === 'caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      
-      <!-- Down Arrow Icon -->
-      <svg *ngIf="iconType === 'arrow'" width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M6 2L6 10M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      
-      <!-- Sharp Cornered Down Caret Icon -->
-      <svg *ngIf="iconType === 'sharp-caret'" width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <polygon points="3,4.5 6,7.5 9,4.5" fill="currentColor"/>
-      </svg>
-      
-      <!-- Inverted Triangle Icon -->
-      <svg *ngIf="iconType === 'inverted-triangle'" width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <polygon points="2,3 6,9 10,3" fill="currentColor"/>
+      <svg [attr.data-icon-type]="iconType" width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <!-- Caret -->
+        <path *ngIf="iconType === 'caret'" 
+              d="M3 4.5L6 7.5L9 4.5" 
+              stroke="currentColor" 
+              stroke-width="1.5" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+        
+        <!-- Arrow -->
+        <path *ngIf="iconType === 'arrow'" 
+              d="M6 2L6 10M6 10L3 7M6 10L9 7" 
+              stroke="currentColor" 
+              stroke-width="1.5" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+        
+        <!-- Sharp Caret -->
+        <polygon *ngIf="iconType === 'sharp-caret'" 
+                 points="3,4.5 6,7.5 9,4.5" 
+                 fill="currentColor"/>
+        
+        <!-- Inverted Triangle -->
+        <polygon *ngIf="iconType === 'inverted-triangle'" 
+                 points="2,3 6,9 10,3" 
+                 fill="currentColor"/>
       </svg>
     </div>
   </div>
   
+  <!-- Dropdown Panel -->
   <div class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
        [class]="panelClass"
@@ -103,14 +116,19 @@
                 (click)="clearSearch()"
                 aria-label="Clear search">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 3L3 9M3 3L9 9" 
+                  stroke="currentColor" 
+                  stroke-width="1.5" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
     </div>
 
+    <!-- Options Container -->
     <div class="nxt-dropdown-options">
-      <!-- Select All Option (only for multiple selection) -->
+      <!-- Select All Option -->
       <div class="nxt-dropdown-option nxt-dropdown-all-option"
            *ngIf="multiple && filteredOptions.length > 0"
            [class.selected]="isAllSelected()"
@@ -125,10 +143,17 @@
                  [class.checked]="isAllSelected()"
                  [class.partially]="isPartiallySelected()">
               <svg *ngIf="isAllSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 6L5 9L10 3" 
+                      stroke="white" 
+                      stroke-width="2" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"/>
               </svg>
               <svg *ngIf="isPartiallySelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 6H9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M3 6H9" 
+                      stroke="white" 
+                      stroke-width="2" 
+                      stroke-linecap="round"/>
               </svg>
             </div>
           </div>
@@ -139,13 +164,14 @@
         </div>
       </div>
 
-      <!-- Divider after Select All -->
+      <!-- Divider -->
       <div class="nxt-dropdown-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
       
-      <!-- Grouped and Regular Options -->
+      <!-- Options -->
       <ng-container *ngFor="let option of filteredOptions; let i = index; trackBy: trackByValue">
         <!-- Group Header -->
-        <div class="nxt-dropdown-group-header" *ngIf="option.group && shouldShowGroupHeader(option, i)">
+        <div class="nxt-dropdown-group-header" 
+             *ngIf="option.group && shouldShowGroupHeader(option, i)">
           {{ option.group }}
         </div>
         
@@ -162,7 +188,11 @@
             <div class="nxt-dropdown-option-checkbox" *ngIf="multiple">
               <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
                 <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 6L5 9L10 3" 
+                        stroke="white" 
+                        stroke-width="2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round"/>
                 </svg>
               </div>
             </div>
@@ -174,8 +204,7 @@
         </div>
       </ng-container>
       
-      <!-- Content Projected Options will be processed in the component -->
-      
+      <!-- No Options Message -->
       <div class="nxt-dropdown-no-options" *ngIf="filteredOptions.length === 0">
         <div *ngIf="searchable && searchText && searchText.length >= minSearchLength">
           No options found for "{{ searchText }}"
@@ -192,19 +221,24 @@
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
                 (click)="cancelSelection()">
-          <span *ngIf="cancelButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(cancelButtonIcon)"></span>
+          <span *ngIf="cancelButtonIcon" 
+                class="nxt-dropdown-btn-icon" 
+                [innerHTML]="getSanitizedIcon(cancelButtonIcon)"></span>
           {{ cancelButtonText }}
         </button>
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-apply"
                 (click)="applySelection()">
-          <span *ngIf="applyButtonIcon" class="nxt-dropdown-btn-icon" [innerHTML]="getSanitizedIcon(applyButtonIcon)"></span>
+          <span *ngIf="applyButtonIcon" 
+                class="nxt-dropdown-btn-icon" 
+                [innerHTML]="getSanitizedIcon(applyButtonIcon)"></span>
           {{ applyButtonText }}
         </button>
       </div>
     </div>
   </div>
   
+  <!-- Error Message -->
   <div class="nxt-dropdown-error" *ngIf="required && !value">
     This field is required
   </div>
