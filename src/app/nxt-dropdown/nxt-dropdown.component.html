@@ -4,7 +4,7 @@
      [class.required]="required"
      [class.multiple]="multiple"
      [class.infield-label]="infieldLabel"
-     [class.infield-label-above]="infieldLabel && infieldLabelPosition === 'above'"
+     [class.infield-label-onfield]="infieldLabel && infieldLabelPosition === 'onfield'"
      [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'">
   
   <!-- Custom Trigger -->
@@ -32,8 +32,8 @@
         {{ getInfieldLabelText() }}
       </div>
       
-      <div class="nxt-dropdown-above-label" 
-           *ngIf="infieldLabelPosition === 'above'">
+      <div class="nxt-dropdown-onfield-label" 
+           *ngIf="infieldLabelPosition === 'onfield'">
         {{ getInfieldLabelText() }}
       </div>
     </ng-container>

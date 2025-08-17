@@ -84,7 +84,7 @@ $dark-primary-hover: #2563eb;
     }
 
     .nxt-dropdown-infield-label,
-    .nxt-dropdown-above-label {
+    .nxt-dropdown-onfield-label {
       position: absolute;
       left: 8px;
       font-size: 12px;
@@ -110,7 +110,7 @@ $dark-primary-hover: #2563eb;
       }
     }
 
-    .nxt-dropdown-above-label {
+    .nxt-dropdown-onfield-label {
       top: -12px;
     }
 
@@ -121,7 +121,7 @@ $dark-primary-hover: #2563eb;
 
     &.disabled {
       .nxt-dropdown-infield-label,
-      .nxt-dropdown-above-label {
+      .nxt-dropdown-onfield-label {
         opacity: 0.4;
         color: #999;
       }

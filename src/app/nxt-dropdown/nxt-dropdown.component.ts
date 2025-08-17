@@ -164,10 +164,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   /**
    * Position of the infield label
    * 'infield': Label appears inside the field and animates when focused/selected
-   * 'above': Label appears above the field as a static label
+   * 'onfield': Label appears on the field as a static label
    * Default: 'infield'
    */
-  @Input() infieldLabelPosition: 'infield' | 'above' = 'infield';
+  @Input() infieldLabelPosition: 'infield' | 'onfield' = 'infield';
 
   // ==================== CONFIGURATION OBJECT INPUT ====================
   

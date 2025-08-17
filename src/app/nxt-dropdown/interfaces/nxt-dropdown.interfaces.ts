@@ -32,5 +32,5 @@ export interface NxtDropdownConfig {
   // Add infield label configuration
   infieldLabel?: boolean;
   infieldLabelText?: string;
-  infieldLabelPosition?: 'infield' | 'above';
+  infieldLabelPosition?: 'infield' | 'onfield';
 } 

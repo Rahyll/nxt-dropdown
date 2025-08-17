@@ -596,7 +596,7 @@ export class NxtDropdownDemoComponent implements OnInit {
   infieldLabelConfigValue: any = null;
   infieldLabelSearchValue: any = null;
   infieldLabelConfirmationValue: any[] = [];
-  aboveLabelValue: any = null;
-  aboveLabelConfigValue: any = null;
-  aboveLabelMultipleConfirmationValue: any[] = [];
+  onfieldLabelValue: any = null;
+  onfieldLabelConfigValue: any = null;
+  onfieldLabelMultipleConfirmationValue: any[] = [];
 } 

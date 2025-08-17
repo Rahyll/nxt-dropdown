@@ -1210,54 +1210,54 @@
         </div>
 
         <div class="demo-card">
-          <h3>Above Label Position</h3>
+          <h3>Onfield Label Position</h3>
           <div class="select-wrapper">
             <nxt-dropdown
-              [(ngModel)]="aboveLabelValue"
+              [(ngModel)]="onfieldLabelValue"
               [options]="options"
               [infieldLabel]="true"
-              infieldLabelPosition="above"
-              infieldLabelText="Above Label"
+              infieldLabelPosition="onfield"
+              infieldLabelText="Onfield Label"
               placeholder="Select an option"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
-          <p class="result">Selected: {{ aboveLabelValue || 'None' }}</p>
+          <p class="result">Selected: {{ onfieldLabelValue || 'None' }}</p>
           <div class="code-example">
-            <small>Label positioned above the field (static position)</small>
+            <small>Label positioned on the field (static position)</small>
           </div>
         </div>
 
         <div class="demo-card">
-          <h3>Above Label via Config</h3>
+          <h3>Onfield Label via Config</h3>
           <div class="select-wrapper">
             <nxt-dropdown
-              [(ngModel)]="aboveLabelConfigValue"
+              [(ngModel)]="onfieldLabelConfigValue"
               [strictConfigMode]="true"
               [config]="{
                 options: options,
                 infieldLabel: true,
-                infieldLabelPosition: 'above',
-                infieldLabelText: 'Above Label via Config',
+                infieldLabelPosition: 'onfield',
+                infieldLabelText: 'Onfield Label via Config',
                 placeholder: 'Select via config'
               }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
-          <p class="result">Selected: {{ aboveLabelConfigValue || 'None' }}</p>
+          <p class="result">Selected: {{ onfieldLabelConfigValue || 'None' }}</p>
           <div class="code-example">
-            <small>Above label configured via configuration object</small>
+            <small>Onfield label configured via configuration object</small>
           </div>
         </div>
 
         <div class="demo-card">
-          <h3>Above Label with Multiple and Confirmation</h3>
+          <h3>Onfield Label with Multiple and Confirmation</h3>
           <div class="select-wrapper">
             <nxt-dropdown
-              [(ngModel)]="aboveLabelMultipleConfirmationValue"
+              [(ngModel)]="onfieldLabelMultipleConfirmationValue"
               [options]="options"
               [infieldLabel]="true"
-              infieldLabelPosition="above"
+              infieldLabelPosition="onfield"
               [multiple]="true"
               [confirmation]="true"
               infieldLabelText="Select multiple with confirmation"
@@ -1265,9 +1265,9 @@
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
-          <p class="result">Selected: {{ aboveLabelMultipleConfirmationValue.length }} items</p>
+          <p class="result">Selected: {{ onfieldLabelMultipleConfirmationValue.length }} items</p>
           <div class="code-example">
-            <small>Above label with multiple selection and confirmation mode</small>
+            <small>Onfield label with multiple selection and confirmation mode</small>
           </div>
         </div>
       </div>
@@ -1429,9 +1429,9 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
               </tr>
               <tr>
                 <td><code>infieldLabelPosition</code></td>
-                <td><code>'infield' | 'above'</code></td>
+                <td><code>'infield' | 'onfield'</code></td>
                 <td><code>'infield'</code></td>
-                <td>Position of the infield label: 'infield' for floating inside, 'above' for static above the field</td>
+                <td>Position of the infield label: 'infield' for floating inside, 'onfield' for static on the field</td>
               </tr>
               <tr>
                 <td><code>config</code></td>
