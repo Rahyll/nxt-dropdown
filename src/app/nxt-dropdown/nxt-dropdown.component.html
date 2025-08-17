@@ -43,7 +43,7 @@
          [class.infield-label-mode]="infieldLabel"
          [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'">
       
-      <ng-container *ngIf="selectedOptions.length === 0 && !infieldLabel; else selectedContent">
+      <ng-container *ngIf="selectedOptions.length === 0; else selectedContent">
         <div class="nxt-dropdown-placeholder">{{ placeholder }}</div>
       </ng-container>
       
