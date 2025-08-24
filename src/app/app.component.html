@@ -1,1 +1,130 @@
-<app-nxt-dropdown-demo></app-nxt-dropdown-demo>
+<div class="flex flex-col gap-20">
+    <nxt-dropdown 
+    class="mb-20"
+    [options]="options" [placeholder]="'Select an option'"
+    [multiple]="true"
+    [confirmation]="true"
+    [searchable]="true"
+    [searchPlaceholder]="'Search options...'"
+    [minSearchLength]="0"
+    [iconType]="'caret'"
+    [applyButtonText]="'Apply'"
+    [applyButtonIcon]="'<span>&#9745;</span>'"
+    [cancelButtonText]="'Cancel'"
+    [cancelButtonIcon]="'<span>&#9746;</span>'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown [(ngModel)]="triggerValue">
+        <nxt-dropdown-trigger>
+            {{ triggerValue }}
+        </nxt-dropdown-trigger>
+        <nxt-option *ngFor="let option of options" [value]="option.value">
+            <span>{{ option.label }}</span>
+        </nxt-option>
+    </nxt-dropdown>
+
+    <nxt-dropdown>
+        <nxt-option-group *ngFor="let group of groups" [label]="group.label">
+            <nxt-option *ngFor="let option of group.options" [value]="option.value">
+                <span>{{ option.label }}</span>
+            </nxt-option>
+        </nxt-option-group>
+    </nxt-dropdown>
+    
+    
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Infield Label'"
+    [infieldLabelPosition]="'infield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Infield Label with multiple selection'"
+    [multiple]="true"
+    [infieldLabelPosition]="'infield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Infield Label with multiple selection & confirmation'"
+    [multiple]="true"
+    [confirmation]="true"
+    [infieldLabelPosition]="'infield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Onfield Label'"
+    [infieldLabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Onfield Label with multiple selection'"
+    [multiple]="true"
+    [infieldLabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [infieldLabel]="true"
+    [infieldLabelText]="'Onfield Label with multiple selection & confirmation'"
+    [multiple]="true"
+    [confirmation]="true"
+    [infieldLabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Onfield Float Label'"
+    [floatlabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Onfield Float Label with multiple selection'"
+    [multiple]="true"
+    [floatlabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Onfield Float Label with multiple selection & confirmation'"
+    [multiple]="true"
+    [confirmation]="true"
+    [floatlabelPosition]="'onfield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Infield Float Label'"
+    [floatlabelPosition]="'infield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Infield Float Label with multiple selection'"
+    [multiple]="true"
+    [floatlabelPosition]="'infield'"
+    ></nxt-dropdown>
+
+    <nxt-dropdown
+    [options]="options" [placeholder]="'Select an option'"
+    [floatlabel]="true"
+    [floatlabelText]="'Infield Float Label with multiple selection & confirmation'"
+    [multiple]="true"
+    [confirmation]="true"
+    [floatlabelPosition]="'infield'"
+    ></nxt-dropdown>
+</div>

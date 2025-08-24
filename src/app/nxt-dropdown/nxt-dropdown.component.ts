@@ -18,8 +18,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NxtOptionComponent } from './components/nxt-option/nxt-option.component';
 import { NxtOptionGroupComponent } from './components/nxt-option-group/nxt-option-group.component';
 import { NxtDropdownTriggerComponent } from './components/nxt-dropdown-trigger/nxt-dropdown-trigger.component';
-import { NxtDropdownConfig, NxtDropdownOption } from './interfaces/nxt-dropdown.interfaces';
-import { validateStrictConfiguration, mergeConfiguration, hasDirectInputValues, hasConfigValues } from './utils/config.utils';
+import { NxtDropdownConfig, NxtDropdownOption, NxtDropdownState, NxtDropdownBasicConfig, NxtDropdownSelectionConfig, NxtDropdownSearchConfig, NxtDropdownLabelConfig, NxtDropdownIconConfig, NxtDropdownConfirmationConfig } from './interfaces/nxt-dropdown.interfaces';
+import { validateStrictConfiguration, mergeConfiguration, hasValues, mergeGroupedConfigurations, extractGroupedConfigurations, validateConfiguration } from './utils/config.utils';
 import { isAllSelected, isPartiallySelected, isOptionSelected, updateSelectedOptions, getValuesFromSelectedOptions, toggleOptionSelection } from './utils/selection.utils';
 import { getDisplayText, getPendingDisplayText } from './utils/display.utils';
 import { filterOptionsBySearch, clearSearchState } from './utils/search.utils';
@@ -235,67 +235,61 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   @ContentChild(NxtDropdownTriggerComponent) customTrigger?: NxtDropdownTriggerComponent;
 
-  // ==================== INTERNAL STATE PROPERTIES ====================
+  // ==================== CONSOLIDATED STATE MANAGEMENT ====================
   
   /**
-   * Current value of the dropdown (single value or array for multiple)
-   * This is the actual value that gets passed to forms and emitted
+   * Consolidated state object containing all internal state properties
+   * This reduces redundancy and improves state management
    */
-  value: any;
+  private state: NxtDropdownState = {
+    value: null,
+    isDisabled: false,
+    isOpen: false,
+    selectedOptions: [],
+    pendingOptions: [],
+    searchText: '',
+    filteredOptions: [],
+    showSearchInput: false,
+    shouldPositionAbove: false,
+    pendingValue: null
+  };
+
+  // ==================== STATE GETTERS ====================
+  
+  get value(): any { return this.state.value; }
+  get isDisabled(): boolean { return this.state.isDisabled; }
+  get isOpen(): boolean { return this.state.isOpen; }
+  get selectedOptions(): NxtDropdownOption[] { return this.state.selectedOptions; }
+  get pendingOptions(): NxtDropdownOption[] { return this.state.pendingOptions; }
+  get searchText(): string { return this.state.searchText; }
+  get filteredOptions(): NxtDropdownOption[] { return this.state.filteredOptions; }
+  get showSearchInput(): boolean { return this.state.showSearchInput; }
+  get shouldPositionAbove(): boolean { return this.state.shouldPositionAbove; }
+  get pendingValue(): any { return this.state.pendingValue; }
+
+  // ==================== STATE UPDATE METHODS ====================
   
   /**
-   * Internal disabled state (can be set by both input and form control)
+   * Update state with partial updates
+   * @param updates - Partial state updates
    */
-  isDisabled: boolean = false;
-  
+  private updateState(updates: Partial<NxtDropdownState>): void {
+    this.state = { ...this.state, ...updates };
+  }
+
   /**
-   * Whether the dropdown panel is currently open
+   * Update specific state properties
    */
-  isOpen: boolean = false;
-  
-  /**
-   * Array of currently selected option objects
-   * Contains full option objects, not just values
-   */
-  selectedOptions: NxtDropdownOption[] = [];
-  
-  /**
-   * Array of pending option selections in confirmation mode
-   * Used to store temporary selections before applying them
-   */
-  pendingOptions: NxtDropdownOption[] = [];
-  
-  /**
-   * Store pending value when options are not yet available
-   * This handles the case where writeValue is called before options are loaded
-   * Prevents losing the initial value when options are loaded asynchronously
-   */
-  private pendingValue: any = null;
-  
-  // ==================== SEARCH FUNCTIONALITY ====================
-  
-  /**
-   * Current search text entered by the user
-   */
-  searchText: string = '';
-  
-  /**
-   * Options filtered based on the current search text
-   * This is what gets displayed in the dropdown panel
-   */
-  filteredOptions: NxtDropdownOption[] = [];
-  
-  /**
-   * Whether to show the search input in the dropdown panel
-   * Controlled by searchable input and dropdown state
-   */
-  showSearchInput: boolean = false;
-  
-  /**
-   * Whether the dropdown should be positioned above the trigger
-   * Calculated based on available space below the trigger
-   */
-  shouldPositionAbove: boolean = false;
+  private setValue(value: any): void { this.updateState({ value }); }
+  private setIsDisabled(isDisabled: boolean): void { this.updateState({ isDisabled }); }
+  private setIsOpen(isOpen: boolean): void { this.updateState({ isOpen }); }
+  private setSelectedOptions(selectedOptions: NxtDropdownOption[]): void { this.updateState({ selectedOptions }); }
+  private setPendingOptions(pendingOptions: NxtDropdownOption[]): void { this.updateState({ pendingOptions }); }
+  private setSearchText(searchText: string): void { this.updateState({ searchText }); }
+  private setFilteredOptions(filteredOptions: NxtDropdownOption[]): void { this.updateState({ filteredOptions }); }
+  private setShowSearchInput(showSearchInput: boolean): void { this.updateState({ showSearchInput }); }
+  private setShouldPositionAbove(shouldPositionAbove: boolean): void { this.updateState({ shouldPositionAbove }); }
+  private setPendingValue(pendingValue: any): void { this.updateState({ pendingValue }); }
 
   // ==================== CONTROL VALUE ACCESSOR IMPLEMENTATION ====================
   
@@ -329,7 +323,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   private resetPendingOptions(): void {
     if (this.confirmation && this.multiple) {
-      this.pendingOptions = [...this.selectedOptions];
+      this.setPendingOptions([...this.selectedOptions]);
     }
   }
 
@@ -338,7 +332,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Consolidates the common pattern of updating disabled state, selected options, and filtered options
    */
   private updateInternalState(): void {
-    this.isDisabled = this.disabled;
+    this.setIsDisabled(this.disabled);
     this.updateSelectedOptions();
     this.updateFilteredOptions();
   }
@@ -557,14 +551,14 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   private handlePendingValue(): void {
     // Apply the pending value now that options are available
-    this.value = this.pendingValue;
+    this.setValue(this.pendingValue);
     this.updateSelectedOptions();
     
     // Reset pending options in confirmation mode
     this.resetPendingOptions();
     
     // Clear the pending value since we've processed it
-    this.pendingValue = null;
+    this.setPendingValue(null);
   }
 
   /**
@@ -594,17 +588,17 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * @param value - The value to set (can be single value or array)
    */
   writeValue(value: any): void {
-    this.value = value;
+    this.setValue(value);
     
     // If options are not available yet, store the value as pending
     // This handles the case where the form control value is set before the dropdown options are loaded
     if (!this.options || this.options.length === 0) {
-      this.pendingValue = value;
+      this.setPendingValue(value);
       return;
     }
     
     // Clear pending value since we can now process it
-    this.pendingValue = null;
+    this.setPendingValue(null);
     
     this.updateSelectedOptions();
     
@@ -633,7 +627,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * @param isDisabled - Whether the control should be disabled
    */
   setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+    this.setIsDisabled(isDisabled);
     this.updateTriggerProperties();
   }
 
@@ -645,7 +639,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   toggleDropdown(): void {
     if (!this.isDisabled) {
-      this.isOpen = !this.isOpen;
+      this.setIsOpen(!this.isOpen);
       this.updateTriggerProperties();
       
       if (this.isOpen) {
@@ -658,7 +652,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
         
         // Show and focus search input if searchable
         if (this.searchable) {
-          this.showSearchInput = true;
+          this.setShowSearchInput(true);
           // Focus search input after a short delay to ensure it's rendered
           setTimeout(() => {
             const searchInput = this.elementRef.nativeElement.querySelector('.nxt-dropdown-search-input');
@@ -691,7 +685,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     const spaceBelow = viewportHeight - triggerRect.bottom;
     
     // If there's not enough space below (max-height + buffer), position above
-    this.shouldPositionAbove = spaceBelow < (dropdownMaxHeight + buffer);
+    this.setShouldPositionAbove(spaceBelow < (dropdownMaxHeight + buffer));
   }
 
   /**
@@ -720,7 +714,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Closes the dropdown and clears search state
    */
   closeDropdown(): void {
-    this.isOpen = false;
+    this.setIsOpen(false);
     this.updateTriggerProperties();
     this.clearSearch();
     
@@ -737,7 +731,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.searchText = target.value;
+    this.setSearchText(target.value);
     this.updateFilteredOptions();
   }
 
@@ -763,8 +757,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   clearSearch(): void {
     const clearedState = clearSearchState();
-    this.searchText = clearedState.searchText;
-    this.showSearchInput = clearedState.showSearchInput;
+    this.setSearchText(clearedState.searchText);
+    this.setShowSearchInput(clearedState.showSearchInput);
     this.updateFilteredOptions();
   }
 
@@ -773,7 +767,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Also recalculates dropdown position if open
    */
   updateFilteredOptions(): void {
-    this.filteredOptions = filterOptionsBySearch(this.options, this.searchText, this.searchable, this.minSearchLength);
+    this.setFilteredOptions(filterOptionsBySearch(this.options, this.searchText, this.searchable, this.minSearchLength));
     
     // Recalculate position if dropdown is open, as content height might have changed
     if (this.isOpen) {
@@ -827,12 +821,12 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
     if (allSelected) {
       // Deselect all
-      this.selectedOptions = [];
-      this.value = [];
+      this.setSelectedOptions([]);
+      this.setValue([]);
     } else {
       // Select all available options
-      this.selectedOptions = [...availableOptions];
-      this.value = availableOptions.map(opt => opt.value);
+      this.setSelectedOptions([...availableOptions]);
+      this.setValue(availableOptions.map(opt => opt.value));
     }
 
     this.onChange(this.value);
@@ -852,10 +846,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
 
     if (allSelected) {
       // Deselect all
-      this.pendingOptions = [];
+      this.setPendingOptions([]);
     } else {
       // Select all available options
-      this.pendingOptions = [...availableOptions];
+      this.setPendingOptions([...availableOptions]);
     }
   }
 
@@ -905,8 +899,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * @param option - The option to select
    */
   private selectSingleOption(option: NxtDropdownOption): void {
-    this.value = option.value;
-    this.selectedOptions = [option];
+    this.setValue(option.value);
+    this.setSelectedOptions([option]);
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
@@ -918,8 +912,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * @param option - The option to toggle
    */
   private toggleMultipleSelection(option: NxtDropdownOption): void {
-    this.selectedOptions = toggleOptionSelection(option, this.selectedOptions);
-    this.value = getValuesFromSelectedOptions(this.selectedOptions, this.multiple);
+    this.setSelectedOptions(toggleOptionSelection(option, this.selectedOptions));
+    this.setValue(getValuesFromSelectedOptions(this.selectedOptions, this.multiple));
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
@@ -930,7 +924,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Maps value(s) back to full option objects
    */
   private updateSelectedOptions(): void {
-    this.selectedOptions = updateSelectedOptions(this.value, this.options, this.multiple);
+    this.setSelectedOptions(updateSelectedOptions(this.value, this.options, this.multiple));
   }
 
   // ==================== DISPLAY METHODS ====================
@@ -1026,8 +1020,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   applySelection(): void {
     if (!this.confirmation || !this.multiple) return;
 
-    this.selectedOptions = [...this.pendingOptions];
-    this.value = getValuesFromSelectedOptions(this.selectedOptions, this.multiple);
+    this.setSelectedOptions([...this.pendingOptions]);
+    this.setValue(getValuesFromSelectedOptions(this.selectedOptions, this.multiple));
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);

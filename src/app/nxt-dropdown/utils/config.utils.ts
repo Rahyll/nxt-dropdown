@@ -1,7 +1,7 @@
-import { NxtDropdownConfig } from '../interfaces';
+import { NxtDropdownConfig, NxtDropdownBasicConfig, NxtDropdownSelectionConfig, NxtDropdownSearchConfig, NxtDropdownLabelConfig, NxtDropdownIconConfig, NxtDropdownConfirmationConfig } from '../interfaces';
 
 /**
- * Validates strict configuration mode
+ * Simplified validation for strict configuration mode
  * @param config - Configuration object
  * @param directInputs - Object containing direct input values
  * @param strictMode - Whether strict mode is enabled
@@ -16,8 +16,8 @@ export function validateStrictConfiguration(
     return { isValid: true };
   }
 
-  const hasDirectInputs = hasDirectInputValues(directInputs);
-  const hasConfigObject = hasConfigValues(config);
+  const hasDirectInputs = hasValues(directInputs);
+  const hasConfigObject = hasValues(config);
 
   if (hasDirectInputs && hasConfigObject) {
     return {
@@ -30,65 +30,26 @@ export function validateStrictConfiguration(
 }
 
 /**
- * Checks if direct inputs are being used
- * @param directInputs - Object containing direct input values
- * @returns True if direct inputs are being used
+ * Simplified function to check if an object has meaningful values
+ * @param obj - Object to check
+ * @returns True if object has values
  */
-export function hasDirectInputValues(directInputs: any): boolean {
-  return !!(
-    directInputs.options?.length > 0 ||
-    directInputs.placeholder !== 'Select an option' ||
-    directInputs.disabled === true ||
-    directInputs.required === true ||
-    directInputs.multiple === true ||
-    directInputs.confirmation === true ||
-    directInputs.panelClass !== '' ||
-    directInputs.searchable === true ||
-    directInputs.searchPlaceholder !== 'Search options...' ||
-    directInputs.minSearchLength !== 0 ||
-    directInputs.iconType !== 'caret' ||
-    directInputs.infieldLabel === true ||
-    directInputs.infieldLabelText !== '' ||
-    directInputs.infieldLabelPosition !== 'infield' ||
-    directInputs.floatlabel === true ||
-    directInputs.floatlabelText !== '' ||
-    directInputs.floatlabelPosition !== 'infield'
-  );
-}
-
-/**
- * Checks if config object has values
- * @param config - Configuration object
- * @returns True if config object has values
- */
-export function hasConfigValues(config: NxtDropdownConfig): boolean {
-  if (!config || Object.keys(config).length === 0) {
+export function hasValues(obj: any): boolean {
+  if (!obj || typeof obj !== 'object') {
     return false;
   }
   
-  return !!(
-    config.options ||
-    config.placeholder ||
-    config.disabled !== undefined ||
-    config.required !== undefined ||
-    config.multiple !== undefined ||
-    config.confirmation !== undefined ||
-    config.panelClass ||
-    config.searchable !== undefined ||
-    config.searchPlaceholder ||
-    config.minSearchLength !== undefined ||
-    config.iconType !== undefined ||
-    config.infieldLabel !== undefined ||
-    config.infieldLabelText ||
-    config.infieldLabelPosition !== undefined ||
-    config.floatlabel !== undefined ||
-    config.floatlabelText ||
-    config.floatlabelPosition !== undefined
-  );
+  return Object.keys(obj).length > 0 && 
+         Object.values(obj).some(val => 
+           val !== undefined && 
+           val !== null && 
+           val !== '' && 
+           (Array.isArray(val) ? val.length > 0 : true)
+         );
 }
 
 /**
- * Merges configuration with direct inputs based on strict mode
+ * Optimized configuration merger with cleaner logic
  * @param config - Configuration object
  * @param directInputs - Direct input values
  * @param strictMode - Whether strict mode is enabled
@@ -98,48 +59,126 @@ export function mergeConfiguration(
   config: NxtDropdownConfig,
   directInputs: any,
   strictMode: boolean
-): any {
-  if (strictMode) {
-    // In strict mode, prioritize config object over direct inputs
-    return {
-      options: config.options || directInputs.options || [],
-      placeholder: config.placeholder || directInputs.placeholder || 'Select an option',
-      disabled: config.disabled !== undefined ? config.disabled : (directInputs.disabled || false),
-      required: config.required !== undefined ? config.required : (directInputs.required || false),
-      multiple: config.multiple !== undefined ? config.multiple : (directInputs.multiple || false),
-      confirmation: config.confirmation !== undefined ? config.confirmation : (directInputs.confirmation || false),
-      panelClass: config.panelClass || directInputs.panelClass || '',
-      searchable: config.searchable !== undefined ? config.searchable : (directInputs.searchable || false),
-      searchPlaceholder: config.searchPlaceholder || directInputs.searchPlaceholder || 'Search options...',
-      minSearchLength: config.minSearchLength !== undefined ? config.minSearchLength : (directInputs.minSearchLength || 0),
-      iconType: config.iconType || directInputs.iconType || 'caret',
-      infieldLabel: config.infieldLabel !== undefined ? config.infieldLabel : (directInputs.infieldLabel || false),
-      infieldLabelText: config.infieldLabelText || directInputs.infieldLabelText || '',
-      infieldLabelPosition: config.infieldLabelPosition || directInputs.infieldLabelPosition || 'infield',
-      floatlabel: config.floatlabel !== undefined ? config.floatlabel : (directInputs.floatlabel || false),
-      floatlabelText: config.floatlabelText || directInputs.floatlabelText || '',
-      floatlabelPosition: config.floatlabelPosition || directInputs.floatlabelPosition || 'infield'
-    };
-  } else {
+): NxtDropdownConfig {
+  const merged = { ...config };
+  
+  if (!strictMode) {
     // In non-strict mode, direct inputs override config object
-    return {
-      options: directInputs.options || config.options || [],
-      placeholder: directInputs.placeholder !== 'Select an option' ? directInputs.placeholder : (config.placeholder || 'Select an option'),
-      disabled: directInputs.disabled !== undefined ? directInputs.disabled : (config.disabled || false),
-      required: directInputs.required !== undefined ? directInputs.required : (config.required || false),
-      multiple: directInputs.multiple !== undefined ? directInputs.multiple : (config.multiple || false),
-      confirmation: directInputs.confirmation !== undefined ? directInputs.confirmation : (config.confirmation || false),
-      panelClass: directInputs.panelClass !== '' ? directInputs.panelClass : (config.panelClass || ''),
-      searchable: directInputs.searchable !== undefined ? directInputs.searchable : (config.searchable || false),
-      searchPlaceholder: directInputs.searchPlaceholder !== 'Search options...' ? directInputs.searchPlaceholder : (config.searchPlaceholder || 'Search options...'),
-      minSearchLength: directInputs.minSearchLength !== undefined ? directInputs.minSearchLength : (config.minSearchLength || 0),
-      iconType: directInputs.iconType !== 'caret' ? directInputs.iconType : (config.iconType || 'caret'),
-      infieldLabel: directInputs.infieldLabel !== undefined ? directInputs.infieldLabel : (config.infieldLabel || false),
-      infieldLabelText: directInputs.infieldLabelText !== '' ? directInputs.infieldLabelText : (config.infieldLabelText || ''),
-      infieldLabelPosition: directInputs.infieldLabelPosition !== 'infield' ? directInputs.infieldLabelPosition : (config.infieldLabelPosition || 'infield'),
-      floatlabel: directInputs.floatlabel !== undefined ? directInputs.floatlabel : (config.floatlabel || false),
-      floatlabelText: directInputs.floatlabelText !== '' ? directInputs.floatlabelText : (config.floatlabelText || ''),
-      floatlabelPosition: directInputs.floatlabelPosition !== 'infield' ? directInputs.floatlabelPosition : (config.floatlabelPosition || 'infield')
-    };
+    Object.assign(merged, directInputs);
   }
+  
+  return merged;
+}
+
+/**
+ * Merge grouped configurations into a single config object
+ * @param basic - Basic configuration
+ * @param selection - Selection configuration
+ * @param search - Search configuration
+ * @param label - Label configuration
+ * @param icon - Icon configuration
+ * @param confirmation - Confirmation configuration
+ * @returns Merged configuration object
+ */
+export function mergeGroupedConfigurations(
+  basic: NxtDropdownBasicConfig = {},
+  selection: NxtDropdownSelectionConfig = {},
+  search: NxtDropdownSearchConfig = {},
+  label: NxtDropdownLabelConfig = {},
+  icon: NxtDropdownIconConfig = {},
+  confirmation: NxtDropdownConfirmationConfig = {}
+): NxtDropdownConfig {
+  return {
+    ...basic,
+    ...selection,
+    ...search,
+    ...label,
+    ...icon,
+    confirmationButtons: {
+      apply: {
+        text: confirmation.applyButtonText,
+        icon: confirmation.applyButtonIcon
+      },
+      cancel: {
+        text: confirmation.cancelButtonText,
+        icon: confirmation.cancelButtonIcon
+      }
+    }
+  };
+}
+
+/**
+ * Extract grouped configurations from a single config object
+ * @param config - Configuration object
+ * @returns Object containing grouped configurations
+ */
+export function extractGroupedConfigurations(config: NxtDropdownConfig): {
+  basic: NxtDropdownBasicConfig;
+  selection: NxtDropdownSelectionConfig;
+  search: NxtDropdownSearchConfig;
+  label: NxtDropdownLabelConfig;
+  icon: NxtDropdownIconConfig;
+  confirmation: NxtDropdownConfirmationConfig;
+} {
+  return {
+    basic: {
+      options: config.options,
+      placeholder: config.placeholder,
+      disabled: config.disabled,
+      required: config.required,
+      panelClass: config.panelClass
+    },
+    selection: {
+      multiple: config.multiple,
+      confirmation: config.confirmation
+    },
+    search: {
+      searchable: config.searchable,
+      searchPlaceholder: config.searchPlaceholder,
+      minSearchLength: config.minSearchLength
+    },
+    label: {
+      infieldLabel: config.infieldLabel,
+      infieldLabelText: config.infieldLabelText,
+      infieldLabelPosition: config.infieldLabelPosition,
+      floatlabel: config.floatlabel,
+      floatlabelText: config.floatlabelText,
+      floatlabelPosition: config.floatlabelPosition
+    },
+    icon: {
+      iconType: config.iconType
+    },
+    confirmation: {
+      applyButtonText: config.confirmationButtons?.apply?.text,
+      applyButtonIcon: config.confirmationButtons?.apply?.icon,
+      cancelButtonText: config.confirmationButtons?.cancel?.text,
+      cancelButtonIcon: config.confirmationButtons?.cancel?.icon
+    }
+  };
+}
+
+/**
+ * Validate configuration object for required properties
+ * @param config - Configuration object to validate
+ * @returns Validation result
+ */
+export function validateConfiguration(config: NxtDropdownConfig): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  
+  if (config.multiple && config.confirmation && !config.confirmationButtons) {
+    errors.push('Confirmation buttons configuration is required when multiple and confirmation are enabled');
+  }
+  
+  if (config.searchable && config.minSearchLength && config.minSearchLength < 0) {
+    errors.push('minSearchLength must be a non-negative number');
+  }
+  
+  if (config.infieldLabel && config.floatlabel) {
+    errors.push('Cannot use both infieldLabel and floatlabel simultaneously');
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
 } 

@@ -17,5 +17,29 @@ export class AppComponent {
    * Application name with Angular version
    * Used for display purposes in the application header
    */
-  name = 'Angular ' + VERSION.major;
+
+  triggerValue : string = 'option1';
+
+  groups = [
+    { label: 'Group 1', options: [
+      { value: 'option1', label: 'Option 1' },
+      { value: 'option2', label: 'Option 2' },
+      { value: 'option3', label: 'Option 3' },
+    ] },
+    { label: 'Group 2', options: [
+      { value: 'option4', label: 'Option 4' },
+      { value: 'option5', label: 'Option 5' },
+    ] },
+    { label: 'Group 3', options: [
+      { value: 'option6', label: 'Option 6' },
+      { value: 'option7', label: 'Option 7' },
+    ] },
+  ];
+    
+
+  options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
 }
