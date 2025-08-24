@@ -49,7 +49,10 @@ export function hasDirectInputValues(directInputs: any): boolean {
     directInputs.iconType !== 'caret' ||
     directInputs.infieldLabel === true ||
     directInputs.infieldLabelText !== '' ||
-    directInputs.infieldLabelPosition !== 'infield'
+    directInputs.infieldLabelPosition !== 'infield' ||
+    directInputs.floatlabel === true ||
+    directInputs.floatlabelText !== '' ||
+    directInputs.floatlabelPosition !== 'infield'
   );
 }
 
@@ -77,7 +80,10 @@ export function hasConfigValues(config: NxtDropdownConfig): boolean {
     config.iconType !== undefined ||
     config.infieldLabel !== undefined ||
     config.infieldLabelText ||
-    config.infieldLabelPosition !== undefined
+    config.infieldLabelPosition !== undefined ||
+    config.floatlabel !== undefined ||
+    config.floatlabelText ||
+    config.floatlabelPosition !== undefined
   );
 }
 
@@ -109,7 +115,10 @@ export function mergeConfiguration(
       iconType: config.iconType || directInputs.iconType || 'caret',
       infieldLabel: config.infieldLabel !== undefined ? config.infieldLabel : (directInputs.infieldLabel || false),
       infieldLabelText: config.infieldLabelText || directInputs.infieldLabelText || '',
-      infieldLabelPosition: config.infieldLabelPosition || directInputs.infieldLabelPosition || 'infield'
+      infieldLabelPosition: config.infieldLabelPosition || directInputs.infieldLabelPosition || 'infield',
+      floatlabel: config.floatlabel !== undefined ? config.floatlabel : (directInputs.floatlabel || false),
+      floatlabelText: config.floatlabelText || directInputs.floatlabelText || '',
+      floatlabelPosition: config.floatlabelPosition || directInputs.floatlabelPosition || 'infield'
     };
   } else {
     // In non-strict mode, direct inputs override config object
@@ -127,7 +136,10 @@ export function mergeConfiguration(
       iconType: directInputs.iconType !== 'caret' ? directInputs.iconType : (config.iconType || 'caret'),
       infieldLabel: directInputs.infieldLabel !== undefined ? directInputs.infieldLabel : (config.infieldLabel || false),
       infieldLabelText: directInputs.infieldLabelText !== '' ? directInputs.infieldLabelText : (config.infieldLabelText || ''),
-      infieldLabelPosition: directInputs.infieldLabelPosition !== 'infield' ? directInputs.infieldLabelPosition : (config.infieldLabelPosition || 'infield')
+      infieldLabelPosition: directInputs.infieldLabelPosition !== 'infield' ? directInputs.infieldLabelPosition : (config.infieldLabelPosition || 'infield'),
+      floatlabel: directInputs.floatlabel !== undefined ? directInputs.floatlabel : (config.floatlabel || false),
+      floatlabelText: directInputs.floatlabelText !== '' ? directInputs.floatlabelText : (config.floatlabelText || ''),
+      floatlabelPosition: directInputs.floatlabelPosition !== 'infield' ? directInputs.floatlabelPosition : (config.floatlabelPosition || 'infield')
     };
   }
 } 

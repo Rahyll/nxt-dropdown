@@ -169,6 +169,28 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   @Input() infieldLabelPosition: 'infield' | 'onfield' = 'infield';
 
+  /**
+   * Whether to hide the dropdown value display when no option is selected
+   * When true, the placeholder and selected content are hidden when no selection is made
+   * Default: false
+   */
+  @Input() floatlabel: boolean = false;
+
+  /**
+   * Position of the floating label when active
+   * 'infield': Label appears inside the field and animates when focused/selected
+   * 'onfield': Label appears on the field as a static label
+   * Default: 'infield'
+   */
+  @Input() floatlabelPosition: 'infield' | 'onfield' = 'infield';
+
+  /**
+   * Text for the floating label
+   * If not provided, uses the placeholder text
+   * Default: empty string (falls back to placeholder)
+   */
+  @Input() floatlabelText: string = '';
+
   // ==================== CONFIGURATION OBJECT INPUT ====================
   
   /**
@@ -383,7 +405,8 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Check if any configuration-related properties changed
     const configProperties = ['config', 'options', 'placeholder', 'disabled', 'required', 
       'multiple', 'confirmation', 'panelClass', 'searchable', 'searchPlaceholder', 
-      'minSearchLength', 'iconType', 'infieldLabel', 'infieldLabelText', 'infieldLabelPosition', 'strictConfigMode'];
+      'minSearchLength', 'iconType', 'infieldLabel', 'infieldLabelText', 'infieldLabelPosition', 
+      'floatlabel', 'floatlabelText', 'floatlabelPosition', 'strictConfigMode'];
     
     const hasConfigChanges = configProperties.some(prop => changes[prop]);
     
@@ -499,7 +522,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       cancelButtonIcon: this.cancelButtonIcon,
       infieldLabel: this.infieldLabel,
       infieldLabelText: this.infieldLabelText,
-      infieldLabelPosition: this.infieldLabelPosition
+      infieldLabelPosition: this.infieldLabelPosition,
+      floatlabel: this.floatlabel,
+      floatlabelText: this.floatlabelText,
+      floatlabelPosition: this.floatlabelPosition
     };
 
     // Validate configuration to ensure no conflicts between config object and direct inputs
@@ -932,6 +958,15 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   getInfieldLabelText(): string {
     return this.infieldLabelText || this.placeholder;
+  }
+
+  /**
+   * Gets the text to display for the floating label
+   * Uses floatlabelText if provided, otherwise falls back to placeholder
+   * @returns The label text for floating label mode
+   */
+  getFloatLabelText(): string {
+    return this.floatlabelText || this.placeholder;
   }
 
   // ==================== KEYBOARD NAVIGATION ====================

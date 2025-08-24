@@ -263,6 +263,13 @@ export class NxtDropdownDemoComponent implements OnInit {
    * Default: null
    */
   customTriggerStatusValue: any = null;
+
+  /**
+   * Value for custom trigger with multiple demo
+   * Default: null
+   */
+  customTriggerMultipleValue: any[] = [];
+  
   
   /**
    * Value for custom trigger without arrow demo
@@ -547,6 +554,23 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.customTriggerStatusValue = null;
     this.customTriggerNoArrowValue = null;
     this.customTriggerRichValue = null;
+    this.infieldLabelValue = null;
+    this.customInfieldLabelValue = null;
+    this.infieldLabelMultipleValue = [];
+    this.infieldLabelConfigValue = null;
+    this.infieldLabelSearchValue = null;
+    this.infieldLabelConfirmationValue = [];
+    this.onfieldLabelValue = null;
+    this.onfieldLabelConfigValue = null;
+    this.onfieldLabelMultipleConfirmationValue = [];
+    this.floatlabelValue = null;
+    this.customFloatlabelValue = null;
+    this.floatlabelMultipleValue = [];
+    this.floatlabelInfieldValue = null;
+    this.floatlabelOnfieldValue = null;
+    this.floatlabelSearchValue = null;
+    this.floatlabelConfirmationValue = [];
+    this.floatlabelConfigValue = null;
   }
 
   /**
@@ -599,4 +623,14 @@ export class NxtDropdownDemoComponent implements OnInit {
   onfieldLabelValue: any = null;
   onfieldLabelConfigValue: any = null;
   onfieldLabelMultipleConfirmationValue: any[] = [];
+
+  // Floating Label Demo Values
+  floatlabelValue: any = null;
+  customFloatlabelValue: any = null;
+  floatlabelMultipleValue: any[] = [];
+  floatlabelInfieldValue: any = null;
+  floatlabelOnfieldValue: any = null;
+  floatlabelSearchValue: any = null;
+  floatlabelConfirmationValue: any[] = [];
+  floatlabelConfigValue: any = null;
 } 

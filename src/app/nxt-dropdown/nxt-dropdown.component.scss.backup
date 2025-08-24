@@ -119,8 +119,6 @@ $dark-primary-hover: #2563eb;
       min-height: 22px;
     }
 
-
-
     &.disabled {
       .nxt-dropdown-infield-label,
       .nxt-dropdown-onfield-label {
@@ -140,62 +138,6 @@ $dark-primary-hover: #2563eb;
 
   .nxt-dropdown-custom-trigger-wrapper {
     position: relative;
-  }
-
-  // Floating label styles
-  .nxt-dropdown-float-infield-label,
-  .nxt-dropdown-float-onfield-label {
-    position: absolute;
-    left: 8px;
-    font-size: 14px;
-    color: $text-secondary;
-    background-color: $bg-white;
-    padding: 0 4px;
-    pointer-events: none;
-    z-index: 1;
-    transition: $transition;
-    transform-origin: left top;
-  }
-
-  .nxt-dropdown-float-infield-label.active {
-    font-size: 12px;
-    color: $primary-color;
-    // transform: translateY(-4px);
-  }
-
-  .nxt-dropdown-float-onfield-label.active {
-    font-size: 12px;
-    color: $primary-color;
-    transform: translateY(-8px);
-  }
-
-  
-
-  // When floatlabel is enabled, adjust trigger padding
-  &.floatlabel-enabled .nxt-dropdown-value.floatlabel-infield-mode.floatlabel-infield-active {
-    padding-top: 24px;
-    // padding-bottom: 22px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-infield-label{
-    top: 16px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-onfield-label {
-    top: 8px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-infield-label.active {
-    top: 4px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-onfield-label.active {
-    top: 0;
-  }
-
-  // Floating label value display adjustments
-  &.floatlabel-enabled .nxt-dropdown-value.floatlabel-infield-mode {
-    padding-top: 45px;
   }
 }
 
@@ -730,25 +672,37 @@ $dark-primary-hover: #2563eb;
     }
   }
 
-}
-
-// No height utility class for floating labels
-.no-height {
-  height: 0px !important;
-  overflow: hidden !important;
-  
-  * {
-    height: 0px !important;
-    overflow: hidden !important;
+  // Floating label styles
+  .nxt-dropdown-float-label {
+    position: absolute;
+    left: 8px;
+    font-size: 14px;
+    color: $text-secondary;
+    background-color: $bg-white;
+    padding: 0 4px;
+    pointer-events: none;
+    z-index: 1;
+    transition: $transition;
+    transform-origin: left top;
   }
-  
-  .nxt-dropdown-placeholder {
-    height: 0px !important;
-    line-height: 1 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
+
+  .nxt-dropdown-float-label.active {
+    font-size: 12px;
+    color: $primary-color;
+    transform: translateY(-8px);
+  }
+
+  // When floatlabel is enabled, adjust trigger padding
+  &.floatlabel-enabled .nxt-dropdown-trigger {
+    padding-top: 16px;
+    padding-bottom: 8px;
+  }
+
+  &.floatlabel-enabled .nxt-dropdown-float-label {
+    top: 8px;
+  }
+
+  &.floatlabel-enabled .nxt-dropdown-float-label.active {
+    top: 0;
   }
 }
-

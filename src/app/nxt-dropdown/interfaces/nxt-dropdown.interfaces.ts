@@ -33,4 +33,8 @@ export interface NxtDropdownConfig {
   infieldLabel?: boolean;
   infieldLabelText?: string;
   infieldLabelPosition?: 'infield' | 'onfield';
+  // Add floating label configuration
+  floatlabel?: boolean;
+  floatlabelText?: string;
+  floatlabelPosition?: 'infield' | 'onfield';
 } 

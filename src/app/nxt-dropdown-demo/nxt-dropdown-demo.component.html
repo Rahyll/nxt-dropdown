@@ -629,21 +629,21 @@
           <h3>Custom Trigger with Multiple</h3>
           <div class="select-wrapper">
             <nxt-dropdown
-              [(ngModel)]="customTriggerStatusValue"
+              [(ngModel)]="customTriggerMultipleValue"
               [multiple]="true"
               placeholder="Select an option">
               <nxt-dropdown-trigger>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span>{{customTriggerStatusValue?.[0] || ''}}</span>
-                  <span *ngIf="(customTriggerStatusValue?.length || 0) > 1">
-                    (+{{(customTriggerStatusValue?.length || 0) - 1}} {{customTriggerStatusValue?.length === 2 ? 'other' : 'others'}})
+                  <span>{{customTriggerMultipleValue?.[0] || ''}}</span>
+                  <span *ngIf="(customTriggerMultipleValue?.length || 0) > 1">
+                    (+{{(customTriggerMultipleValue?.length || 0) - 1}} {{customTriggerMultipleValue?.length === 2 ? 'other' : 'others'}})
                   </span>
                 </div>
               </nxt-dropdown-trigger>
               <nxt-option *ngFor="let option of options" [value]="option.value">{{option.label}}</nxt-option>
             </nxt-dropdown>
           </div>
-          <p class="result">Selected: {{ customTriggerStatusValue || 'None' }}</p>
+          <p class="result">Selected: {{ customTriggerMultipleValue || 'None' }}</p>
           <div class="code-example">
             <small>Custom trigger with status indicator</small>
           </div>
@@ -1272,6 +1272,166 @@
         </div>
       </div>
     </div>
+
+    <!-- Floating Label Demos -->
+    <div class="demo-section">
+      <h2>🏷️ Floating Label Demos</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Basic Floating Label</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelValue"
+              [options]="options"
+              [floatlabel]="true"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Floating label mode with default placeholder as label</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Custom Floating Label Text</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="customFloatlabelValue"
+              [options]="options"
+              [floatlabel]="true"
+              floatlabelText="Choose your option"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ customFloatlabelValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Custom floating label text different from placeholder</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label with Multiple Selection</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelMultipleValue"
+              [options]="options"
+              [floatlabel]="true"
+              [multiple]="true"
+              floatlabelText="Select multiple options"
+              placeholder="Choose options"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelMultipleValue.length }} items</p>
+          <div class="code-example">
+            <small>Floating label with multiple selection support</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label - Infield Position</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelInfieldValue"
+              [options]="options"
+              [floatlabel]="true"
+              floatlabelPosition="infield"
+              floatlabelText="Infield Floating Label"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelInfieldValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Floating label positioned inside the field</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label - Onfield Position</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelOnfieldValue"
+              [options]="options"
+              [floatlabel]="true"
+              floatlabelPosition="onfield"
+              floatlabelText="Onfield Floating Label"
+              placeholder="Select an option"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelOnfieldValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Floating label positioned on top of the field</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label with Search</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelSearchValue"
+              [options]="countryOptions"
+              [floatlabel]="true"
+              [searchable]="true"
+              floatlabelText="Search Countries"
+              placeholder="Type to search..."
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelSearchValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Floating label with search functionality</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label with Confirmation</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelConfirmationValue"
+              [options]="options"
+              [floatlabel]="true"
+              [multiple]="true"
+              [confirmation]="true"
+              floatlabelText="Select with confirmation"
+              placeholder="Choose options"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelConfirmationValue.length }} items</p>
+          <div class="code-example">
+            <small>Floating label with multiple selection and confirmation mode</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Floating Label via Config</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="floatlabelConfigValue"
+              [strictConfigMode]="true"
+              [config]="{
+                options: options,
+                floatlabel: true,
+                floatlabelText: 'Configured Floating Label',
+                floatlabelPosition: 'infield',
+                placeholder: 'Select via config'
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ floatlabelConfigValue || 'None' }}</p>
+          <div class="code-example">
+            <small>Floating label configured via configuration object</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Guide Tab Content -->
@@ -1432,6 +1592,24 @@ export class AppModule {{ '{' }} {{ '}' }}</code></pre>
                 <td><code>'infield' | 'onfield'</code></td>
                 <td><code>'infield'</code></td>
                 <td>Position of the infield label: 'infield' for floating inside, 'onfield' for static on the field</td>
+              </tr>
+              <tr>
+                <td><code>floatlabel</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Enable floating label mode (label slides up when focused or selected)</td>
+              </tr>
+              <tr>
+                <td><code>floatlabelText</code></td>
+                <td><code>string</code></td>
+                <td><code>''</code></td>
+                <td>Text for the floating label (falls back to placeholder if empty)</td>
+              </tr>
+              <tr>
+                <td><code>floatlabelPosition</code></td>
+                <td><code>'infield' | 'onfield'</code></td>
+                <td><code>'infield'</code></td>
+                <td>Position of the floating label: 'infield' for floating inside, 'onfield' for static on the field</td>
               </tr>
               <tr>
                 <td><code>config</code></td>

@@ -5,7 +5,10 @@
      [class.multiple]="multiple"
      [class.infield-label]="infieldLabel"
      [class.infield-label-onfield]="infieldLabel && infieldLabelPosition === 'onfield'"
-     [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'">
+     [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'"
+     [class.floatlabel-enabled]="floatlabel"
+     [class.floatlabel-infield-enabled]="floatlabel && floatlabelPosition === 'infield'"
+     [class.floatlabel-onfield-enabled]="floatlabel && floatlabelPosition === 'onfield'">
   
   <!-- Custom Trigger -->
   <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
@@ -37,11 +40,28 @@
         {{ getInfieldLabelText() }}
       </div>
     </ng-container>
+
+    <ng-container *ngIf="floatlabel">
+      <div class="nxt-dropdown-float-infield-label" 
+           *ngIf="floatlabelPosition === 'infield'"
+           [class.active]="isOpen || selectedOptions.length > 0">
+        {{ getFloatLabelText() }}
+      </div>
+      
+      <div class="nxt-dropdown-float-onfield-label" 
+           *ngIf="floatlabelPosition === 'onfield'"
+           [class.active]="isOpen || selectedOptions.length > 0">
+        {{ getFloatLabelText() }}
+      </div>
+    </ng-container>
     
     <!-- Value Display -->
     <div class="nxt-dropdown-value" 
          [class.infield-label-mode]="infieldLabel"
-         [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'">
+         [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'"
+         [class.floatlabel-infield-mode]="floatlabel && floatlabelPosition === 'infield'"
+         [class.floatlabel-infield-active]="floatlabel && floatlabelPosition === 'infield' && (selectedOptions.length > 0)"
+         [class.no-height]="floatlabel && selectedOptions.length === 0">
       
       <ng-container *ngIf="selectedOptions.length === 0; else selectedContent">
         <div class="nxt-dropdown-placeholder">{{ placeholder }}</div>
