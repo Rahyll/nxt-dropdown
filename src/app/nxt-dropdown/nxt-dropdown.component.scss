@@ -1,21 +1,5 @@
-// Variables
-$primary-color: #1976d2;
-$primary-hover: #1565c0;
-$primary-light: #e3f2fd;
-$border-color: #d0d7de;
-$border-hover: #1976d2;
-$text-primary: #24292f;
-$text-secondary: #6a737d;
-$text-muted: #9ca3af;
-$bg-white: #ffffff;
-$bg-light: #f6f8fa;
-$bg-lighter: #f8f9fa;
-$border-radius: 6px;
-$border-radius-sm: 4px;
-$transition: all 0.2s ease;
-$box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-$min-width: 200px;
-$min-height: 40px;
+// ==================== DESIGN SYSTEM ====================
+// CSS Custom Properties for consistent theming and easier maintenance
 
 // Dark mode variables
 $dark-bg: #1f2937;
@@ -24,7 +8,7 @@ $dark-text: #f9fafb;
 $dark-primary: #3b82f6;
 $dark-primary-hover: #2563eb;
 
-// Mixins
+// ==================== UTILITY MIXINS ====================
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -43,325 +27,401 @@ $dark-primary-hover: #2563eb;
   justify-content: space-between;
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 @mixin focus-state {
-  border-color: $primary-color;
-  box-shadow: $box-shadow;
+  border-color: var(--nxt-primary);
+  box-shadow: var(--nxt-shadow-focus);
 }
 
 @mixin disabled-state {
   opacity: 0.6;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
-// Base container
+@mixin hover-state {
+  border-color: var(--nxt-border-hover);
+  background-color: var(--nxt-bg-light);
+}
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+// ==================== UTILITY CLASSES ====================
+.nxt-flex-center { @include flex-center; }
+.nxt-flex-between { @include flex-between; }
+.nxt-flex-start { @include flex-start; }
+.nxt-flex-column { @include flex-column; }
+.nxt-text-truncate { @include text-truncate; }
+
+
+// ==================== BASE COMPONENT STYLES ====================
 .nxt-dropdown-container {
   position: relative;
   width: 100%;
   max-width: 100%;
-  min-width: $min-width;
+  min-width: var(--nxt-min-width);
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--nxt-font-family);
+  font-size: var(--nxt-font-size-base);
+  line-height: var(--nxt-line-height);
 
   &.disabled {
-    opacity: 0.6;
-    pointer-events: none;
+    @include disabled-state;
   }
 
   &.required .nxt-dropdown-trigger {
-    border-color: #d32f2f;
+    border-color: var(--nxt-error);
   }
 
   &.open .nxt-dropdown-trigger {
     @include focus-state;
   }
 
-  // Infield label mode
+  &.multiple {
+    .nxt-dropdown-option {
+      padding-left: calc(var(--nxt-spacing-md) + 24px);
+    }
+  }
+
+  // ==================== LABEL MODES ====================
   &.infield-label {
+    position: relative;
+    
     .nxt-dropdown-trigger {
       position: relative;
     }
 
-    .nxt-dropdown-infield-label,
-    .nxt-dropdown-onfield-label {
+    .nxt-dropdown-iftalabel-infield {
       position: absolute;
-      left: 8px;
-      font-size: 12px;
-      color: $text-secondary;
-      background-color: $bg-white;
-      padding: 0 4px;
+      left: var(--nxt-spacing-sm);
+      top: 2px;
+      font-size: var(--nxt-font-size-sm);
+      color: var(--nxt-text-secondary);
+      background-color: var(--nxt-bg-white);
+      padding: 0 var(--nxt-spacing-xs);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.7;
+      
+      &.active, .open & {
+        color: var(--nxt-primary);
+        opacity: 1;
+      }
+      
+
+    }
+
+    .nxt-dropdown-iftalabel-onfield {
+      position: absolute;
+      left: var(--nxt-spacing-sm);
+      top: -8px;
+      font-size: var(--nxt-font-size-xs);
+      color: var(--nxt-text-secondary);
+      background-color: var(--nxt-bg-white);
+      padding: 0 var(--nxt-spacing-xs);
       pointer-events: none;
       z-index: 1;
     }
+  }
 
-    .nxt-dropdown-infield-label {
-      top: 2px;
-      transition: $transition;
+  &.floatlabel {
+    .nxt-dropdown-trigger {
+      position: relative;
+      min-height: var(--nxt-min-height);
+      height: var(--nxt-min-height); // Fixed height to prevent container expansion
+      
+      .nxt-dropdown-trigger-content {
+        padding-top: 16px; // Add space for floatlabel
+        height: 100%; // Ensure content takes full height
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    // Specific height for infield float label
+    &.infield-floatlabel {
+      .nxt-dropdown-trigger {
+        min-height: 45px; // Increased height for infield float label
+        height: 45px; // Increased height for infield float label
+      }
+    }
+
+    .nxt-dropdown-floatlabel-onfield {
+      position: absolute;
+      left: var(--nxt-spacing-sm);
+      top: 50%; // Center vertically initially
+      transform: translateY(-50%); // Center vertically initially
+      font-size: var(--nxt-font-size-base);
+      color: var(--nxt-text-secondary);
+      background-color: var(--nxt-bg-white);
+      padding: 0 var(--nxt-spacing-xs);
+      pointer-events: none;
+      z-index: 1;
+      transition: var(--nxt-transition);
       transform-origin: left top;
-      transform: translateY(0) scale(1);
-      opacity: 0.7;
-
-      &.active,
-      .open & {
-        color: $primary-color;
-        opacity: 1;
-        font-weight: 500;
+      
+      &.active, .open & {
+        color: var(--nxt-primary);
+        transform: scale(0.85) translateY(-20px);
+        font-size: var(--nxt-font-size-sm);
       }
     }
 
-    .nxt-dropdown-onfield-label {
-      top: -12px;
-    }
-
-    .nxt-dropdown-value.infield-label-infield-mode {
-      padding-top: 24px;
-      min-height: 22px;
-    }
-
-
-
-    &.disabled {
-      .nxt-dropdown-infield-label,
-      .nxt-dropdown-onfield-label {
-        opacity: 0.4;
-        color: #999;
+    .nxt-dropdown-floatlabel-infield {
+      position: absolute;
+      left: var(--nxt-spacing-sm);
+      top: 50%; // Center vertically initially
+      transform: translateY(-50%); // Center vertically initially
+      font-size: var(--nxt-font-size-base);
+      color: var(--nxt-text-secondary);
+      background-color: var(--nxt-bg-white);
+      padding: 0 var(--nxt-spacing-xs);
+      pointer-events: none;
+      z-index: 1;
+      transition: var(--nxt-transition);
+      transform-origin: left top;
+      
+      &.active, .open & {
+        color: var(--nxt-primary);
+        transform: scale(0.85) translateY(-22px);
+        font-size: var(--nxt-font-size-sm);
       }
     }
-  }
-
-  // Custom trigger
-  nxt-dropdown-trigger,
-  .nxt-dropdown-custom-trigger-wrapper {
-    display: block;
-    width: 100%;
-    min-width: $min-width;
-  }
-
-  .nxt-dropdown-custom-trigger-wrapper {
-    position: relative;
-  }
-
-  // Floating label styles
-  .nxt-dropdown-float-infield-label,
-  .nxt-dropdown-float-onfield-label {
-    position: absolute;
-    left: 8px;
-    font-size: 14px;
-    color: $text-secondary;
-    background-color: $bg-white;
-    padding: 0 4px;
-    pointer-events: none;
-    z-index: 1;
-    transition: $transition;
-    transform-origin: left top;
-  }
-
-  .nxt-dropdown-float-infield-label.active {
-    font-size: 12px;
-    color: $primary-color;
-    // transform: translateY(-4px);
-  }
-
-  .nxt-dropdown-float-onfield-label.active {
-    font-size: 12px;
-    color: $primary-color;
-    transform: translateY(-8px);
-  }
-
-  
-
-  // When floatlabel is enabled, adjust trigger padding
-  &.floatlabel-enabled .nxt-dropdown-value.floatlabel-infield-mode.floatlabel-infield-active {
-    padding-top: 24px;
-    // padding-bottom: 22px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-infield-label{
-    top: 16px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-onfield-label {
-    top: 8px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-infield-label.active {
-    top: 4px;
-  }
-
-  &.floatlabel-enabled .nxt-dropdown-float-onfield-label.active {
-    top: 0;
-  }
-
-  // Floating label value display adjustments
-  &.floatlabel-enabled .nxt-dropdown-value.floatlabel-infield-mode {
-    padding-top: 45px;
   }
 }
 
-// Trigger
+// ==================== CUSTOM TRIGGER WRAPPER ====================
+.nxt-dropdown-custom-trigger-wrapper {
+  width: 100%;
+  cursor: pointer;
+}
+
+// ==================== TRIGGER STYLES ====================
 .nxt-dropdown-trigger {
   @include flex-between;
-  position: relative;
   width: 100%;
-  max-width: 100%;
-  min-width: $min-width;
-  min-height: $min-height;
-  background-color: $bg-white;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
+  min-height: var(--nxt-min-height);
+  height: var(--nxt-min-height); // Ensure consistent height
+  padding: var(--nxt-spacing-sm) var(--nxt-spacing-md);
+  border: var(--nxt-border-width) solid var(--nxt-border);
+  border-radius: var(--nxt-border-radius);
+  background-color: var(--nxt-bg-white);
+  color: var(--nxt-text-primary);
+  font-size: var(--nxt-font-size-base);
   cursor: pointer;
-  transition: $transition;
-  outline: none;
+  transition: var(--nxt-transition);
   box-sizing: border-box;
 
   &:hover:not(.disabled) {
-    border-color: $border-hover;
+    @include hover-state;
   }
 
   &:focus {
+    outline: none;
     @include focus-state;
   }
 
-  &.infield-label-mode {
-    align-items: flex-end;
+  &.disabled {
+    @include disabled-state;
+  }
+
+  .nxt-dropdown-trigger-content {
+    @include flex-start;
+    flex: 1;
+    min-width: 0;
+    gap: var(--nxt-spacing-sm);
+    overflow: hidden; // Prevent content overflow
+    
+    &.nxt-dropdown-trigger-content-with-infield {
+      padding-top: 16px;
+    }
+    &.nxt-dropdown-trigger-content-with-infield-floatlabel {
+      padding-top: 16px;
+      align-items: flex-start; // Align content to top when label is floating
+    }
+  }
+
+  .nxt-dropdown-trigger-text {
+    @include text-truncate;
+    flex: 1;
+    overflow: hidden; // Ensure text doesn't cause height expansion
+  }
+
+  .nxt-dropdown-trigger-icon {
+    @include flex-center;
+    width: 16px;
+    height: 16px;
+    transition: var(--nxt-transition);
+    color: var(--nxt-text-secondary);
+    
+    .open & {
+      transform: rotate(180deg);
+    }
   }
 }
 
-// Value display
-.nxt-dropdown-value {
-  flex: 1;
-  min-width: 0;
-  max-width: 100%;
-  @include flex-start;
-  padding: 8px 0 8px 12px;
-  overflow: hidden;
-}
-
+// ==================== PLACEHOLDER AND SELECTED TEXT ====================
 .nxt-dropdown-placeholder {
-  color: $text-secondary;
+  color: var(--nxt-text-secondary);
   font-style: italic;
 }
 
-.nxt-dropdown-selected,
-.nxt-dropdown-multiple {
-  width: 100%;
-}
-
-.nxt-dropdown-single,
-.nxt-dropdown-text {
-  color: $text-primary;
+.nxt-dropdown-selected {
+  color: var(--nxt-text-primary);
   font-weight: 500;
 }
 
-.nxt-dropdown-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.nxt-dropdown-empty {
+  height: 0; // Ensure empty content doesn't take space
+  visibility: hidden;
 }
 
-// Arrow
-.nxt-dropdown-arrow {
-  @include flex-center;
-  width: 20px;
-  color: $text-secondary;
-  padding: 8px 12px 8px 0;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-  margin-left: 8px;
-  align-self: stretch;
-
-  .open & svg {
-    transform: rotate(180deg);
-  }
-}
-
-// Dropdown panel
-.nxt-dropdown-dropdown {
+// ==================== PANEL STYLES ====================
+.nxt-dropdown-panel {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  z-index: 1000;
-  margin-top: 4px;
-  background-color: $bg-white;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-height: 200px;
-  min-width: $min-width;
-  overflow-y: auto;
-  overflow-x: hidden;
-  animation: dropdownFadeIn 0.2s ease;
-  box-sizing: border-box;
+  z-index: var(--nxt-z-dropdown);
+  background-color: var(--nxt-bg-white);
+  border: var(--nxt-border-width) solid var(--nxt-border);
+  border-radius: var(--nxt-border-radius);
+  box-shadow: var(--nxt-shadow-lg);
+  max-height: var(--nxt-max-height);
+  overflow: hidden;
+  margin-top: var(--nxt-spacing-xs);
 
-  &.confirmation-mode {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    max-height: 300px;
-  }
-
-  &.position-above {
+  &.above {
     top: auto;
     bottom: 100%;
     margin-top: 0;
-    margin-bottom: 4px;
-    animation: dropdownFadeInAbove 0.2s ease;
+    margin-bottom: var(--nxt-spacing-xs);
+  }
+
+  .nxt-dropdown-search {
+    padding: var(--nxt-spacing-md);
+    border-bottom: var(--nxt-border-width) solid var(--nxt-border);
+
+    .nxt-dropdown-search-input {
+      width: 100%;
+      padding: var(--nxt-spacing-sm);
+      border: var(--nxt-border-width) solid var(--nxt-border);
+      border-radius: var(--nxt-border-radius-sm);
+      font-size: var(--nxt-font-size-base);
+      
+      &:focus {
+        outline: none;
+        @include focus-state;
+      }
+    }
+  }
+
+  .nxt-dropdown-options {
+    max-height: calc(var(--nxt-max-height) - 60px);
+    overflow-y: auto;
+  }
+
+  .nxt-dropdown-confirmation {
+    @include flex-between;
+    padding: var(--nxt-spacing-md);
+    border-top: var(--nxt-border-width) solid var(--nxt-border);
+    background-color: var(--nxt-bg-light);
   }
 }
 
-// Search
-.nxt-dropdown-search {
-  padding: 8px 12px;
-  border-bottom: 1px solid #e1e4e8;
-  background-color: $bg-lighter;
-  border-radius: $border-radius $border-radius 0 0;
-}
-
-.nxt-dropdown-search-container {
-  position: relative;
-  @include flex-center;
-}
-
-.nxt-dropdown-search-input {
+// ==================== OPTION STYLES ====================
+.nxt-dropdown-option {
+  @include flex-between;
+  padding: var(--nxt-spacing-sm) var(--nxt-spacing-md);
+  cursor: pointer;
+  transition: var(--nxt-transition);
+  border: none;
+  background: none;
   width: 100%;
-  padding: 8px 32px 8px 12px;
-  border: 1px solid $border-color;
-  border-radius: $border-radius-sm;
-  font-size: 14px;
-  line-height: 1.5;
-  background-color: $bg-white;
-  outline: none;
-  transition: border-color 0.2s ease;
+  text-align: left;
+  font-size: var(--nxt-font-size-base);
+  color: var(--nxt-text-primary);
 
-  &:focus {
-    @include focus-state;
+  &:hover:not(.disabled) {
+    background-color: var(--nxt-bg-light);
   }
 
-  &::placeholder {
-    color: $text-secondary;
+  &.selected {
+    background-color: var(--nxt-primary-light);
+    color: var(--nxt-primary);
+  }
+
+  &.partially-selected {
+    background-color: var(--nxt-primary-lighter);
+    color: var(--nxt-primary);
+  }
+
+  &.disabled {
+    @include disabled-state;
+    color: var(--nxt-text-muted);
+  }
+
+  &.grouped {
+    padding-left: calc(var(--nxt-spacing-md) * 2);
+  }
+
+  .nxt-dropdown-option-content {
+    @include flex-start;
+    flex: 1;
+    gap: var(--nxt-spacing-sm);
+  }
+
+  .nxt-dropdown-option-text {
+    @include text-truncate;
+    flex: 1;
+  }
+
+  .nxt-dropdown-option-icon {
+    @include flex-center;
+    width: 16px;
+    height: 16px;
+    color: var(--nxt-primary);
   }
 }
 
-.nxt-dropdown-search-clear {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+// ==================== ALL OPTION STYLES ====================
+.nxt-dropdown-all-option {
+  font-weight: 600;
+  border-bottom: var(--nxt-border-width) solid var(--nxt-border);
+  
+  &:hover {
+    background-color: var(--nxt-bg-lighter);
+  }
+}
+
+// ==================== CHECKBOX STYLES ====================
+.nxt-dropdown-checkbox {
   @include flex-center;
   width: 16px;
   height: 16px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: $text-secondary;
-  border-radius: 50%;
-  transition: $transition;
+  border: 2px solid var(--nxt-border);
+  border-radius: var(--nxt-border-radius-sm);
+  background-color: var(--nxt-bg-white);
+  transition: var(--nxt-transition);
 
-  &:hover {
-    background-color: #e1e4e8;
-    color: $text-primary;
+  &.checked {
+    background-color: var(--nxt-primary);
+    border-color: var(--nxt-primary);
+  }
+
+  &.partially {
+    background-color: var(--nxt-primary);
+    border-color: var(--nxt-primary);
   }
 
   svg {
@@ -370,385 +430,153 @@ $dark-primary-hover: #2563eb;
   }
 }
 
-// Animations
-@keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes dropdownFadeInAbove {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Options
-.nxt-dropdown-options {
-  padding: 4px 0;
-
-  .confirmation-mode & {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 0;
-  }
-}
-
-.nxt-dropdown-option {
-  @include flex-center;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-  user-select: none;
-
-  &:hover:not(.disabled) {
-    background-color: $bg-light;
-  }
-
-  &.selected {
-    background-color: $primary-light;
-    color: $primary-color;
-  }
-
-  &.disabled {
-    @include disabled-state;
-    color: $text-secondary;
-  }
-
-  &.grouped {
-    padding-left: 20px;
-  }
-}
-
-.nxt-dropdown-option-content {
-  @include flex-center;
-  width: 100%;
-}
-
-.nxt-dropdown-option-checkbox {
-  @include flex-center;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-
-.nxt-dropdown-checkbox {
-  @include flex-center;
-  width: 16px;
-  height: 16px;
-  border: 2px solid $border-color;
-  border-radius: 3px;
-  transition: $transition;
-
-  &.checked,
-  &.partially {
-    background-color: $primary-color;
-    border-color: $primary-color;
-  }
-}
-
-.nxt-dropdown-option-label {
-  flex: 1;
-  font-weight: 400;
-}
-
-.nxt-dropdown-all-option {
-  margin-bottom: 4px;
-  padding-bottom: 8px;
-
-  .nxt-dropdown-option-label {
+// ==================== GROUP STYLES ====================
+.nxt-dropdown-group {
+  .nxt-dropdown-group-header {
+    @include flex-between;
+    padding: var(--nxt-spacing-sm) var(--nxt-spacing-md);
+    background-color: var(--nxt-bg-lighter);
+    font-size: var(--nxt-font-size-sm);
     font-weight: 600;
-    color: $primary-color;
+    color: var(--nxt-text-secondary);
+    border-bottom: var(--nxt-border-width) solid var(--nxt-border);
   }
 
-  &.partially-selected {
-    background-color: $primary-light;
-    
-    .nxt-dropdown-option-label {
-      color: $primary-color;
+  .nxt-dropdown-group-options {
+    .nxt-dropdown-option {
+      padding-left: calc(var(--nxt-spacing-md) * 2);
     }
   }
 }
 
+// ==================== DIVIDER STYLES ====================
 .nxt-dropdown-divider {
   height: 1px;
-  background-color: #e1e4e8;
-  margin: 2px 0;
+  background-color: var(--nxt-border);
+  margin: var(--nxt-spacing-xs) 0;
 }
 
-.nxt-dropdown-group-header {
-  padding: 8px 12px 4px 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
-  margin-top: 4px;
+// ==================== NO OPTIONS STYLES ====================
+.nxt-dropdown-no-options {
+  @include flex-center;
+  padding: var(--nxt-spacing-lg);
+  color: var(--nxt-text-secondary);
+  font-style: italic;
+  text-align: center;
 }
 
-// Footer
-.nxt-dropdown-footer {
-  border-top: 1px solid #e1e4e8;
-  padding: 12px;
-  background-color: $bg-lighter;
-  border-radius: 0 0 $border-radius $border-radius;
-
-  .confirmation-mode & {
-    flex-shrink: 0;
-  }
-}
-
-.nxt-dropdown-footer-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
+// ==================== BUTTON STYLES ====================
 .nxt-dropdown-btn {
   @include flex-center;
-  padding: 8px 16px;
-  border: 1px solid $border-color;
-  border-radius: $border-radius-sm;
-  font-size: 14px;
-  font-weight: 500;
+  gap: var(--nxt-spacing-xs);
+  padding: var(--nxt-spacing-sm) var(--nxt-spacing-md);
+  border: var(--nxt-border-width) solid var(--nxt-border);
+  border-radius: var(--nxt-border-radius-sm);
+  background-color: var(--nxt-bg-white);
+  color: var(--nxt-text-primary);
+  font-size: var(--nxt-font-size-base);
   cursor: pointer;
-  transition: $transition;
-  outline: none;
-  min-width: 80px;
-  gap: 6px;
+  transition: var(--nxt-transition);
 
   &:hover {
-    transform: translateY(-1px);
-  }
-
-  .nxt-dropdown-btn-icon {
-    font-size: 16px;
-    line-height: 1;
-    @include flex-center;
-    
-    .material-icons {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      @include flex-center;
-    }
-    
-    i {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      @include flex-center;
-    }
+    @include hover-state;
   }
 
   &.nxt-dropdown-btn-cancel {
-    background-color: $bg-white;
-    color: $text-primary;
+    background-color: var(--nxt-bg-white);
+    color: var(--nxt-text-secondary);
+    border-color: var(--nxt-border);
 
     &:hover {
-      background-color: $bg-light;
-      border-color: $primary-color;
+      background-color: var(--nxt-bg-light);
+      color: var(--nxt-text-primary);
     }
   }
 
   &.nxt-dropdown-btn-apply {
-    background-color: $primary-color;
-    color: $bg-white;
-    border-color: $primary-color;
+    background-color: var(--nxt-primary);
+    color: var(--nxt-bg-white);
+    border-color: var(--nxt-primary);
 
     &:hover {
-      background-color: $primary-hover;
-      border-color: $primary-hover;
+      background-color: var(--nxt-primary-hover);
+      border-color: var(--nxt-primary-hover);
+    }
+  }
+
+  .nxt-dropdown-btn-icon {
+    @include flex-center;
+    width: 16px;
+    height: 16px;
+    
+    svg {
+      width: 14px;
+      height: 14px;
     }
   }
 }
 
-.nxt-dropdown-no-options {
-  padding: 12px;
-  text-align: center;
-  color: $text-secondary;
-  font-style: italic;
-}
-
-.nxt-dropdown-error {
-  margin-top: 4px;
-  color: #d32f2f;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-// Responsive
+// ==================== RESPONSIVE DESIGN ====================
 @media (max-width: 768px) {
   .nxt-dropdown-container {
-    font-size: 16px;
+    min-width: 100%;
   }
-
-  .nxt-dropdown-trigger,
-  .nxt-dropdown-option {
-    min-height: 44px;
+  
+  .nxt-dropdown-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 400px;
+    max-height: 70vh;
   }
 }
 
-// Dark mode
-@media (prefers-color-scheme: dark) {
-  .nxt-dropdown-container {
+// ==================== ACCESSIBILITY ====================
+.nxt-dropdown-container {
+  &:focus-within {
     .nxt-dropdown-trigger {
-      background-color: $dark-bg;
-      border-color: $dark-border;
-      color: $dark-text;
-
-      &:hover:not(.disabled) {
-        border-color: $dark-primary;
-      }
-
-      &:focus {
-        border-color: $dark-primary;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-      }
-    }
-
-    .nxt-dropdown-placeholder {
-      color: $text-muted;
-    }
-
-    .nxt-dropdown-single,
-    .nxt-dropdown-summary {
-      color: $dark-text;
-    }
-
-    .nxt-dropdown-dropdown {
-      background-color: $dark-bg;
-      border-color: $dark-border;
-    }
-
-    .nxt-dropdown-search {
-      border-bottom-color: $dark-border;
-      background-color: #111827;
-    }
-
-    .nxt-dropdown-search-input {
-      background-color: $dark-border;
-      border-color: #4b5563;
-      color: $dark-text;
-
-      &:focus {
-        border-color: $dark-primary;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-      }
-
-      &::placeholder {
-        color: $text-muted;
-      }
-    }
-
-    .nxt-dropdown-search-clear {
-      color: $text-muted;
-
-      &:hover {
-        background-color: #4b5563;
-        color: $dark-text;
-      }
-    }
-
-    .nxt-dropdown-option {
-      &:hover:not(.disabled) {
-        background-color: $dark-border;
-      }
-
-      &.selected {
-        background-color: #1e3a8a;
-        color: $dark-primary;
-      }
-
-      &.disabled {
-        color: #6b7280;
-      }
-    }
-
-    .nxt-dropdown-all-option {
-      .nxt-dropdown-option-label {
-        color: $dark-primary;
-      }
-
-      &.partially-selected {
-        background-color: #1e3a8a;
-        
-        .nxt-dropdown-option-label {
-          color: $dark-primary;
-        }
-      }
-    }
-
-    .nxt-dropdown-divider {
-      background-color: $dark-border;
-    }
-
-    .nxt-dropdown-footer {
-      border-top-color: $dark-border;
-      background-color: $dark-bg;
-    }
-
-    .nxt-dropdown-btn {
-      &.nxt-dropdown-btn-cancel {
-        background-color: $dark-border;
-        color: $dark-text;
-        border-color: #4b5563;
-
-        &:hover {
-          background-color: #4b5563;
-          border-color: $dark-primary;
-        }
-      }
-
-      &.nxt-dropdown-btn-apply {
-        background-color: $dark-primary;
-        border-color: $dark-primary;
-
-        &:hover {
-          background-color: $dark-primary-hover;
-          border-color: $dark-primary-hover;
-        }
-      }
-    }
-
-    .nxt-dropdown-no-options {
-      color: $text-muted;
+      @include focus-state;
     }
   }
-
 }
 
-// No height utility class for floating labels
-.no-height {
-  height: 0px !important;
-  overflow: hidden !important;
-  
-  * {
-    height: 0px !important;
-    overflow: hidden !important;
+.nxt-dropdown-option {
+  &:focus {
+    outline: none;
+    @include focus-state;
   }
-  
-  .nxt-dropdown-placeholder {
-    height: 0px !important;
-    line-height: 1 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
+}
+
+// ==================== ANIMATIONS ====================
+@keyframes nxt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nxt-dropdown-panel {
+  animation: nxt-fade-in var(--nxt-transition);
+}
+
+@keyframes nxt-scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.nxt-dropdown-float-label.active {
+  animation: nxt-scale-in var(--nxt-transition);
 }
 

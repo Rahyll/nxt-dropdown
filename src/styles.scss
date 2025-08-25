@@ -9,3 +9,63 @@ html,
 body {
   height: 100%;
 }
+
+:root {
+  // Color tokens
+  --nxt-primary: #1976d2;
+  --nxt-primary-hover: #1565c0;
+  --nxt-primary-light: #e3f2fd;
+  --nxt-border: #d0d7de;
+  --nxt-border-hover: #1976d2;
+  --nxt-text-primary: #24292f;
+  --nxt-text-secondary: #6a737d;
+  --nxt-text-muted: #9ca3af;
+  --nxt-bg-white: #ffffff;
+  --nxt-bg-light: #f6f8fa;
+  --nxt-bg-lighter: #f8f9fa;
+  --nxt-error: #d32f2f;
+  --nxt-success: #2e7d32;
+  
+  // Spacing tokens
+  --nxt-spacing-xs: 4px;
+  --nxt-spacing-sm: 8px;
+  --nxt-spacing-md: 12px;
+  --nxt-spacing-lg: 16px;
+  --nxt-spacing-xl: 24px;
+  --nxt-spacing-xxl: 32px;
+  
+  // Typography tokens
+  --nxt-font-size-xs: 11px;
+  --nxt-font-size-sm: 12px;
+  --nxt-font-size-base: 14px;
+  --nxt-font-size-lg: 16px;
+  --nxt-font-size-xl: 18px;
+  --nxt-line-height: 1.5;
+  --nxt-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  // Border tokens
+  --nxt-border-radius-sm: 4px;
+  --nxt-border-radius: 6px;
+  --nxt-border-radius-lg: 8px;
+  --nxt-border-width: 1px;
+  
+  // Animation tokens
+  --nxt-transition-fast: all 0.1s ease;
+  --nxt-transition: all 0.2s ease;
+  --nxt-transition-slow: all 0.3s ease;
+  
+  // Shadow tokens
+  --nxt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --nxt-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --nxt-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --nxt-shadow-focus: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  
+  // Size tokens
+  --nxt-min-width: 200px;
+  --nxt-min-height: 40px;
+  --nxt-max-height: 300px;
+  
+  // Z-index tokens
+  --nxt-z-dropdown: 1000;
+  --nxt-z-overlay: 999;
+}

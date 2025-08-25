@@ -12,9 +12,12 @@
  * - Customizable icons and styling
  * - Strict configuration mode for validation
  */
-import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild, ChangeDetectionStrategy } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NxtOptionComponent } from './components/nxt-option/nxt-option.component';
 import { NxtOptionGroupComponent } from './components/nxt-option-group/nxt-option-group.component';
 import { NxtDropdownTriggerComponent } from './components/nxt-dropdown-trigger/nxt-dropdown-trigger.component';
@@ -39,6 +42,27 @@ import { getSanitizedIcon, trackByValue, handleDropdownKeyDown, handleSearchKeyD
   selector: 'nxt-dropdown',
   templateUrl: './nxt-dropdown.component.html',
   styleUrls: ['./nxt-dropdown.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('dropdownAnimation', [
+      state('closed', style({
+        opacity: 0,
+        transform: 'translateY(-10px)',
+        visibility: 'hidden'
+      })),
+      state('open', style({
+        opacity: 1,
+        transform: 'translateY(0)',
+        visibility: 'visible'
+      })),
+      transition('closed => open', [
+        animate('200ms ease-out')
+      ]),
+      transition('open => closed', [
+        animate('150ms ease-in')
+      ])
+    ])
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -267,6 +291,18 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   get shouldPositionAbove(): boolean { return this.state.shouldPositionAbove; }
   get pendingValue(): any { return this.state.pendingValue; }
 
+  // ==================== PERFORMANCE OPTIMIZATION ====================
+  
+  /**
+   * Subject for debounced search input
+   * Improves performance by reducing the frequency of search operations
+   */
+  private searchSubject = new Subject<string>();
+  private searchDebounced$ = this.searchSubject.pipe(
+    debounceTime(300),
+    distinctUntilChanged()
+  );
+
   // ==================== STATE UPDATE METHODS ====================
   
   /**
@@ -318,31 +354,42 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   // ==================== PRIVATE HELPER METHODS ====================
 
   /**
-   * Resets pending options to match current selected options in confirmation mode
-   * This eliminates the repeated logic for resetting pending options
+   * Consolidated state update method that handles all common state updates
+   * Reduces redundancy by combining related state management operations
    */
-  private resetPendingOptions(): void {
-    if (this.confirmation && this.multiple) {
+  private updateDropdownState(updates: {
+    resetPending?: boolean;
+    updateSelected?: boolean;
+    updateFiltered?: boolean;
+    checkPendingValue?: boolean;
+  } = {}): void {
+    const {
+      resetPending = false,
+      updateSelected = false,
+      updateFiltered = false,
+      checkPendingValue = false
+    } = updates;
+
+    // Update disabled state
+    this.setIsDisabled(this.disabled);
+
+    // Update selected options if requested
+    if (updateSelected) {
+      this.updateSelectedOptions();
+    }
+
+    // Update filtered options if requested
+    if (updateFiltered) {
+      this.updateFilteredOptions();
+    }
+
+    // Reset pending options in confirmation mode if requested
+    if (resetPending && this.confirmation && this.multiple) {
       this.setPendingOptions([...this.selectedOptions]);
     }
-  }
 
-  /**
-   * Updates all internal state properties after configuration changes
-   * Consolidates the common pattern of updating disabled state, selected options, and filtered options
-   */
-  private updateInternalState(): void {
-    this.setIsDisabled(this.disabled);
-    this.updateSelectedOptions();
-    this.updateFilteredOptions();
-  }
-
-  /**
-   * Checks if there's a pending value and handles it when options are available
-   * Consolidates the repeated logic for checking and processing pending values
-   */
-  private checkAndHandlePendingValue(): void {
-    if (this.options && this.options.length > 0 && this.pendingValue !== null) {
+    // Check and handle pending value if requested
+    if (checkPendingValue && this.options && this.options.length > 0 && this.pendingValue !== null) {
       this.handlePendingValue();
     }
   }
@@ -355,11 +402,17 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Update configuration by merging config object with direct inputs
     this.updateConfiguration();
     
-    // Update all internal state
-    this.updateInternalState();
-    
-    // Initialize pending options in confirmation mode
-    this.resetPendingOptions();
+    // Update all internal state with consolidated method
+    this.updateDropdownState({
+      updateSelected: true,
+      updateFiltered: true,
+      resetPending: true
+    });
+
+    // Subscribe to debounced search for performance optimization
+    this.searchDebounced$.subscribe(searchText => {
+      this.updateFilteredOptions();
+    });
   }
 
   /**
@@ -406,7 +459,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     
     if (hasConfigChanges) {
       this.updateConfiguration();
-      this.updateInternalState();
+      this.updateDropdownState({
+        updateSelected: true,
+        updateFiltered: true
+      });
     }
     
     // Process content projected options if they change
@@ -452,7 +508,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.updateFilteredOptions();
       
       // Check if we have a pending value now that options are available
-      this.checkAndHandlePendingValue();
+      this.updateDropdownState({ checkPendingValue: true });
     }
   }
 
@@ -542,7 +598,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.cancelButtonIcon = this.config.confirmationButtons?.cancel?.icon || this.cancelButtonIcon || '';
 
     // Check if options became available and we have a pending value
-    this.checkAndHandlePendingValue();
+    this.updateDropdownState({ checkPendingValue: true });
   }
 
   /**
@@ -552,10 +608,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   private handlePendingValue(): void {
     // Apply the pending value now that options are available
     this.setValue(this.pendingValue);
-    this.updateSelectedOptions();
-    
-    // Reset pending options in confirmation mode
-    this.resetPendingOptions();
+    this.updateDropdownState({
+      updateSelected: true,
+      resetPending: true
+    });
     
     // Clear the pending value since we've processed it
     this.setPendingValue(null);
@@ -600,10 +656,10 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     // Clear pending value since we can now process it
     this.setPendingValue(null);
     
-    this.updateSelectedOptions();
-    
-    // Reset pending options in confirmation mode
-    this.resetPendingOptions();
+    this.updateDropdownState({
+      updateSelected: true,
+      resetPending: true
+    });
   }
 
   /**
@@ -634,38 +690,58 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   // ==================== DROPDOWN INTERACTION METHODS ====================
   
   /**
+   * Consolidated dropdown interaction handler
+   * Handles opening, closing, and toggling with optimized logic
+   */
+  private handleDropdownInteraction(action: 'open' | 'close' | 'toggle'): void {
+    if (this.isDisabled) return;
+
+    switch (action) {
+      case 'open':
+        if (!this.isOpen) {
+          this.setIsOpen(true);
+          this.updateTriggerProperties();
+          this.calculateDropdownPosition();
+          this.onTouched();
+          this.updateDropdownState({ resetPending: true });
+          
+          if (this.searchable) {
+            this.setShowSearchInput(true);
+            setTimeout(() => {
+              const searchInput = this.elementRef.nativeElement.querySelector('.nxt-dropdown-search-input');
+              if (searchInput) {
+                searchInput.focus();
+              }
+            }, 100);
+          }
+        }
+        break;
+        
+      case 'close':
+        if (this.isOpen) {
+          this.setIsOpen(false);
+          this.updateTriggerProperties();
+          this.clearSearch();
+          this.updateDropdownState({ resetPending: true });
+        }
+        break;
+        
+      case 'toggle':
+        if (this.isOpen) {
+          this.handleDropdownInteraction('close');
+        } else {
+          this.handleDropdownInteraction('open');
+        }
+        break;
+    }
+  }
+
+  /**
    * Toggles the dropdown open/closed state
    * Handles search input focus and position calculation
    */
   toggleDropdown(): void {
-    if (!this.isDisabled) {
-      this.setIsOpen(!this.isOpen);
-      this.updateTriggerProperties();
-      
-      if (this.isOpen) {
-        // Calculate position when opening
-        this.calculateDropdownPosition();
-        this.onTouched();
-        
-        // Initialize pending options in confirmation mode
-        this.resetPendingOptions();
-        
-        // Show and focus search input if searchable
-        if (this.searchable) {
-          this.setShowSearchInput(true);
-          // Focus search input after a short delay to ensure it's rendered
-          setTimeout(() => {
-            const searchInput = this.elementRef.nativeElement.querySelector('.nxt-dropdown-search-input');
-            if (searchInput) {
-              searchInput.focus();
-            }
-          }, 100);
-        }
-      } else {
-        // Clear search when closing
-        this.clearSearch();
-      }
-    }
+    this.handleDropdownInteraction('toggle');
   }
 
   /**
@@ -714,25 +790,25 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Closes the dropdown and clears search state
    */
   closeDropdown(): void {
-    this.setIsOpen(false);
-    this.updateTriggerProperties();
-    this.clearSearch();
-    
-    // Reset pending options in confirmation mode
-    this.resetPendingOptions();
+    this.handleDropdownInteraction('close');
   }
 
   // ==================== SEARCH FUNCTIONALITY METHODS ====================
   
   /**
-   * Handles search input changes
+   * Handles search input changes with debounced performance optimization
    * Updates search text and filters options accordingly
    * @param event - The input event from the search field
    */
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.setSearchText(target.value);
-    this.updateFilteredOptions();
+    const searchValue = target.value;
+    
+    // Update search text immediately for UI responsiveness
+    this.setSearchText(searchValue);
+    
+    // Use debounced search for performance optimization
+    this.searchSubject.next(searchValue);
   }
 
   /**
@@ -963,6 +1039,15 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     return this.floatlabelText || this.placeholder;
   }
 
+  /**
+   * Gets the text to display for the onfield label
+   * Uses infieldLabelText if provided, otherwise falls back to placeholder
+   * @returns The label text for onfield label mode
+   */
+  getOnfieldLabelText(): string {
+    return this.infieldLabelText || this.placeholder;
+  }
+
   // ==================== KEYBOARD NAVIGATION ====================
   
   /**
@@ -987,6 +1072,20 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   trackByValue(index: number, option: NxtDropdownOption): any {
     return trackByValue(index, option);
+  }
+
+  /**
+   * Returns the appropriate template based on the current mode
+   * @returns Template reference for the current mode
+   */
+  getTemplateForMode(): any {
+    if (this.infieldLabel) {
+      return 'infieldLabelMode';
+    } else if (this.floatlabel) {
+      return 'floatingLabelMode';
+    } else {
+      return 'basicMode';
+    }
   }
 
   /**
@@ -1036,7 +1135,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     if (!this.confirmation || !this.multiple) return;
 
     // Reset pending options to match current selected options
-    this.resetPendingOptions();
+    this.updateDropdownState({ resetPending: true });
     this.closeDropdown();
   }
 
