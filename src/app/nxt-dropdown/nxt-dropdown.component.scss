@@ -350,8 +350,8 @@ $dark-primary-hover: #2563eb;
   top: 50%;
   transform: translateY(-50%);
   @include flex-center;
-  width: 16px;
-  height: 16px;
+  width: 28px;
+  height: 28px;
   background: none;
   border: none;
   cursor: pointer;
@@ -360,13 +360,14 @@ $dark-primary-hover: #2563eb;
   transition: $transition;
 
   &:hover {
-    background-color: #e1e4e8;
     color: $text-primary;
   }
 
   svg {
-    width: 12px;
-    height: 12px;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
   }
 }
 
@@ -749,6 +750,16 @@ $dark-primary-hover: #2563eb;
     margin: 0 !important;
     opacity: 0 !important;
     visibility: hidden !important;
+  }
+}
+
+.beside-select-all {
+  padding-left: 0px;
+  padding-right: 0px;
+  & .nxt-dropdown-option-content{
+    & .nxt-dropdown-option-checkbox{
+      background-color: white ;
+    }
   }
 }
 

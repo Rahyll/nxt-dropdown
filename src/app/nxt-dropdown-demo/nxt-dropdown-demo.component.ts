@@ -571,6 +571,10 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.floatlabelSearchValue = null;
     this.floatlabelConfirmationValue = [];
     this.floatlabelConfigValue = null;
+    this.selectAllBelowValue = [];
+    this.selectAllBesideValue = [];
+    this.selectAllConfigBelowValue = [];
+    this.selectAllConfigBesideValue = [];
   }
 
   /**
@@ -633,4 +637,30 @@ export class NxtDropdownDemoComponent implements OnInit {
   floatlabelSearchValue: any = null;
   floatlabelConfirmationValue: any[] = [];
   floatlabelConfigValue: any = null;
+
+  // ==================== SELECT ALL POSITION DEMO VALUES ====================
+  
+  /**
+   * Values for select all position demo - below position
+   * Default: empty array
+   */
+  selectAllBelowValue: any[] = [];
+  
+  /**
+   * Values for select all position demo - beside position
+   * Default: empty array
+   */
+  selectAllBesideValue: any[] = [];
+  
+  /**
+   * Values for select all position demo via config - below position
+   * Default: empty array
+   */
+  selectAllConfigBelowValue: any[] = [];
+  
+  /**
+   * Values for select all position demo via config - beside position
+   * Default: empty array
+   */
+  selectAllConfigBesideValue: any[] = [];
 } 

@@ -1432,6 +1432,151 @@
         </div>
       </div>
     </div>
+
+    <!-- Select All Position Demo Section -->
+    <div class="demo-section">
+      <h2>📍 Select All Position Demos</h2>
+      <p><strong>Note:</strong> The "beside" position only works when <code>searchable="true"</code>. When searchable is disabled, it falls back to "below" position.</p>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Select All - Below Position (Default)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllBelowValue"
+              [options]="options"
+              [multiple]="true"
+              [selectAllPosition]="'below'"
+              placeholder="Select all appears below options"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllBelowValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all option positioned below the options list (default behavior)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All - Beside Position (Searchable Required)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllBesideValue"
+              [options]="options"
+              [multiple]="true"
+              [searchable]="true"
+              [selectAllPosition]="'beside'"
+              placeholder="Select all appears beside search input"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllBesideValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all option positioned beside the search input (requires searchable=true)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All Position via Config - Below</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllConfigBelowValue"
+              [strictConfigMode]="true"
+              [config]="{
+                options: options,
+                multiple: true,
+                selectAllPosition: 'below',
+                placeholder: 'Select all below via config'
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllConfigBelowValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all position configured via configuration object - below</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All Position via Config - Beside (Searchable Required)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllConfigBesideValue"
+              [strictConfigMode]="true"
+              [config]="{
+                options: options,
+                multiple: true,
+                searchable: true,
+                selectAllPosition: 'beside',
+                placeholder: 'Select all beside via config'
+              }"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllConfigBesideValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all position configured via configuration object - beside (requires searchable=true)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All Position with Search</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllBelowValue"
+              [options]="countryOptions"
+              [multiple]="true"
+              [searchable]="true"
+              [selectAllPosition]="'below'"
+              placeholder="Search and select all below"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllBelowValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all position with search functionality enabled</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All Position with Confirmation</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllBesideValue"
+              [options]="options"
+              [multiple]="true"
+              [searchable]="true"
+              [confirmation]="true"
+              [selectAllPosition]="'beside'"
+              placeholder="Select all beside with confirmation"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllBesideValue.length }} items</p>
+          <div class="code-example">
+            <small>Select all position with confirmation mode enabled (requires searchable=true for beside position)</small>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Select All Beside Without Searchable (Fallback)</h3>
+          <div class="select-wrapper">
+            <nxt-dropdown
+              [(ngModel)]="selectAllBelowValue"
+              [options]="options"
+              [multiple]="true"
+              [selectAllPosition]="'beside'"
+              placeholder="Beside position without searchable (falls back to below)"
+              (selectionChange)="onSelectionChange($event)">
+            </nxt-dropdown>
+          </div>
+          <p class="result">Selected: {{ selectAllBelowValue.length }} items</p>
+          <div class="code-example">
+            <small>When searchable=false, beside position falls back to below position (default behavior)</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Guide Tab Content -->

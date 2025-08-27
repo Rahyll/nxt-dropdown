@@ -37,4 +37,6 @@ export interface NxtDropdownConfig {
   floatlabel?: boolean;
   floatlabelText?: string;
   floatlabelPosition?: 'infield' | 'onfield';
+  // Add select all position configuration
+  selectAllPosition?: 'below' | 'beside';
 } 

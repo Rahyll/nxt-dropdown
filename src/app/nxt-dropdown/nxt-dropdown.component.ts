@@ -201,6 +201,14 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   @Input() config: NxtDropdownConfig = {};
   
   /**
+   * Position of the select all option
+   * 'below': Select all option appears below the options list
+   * 'beside': Select all option appears beside the options list
+   * Default: 'below'
+   */
+  @Input() selectAllPosition: 'below' | 'beside' = 'below';
+  
+  /**
    * When true, only the config object is allowed and direct inputs are ignored
    * Provides strict validation to prevent mixed configuration approaches
    * Default: false
@@ -820,7 +828,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Selects all available options or deselects all if all are selected
    */
   private toggleSelectAll(): void {
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
+    const availableOptions = this.options.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
       this.selectedOptions.some(selected => selected.value === option.value)
     );
@@ -835,6 +843,9 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
       this.value = availableOptions.map(opt => opt.value);
     }
 
+    // Ensure filtered options are properly maintained after selection change
+    this.updateFilteredOptions();
+
     this.onChange(this.value);
     this.onTouched();
     this.selectionChange.emit(this.value);
@@ -845,7 +856,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Only affects pending options, not the actual selection
    */
   private togglePendingSelectAll(): void {
-    const availableOptions = this.filteredOptions.filter(option => !option.disabled);
+    const availableOptions = this.options.filter(option => !option.disabled);
     const allSelected = availableOptions.every(option => 
       this.pendingOptions.some(selected => selected.value === option.value)
     );
@@ -887,6 +898,32 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    */
   isPartiallySelected(): boolean {
     return isPartiallySelected(this.filteredOptions, this.confirmation ? this.pendingOptions : this.selectedOptions, this.multiple);
+  }
+
+  /**
+   * Checks if all available options (original options, not filtered) are selected
+   * Used for select all functionality to ensure it works regardless of search state
+   * @returns true if all available options are selected
+   */
+  isAllAvailableSelected(): boolean {
+    const availableOptions = this.options.filter(option => !option.disabled);
+    return availableOptions.every(option => 
+      (this.confirmation ? this.pendingOptions : this.selectedOptions).some(selected => selected.value === option.value)
+    );
+  }
+
+  /**
+   * Checks if some (but not all) available options (original options, not filtered) are selected
+   * Used for select all functionality to ensure it works regardless of search state
+   * @returns true if some available options are selected but not all
+   */
+  isPartiallyAvailableSelected(): boolean {
+    const availableOptions = this.options.filter(option => !option.disabled);
+    const selectedOptions = this.confirmation ? this.pendingOptions : this.selectedOptions;
+    const selectedCount = availableOptions.filter(option => 
+      selectedOptions.some(selected => selected.value === option.value)
+    ).length;
+    return selectedCount > 0 && selectedCount < availableOptions.length;
   }
 
   /**

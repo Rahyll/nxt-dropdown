@@ -122,6 +122,36 @@
     <!-- Search Input -->
     <div class="nxt-dropdown-search" *ngIf="searchable && showSearchInput">
       <div class="nxt-dropdown-search-container">
+        <div class="nxt-dropdown-option nxt-dropdown-all-option beside-select-all"
+        *ngIf="(selectAllPosition === 'beside') && multiple && options.length > 0"
+        [class.selected]="isAllAvailableSelected()"
+        [class.partially-selected]="isPartiallyAvailableSelected()"
+        (click)="selectAll(); $event.stopPropagation()"
+        role="option"
+        [attr.aria-selected]="isAllAvailableSelected()">
+     
+          <div class="nxt-dropdown-option-content">
+            <div class="nxt-dropdown-option-checkbox">
+              <div class="nxt-dropdown-checkbox" 
+                    [class.checked]="isAllAvailableSelected()"
+                    [class.partially]="isPartiallyAvailableSelected()">
+                <svg *ngIf="isAllAvailableSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6L5 9L10 3" 
+                        stroke="white" 
+                        stroke-width="2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round"/>
+                </svg>
+                <svg *ngIf="isPartiallyAvailableSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M3 6H9" 
+                        stroke="white" 
+                        stroke-width="2" 
+                        stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
         <input type="text"
                class="nxt-dropdown-search-input"
                [placeholder]="searchPlaceholder"
@@ -133,10 +163,10 @@
         <button type="button" 
                 class="nxt-dropdown-search-clear"
                 *ngIf="searchText"
-                (click)="clearSearch()"
+                (click)="clearSearch(); $event.stopPropagation()"
                 aria-label="Clear search">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M9 3L3 9M3 3L9 9" 
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="width: 24px; height: 24px;">
+            <path d="M18 6L6 18M6 6L18 18" 
                   stroke="currentColor" 
                   stroke-width="1.5" 
                   stroke-linecap="round" 
@@ -150,33 +180,33 @@
     <div class="nxt-dropdown-options">
       <!-- Select All Option -->
       <div class="nxt-dropdown-option nxt-dropdown-all-option"
-           *ngIf="multiple && filteredOptions.length > 0"
-           [class.selected]="isAllSelected()"
-           [class.partially-selected]="isPartiallySelected()"
-           (click)="selectAll()"
+           *ngIf="(selectAllPosition === 'below') && multiple && options.length > 0"
+           [class.selected]="isAllAvailableSelected()"
+           [class.partially-selected]="isPartiallyAvailableSelected()"
+           (click)="selectAll(); $event.stopPropagation()"
            role="option"
-           [attr.aria-selected]="isAllSelected()">
+           [attr.aria-selected]="isAllAvailableSelected()">
         
         <div class="nxt-dropdown-option-content">
-          <div class="nxt-dropdown-option-checkbox">
-            <div class="nxt-dropdown-checkbox" 
-                 [class.checked]="isAllSelected()"
-                 [class.partially]="isPartiallySelected()">
-              <svg *ngIf="isAllSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L5 9L10 3" 
-                      stroke="white" 
-                      stroke-width="2" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round"/>
-              </svg>
-              <svg *ngIf="isPartiallySelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 6H9" 
-                      stroke="white" 
-                      stroke-width="2" 
-                      stroke-linecap="round"/>
-              </svg>
+                      <div class="nxt-dropdown-option-checkbox">
+              <div class="nxt-dropdown-checkbox" 
+                   [class.checked]="isAllAvailableSelected()"
+                   [class.partially]="isPartiallyAvailableSelected()">
+                <svg *ngIf="isAllAvailableSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6L5 9L10 3" 
+                        stroke="white" 
+                        stroke-width="2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round"/>
+                </svg>
+                <svg *ngIf="isPartiallyAvailableSelected()" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M3 6H9" 
+                        stroke="white" 
+                        stroke-width="2" 
+                        stroke-linecap="round"/>
+                </svg>
+              </div>
             </div>
-          </div>
           
           <div class="nxt-dropdown-option-label">
             <strong>Select All</strong>
@@ -185,7 +215,7 @@
       </div>
 
       <!-- Divider -->
-      <div class="nxt-dropdown-divider" *ngIf="multiple && filteredOptions.length > 0"></div>
+      <div class="nxt-dropdown-divider" *ngIf="(selectAllPosition === 'below') && multiple && options.length > 0"></div>
       
       <!-- Options -->
       <ng-container *ngFor="let option of filteredOptions; let i = index; trackBy: trackByValue">
@@ -200,7 +230,7 @@
              [class.selected]="isOptionSelected(option)"
              [class.disabled]="option.disabled"
              [class.grouped]="option.group"
-             (click)="selectOption(option)"
+             (click)="selectOption(option); $event.stopPropagation()"
              role="option"
              [attr.aria-selected]="isOptionSelected(option)">
           
@@ -240,7 +270,7 @@
       <div class="nxt-dropdown-footer-buttons">
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
-                (click)="cancelSelection()">
+                (click)="cancelSelection(); $event.stopPropagation()">
           <span *ngIf="cancelButtonIcon" 
                 class="nxt-dropdown-btn-icon" 
                 [innerHTML]="getSanitizedIcon(cancelButtonIcon)"></span>
@@ -248,7 +278,7 @@
         </button>
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-apply"
-                (click)="applySelection()">
+                (click)="applySelection(); $event.stopPropagation()">
           <span *ngIf="applyButtonIcon" 
                 class="nxt-dropdown-btn-icon" 
                 [innerHTML]="getSanitizedIcon(applyButtonIcon)"></span>
