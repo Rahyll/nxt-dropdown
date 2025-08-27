@@ -12,7 +12,7 @@
  * - Customizable icons and styling
  * - Strict configuration mode for validation
  */
-import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, OnInit, HostListener, ElementRef, OnChanges, SimpleChanges, ContentChildren, QueryList, AfterContentInit, ContentChild, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NxtOptionComponent } from './components/nxt-option/nxt-option.component';
@@ -242,6 +242,26 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Allows users to provide a custom trigger element
    */
   @ContentChild(NxtDropdownTriggerComponent) customTrigger?: NxtDropdownTriggerComponent;
+
+  // ==================== VIEWCHILD REFERENCES ====================
+  
+  /**
+   * Reference to the search input element for direct access
+   * Used instead of querySelector for better performance
+   */
+  @ViewChild('searchInput', { static: false }) searchInput!: ElementRef<HTMLInputElement>;
+  
+  /**
+   * Reference to the dropdown trigger element for positioning calculations
+   * Used instead of querySelector for better performance
+   */
+  @ViewChild('dropdownTrigger', { static: false }) dropdownTrigger!: ElementRef<HTMLElement>;
+  
+  /**
+   * Reference to the dropdown panel element for positioning and styling
+   * Used for dynamic positioning and scroll handling
+   */
+  @ViewChild('dropdownPanel', { static: false }) dropdownPanel!: ElementRef<HTMLElement>;
 
   // ==================== INTERNAL STATE PROPERTIES ====================
   
@@ -594,6 +614,107 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     }
   }
 
+  /**
+   * Gets the dropdown trigger element for positioning calculations
+   * Returns the custom trigger if available, otherwise the default trigger
+   */
+  private getTriggerElement(): HTMLElement | null {
+    // For custom triggers, find the projected trigger element in the DOM
+    if (this.hasCustomTrigger) {
+      const customTriggerElement = this.elementRef.nativeElement.querySelector('nxt-dropdown-trigger');
+      return customTriggerElement as HTMLElement;
+    }
+    
+    // For default triggers, use the ViewChild reference
+    return this.dropdownTrigger?.nativeElement || null;
+  }
+
+  /**
+   * Focuses the search input using ViewChild reference
+   * More efficient than querySelector approach
+   */
+  private focusSearchInput(): void {
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.focus();
+    }
+  }
+
+  /**
+   * Updates the dropdown panel position dynamically
+   * Called when content changes or window events occur
+   */
+  private updateDropdownPosition(): void {
+    if (this.isOpen && this.dropdownPanel?.nativeElement) {
+      // Recalculate position and apply any necessary adjustments
+      this.calculateDropdownPosition();
+      
+      // Additional positioning logic can be added here
+      // For example, ensuring the panel stays within viewport bounds
+      this.ensurePanelInViewport();
+    }
+  }
+
+  /**
+   * Ensures the dropdown panel stays within viewport bounds
+   * Prevents the panel from being cut off by screen edges
+   */
+  private ensurePanelInViewport(): void {
+    if (!this.dropdownPanel?.nativeElement) return;
+
+    const panel = this.dropdownPanel.nativeElement;
+    const panelRect = panel.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Reset any previous transforms
+    panel.style.transform = '';
+    
+    // Check horizontal overflow
+    if (panelRect.right > viewportWidth) {
+      const overflowX = panelRect.right - viewportWidth;
+      panel.style.transform = `translateX(-${overflowX + 10}px)`;
+    } else if (panelRect.left < 0) {
+      const overflowX = Math.abs(panelRect.left);
+      panel.style.transform = `translateX(${overflowX + 10}px)`;
+    }
+    
+    // Check vertical overflow (for above positioning)
+    if (this.shouldPositionAbove && panelRect.top < 0) {
+      const overflowY = Math.abs(panelRect.top);
+      const currentTransform = panel.style.transform;
+      panel.style.transform = `${currentTransform} translateY(${overflowY + 10}px)`;
+    }
+  }
+
+  /**
+   * Clears the search input using ViewChild reference
+   * More efficient than querySelector approach
+   */
+  clearSearchInput(): void {
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.value = '';
+      this.searchInput.nativeElement.focus();
+    }
+  }
+
+  /**
+   * Gets the current search input value using ViewChild reference
+   * More efficient than querySelector approach
+   */
+  getSearchInputValue(): string {
+    return this.searchInput?.nativeElement?.value || '';
+  }
+
+  /**
+   * Sets the search input value using ViewChild reference
+   * More efficient than querySelector approach
+   */
+  setSearchInputValue(value: string): void {
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.value = value;
+    }
+  }
+
   // ==================== CONTROL VALUE ACCESSOR METHODS ====================
   
   /**
@@ -669,10 +790,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
           this.showSearchInput = true;
           // Focus search input after a short delay to ensure it's rendered
           setTimeout(() => {
-            const searchInput = this.elementRef.nativeElement.querySelector('.nxt-dropdown-search-input');
-            if (searchInput) {
-              searchInput.focus();
-            }
+            this.focusSearchInput();
           }, 100);
         }
       } else {
@@ -687,7 +805,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
    * Based on available viewport space and dropdown content height
    */
   private calculateDropdownPosition(): void {
-    const triggerElement = this.elementRef.nativeElement.querySelector('.nxt-dropdown-trigger');
+    const triggerElement = this.getTriggerElement();
     if (!triggerElement) return;
 
     const triggerRect = triggerElement.getBoundingClientRect();
@@ -710,6 +828,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   onWindowResize(): void {
     if (this.isOpen) {
       this.calculateDropdownPosition();
+      this.updateDropdownPosition(); // Update panel position on resize
     }
   }
 
@@ -721,6 +840,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
   onWindowScroll(): void {
     if (this.isOpen) {
       this.calculateDropdownPosition();
+      this.updateDropdownPosition(); // Update panel position on scroll
     }
   }
 
@@ -774,6 +894,7 @@ export class NxtDropdownComponent implements ControlValueAccessor, OnInit, OnCha
     this.searchText = clearedState.searchText;
     this.showSearchInput = clearedState.showSearchInput;
     this.updateFilteredOptions();
+    this.clearSearchInput(); // Clear the input value
   }
 
   /**

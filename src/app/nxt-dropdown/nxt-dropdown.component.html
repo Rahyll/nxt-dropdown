@@ -16,7 +16,8 @@
   </div>
   
   <!-- Default Trigger -->
-  <div class="nxt-dropdown-trigger" 
+  <div #dropdownTrigger
+       class="nxt-dropdown-trigger" 
        *ngIf="!hasCustomTrigger"
        [class.infield-label-mode]="infieldLabel"
        (click)="toggleDropdown()"
@@ -113,7 +114,8 @@
   </div>
   
   <!-- Dropdown Panel -->
-  <div class="nxt-dropdown-dropdown" 
+  <div #dropdownPanel
+       class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
        [class]="panelClass"
        [class.confirmation-mode]="confirmation && multiple"
@@ -152,7 +154,7 @@
             </div>
           </div>
         </div>
-        <input type="text"
+        <input #searchInput
                class="nxt-dropdown-search-input"
                [placeholder]="searchPlaceholder"
                [value]="searchText"
