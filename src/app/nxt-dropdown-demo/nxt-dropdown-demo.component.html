@@ -30,7 +30,9 @@
             <nxt-dropdown
               [(ngModel)]="selectedValue"
               [options]="options"
-              placeholder="Select an option"
+              [config]="{
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -43,8 +45,10 @@
             <nxt-dropdown
               [(ngModel)]="selectedMultipleValues"
               [options]="options"
-              [multiple]="true"
-              placeholder="Select multiple options"
+              [config]="{
+                multiple: true,
+                placeholder: 'Select multiple options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -57,9 +61,11 @@
             <nxt-dropdown
               [(ngModel)]="selectedMultipleValuesWithConfirmation"
               [options]="options"
-              [multiple]="true"
-              [confirmation]="true"
-              placeholder="Select with confirmation"
+              [config]="{
+                multiple: true,
+                confirmation: true,
+                placeholder: 'Select with confirmation'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -72,11 +78,7 @@
             <nxt-dropdown
               [(ngModel)]="customConfirmationValue"
               [options]="options"
-              [multiple]="true"
-              [confirmation]="true"
-              applyButtonText="Save Selection"
-              cancelButtonText="Discard Changes"
-              placeholder="Select with custom button text"
+              [config]="customConfirmationButtonsConfig"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -92,13 +94,7 @@
             <nxt-dropdown
               [(ngModel)]="customConfirmationWithIconsValue"
               [options]="options"
-              [multiple]="true"
-              [confirmation]="true"
-              applyButtonText="Confirm"
-              applyButtonIcon="✅"
-              cancelButtonText="Cancel"
-              cancelButtonIcon="❌"
-              placeholder="Select with icon buttons"
+              [config]="confirmationWithIconsConfig"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -114,13 +110,7 @@
             <nxt-dropdown
               [(ngModel)]="customConfirmationWithIconsValue"
               [options]="options"
-              [multiple]="true"
-              [confirmation]="true"
-              applyButtonText="Save"
-              applyButtonIcon="<span class='material-icons'>check</span>"
-              cancelButtonText="Cancel"
-              cancelButtonIcon="<span class='material-icons'>close</span>"
-              placeholder="Select with font icons"
+              [config]="customConfirmationWithFontIconsConfig"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -136,8 +126,10 @@
             <nxt-dropdown
               [(ngModel)]="requiredValue"
               [options]="options"
-              [required]="true"
-              placeholder="Required field"
+              [config]="{
+                required: true,
+                placeholder: 'Required field'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -157,8 +149,10 @@
             <nxt-dropdown
               [(ngModel)]="largeDatasetValue"
               [options]="largeDatasetOptions"
-              [multiple]="true"
-              placeholder="Select from 50+ options"
+              [config]="{
+                multiple: true,
+                placeholder: 'Select from 50+ options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -171,7 +165,9 @@
             <nxt-dropdown
               [(ngModel)]="disabledOptionsValue"
               [options]="optionsWithDisabled"
-              placeholder="Some options disabled"
+              [config]="{
+                placeholder: 'Some options disabled'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -184,7 +180,9 @@
             <nxt-dropdown
               [(ngModel)]="countryValue"
               [options]="countryOptions"
-              placeholder="Select your country"
+              [config]="{
+                placeholder: 'Select your country'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -197,8 +195,10 @@
             <nxt-dropdown
               [(ngModel)]="categoryValue"
               [options]="categoryOptions"
-              [multiple]="true"
-              placeholder="Select categories"
+              [config]="{
+                multiple: true,
+                placeholder: 'Select categories'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -219,7 +219,9 @@
               <nxt-dropdown
                 formControlName="singleSelect"
                 [options]="options"
-                placeholder="Select an option (required)"
+                [config]="{
+                  placeholder: 'Select an option (required)'
+                }"
                 (selectionChange)="onSelectionChange($event)">
               </nxt-dropdown>
             </div>
@@ -231,8 +233,10 @@
               <nxt-dropdown
                 formControlName="multipleSelect"
                 [options]="options"
-                [multiple]="true"
-                placeholder="Select multiple options (required)"
+                [config]="{
+                  multiple: true,
+                  placeholder: 'Select multiple options (required)'
+                }"
                 (selectionChange)="onSelectionChange($event)">
               </nxt-dropdown>
             </div>
@@ -246,9 +250,11 @@
               <nxt-dropdown
                 formControlName="multipleSelectWithConfirmation"
                 [options]="options"
-                [multiple]="true"
-                [confirmation]="true"
-                placeholder="Select with confirmation (required)"
+                [config]="{
+                  multiple: true,
+                  confirmation: true,
+                  placeholder: 'Select with confirmation (required)'
+                }"
                 (selectionChange)="onSelectionChange($event)">
               </nxt-dropdown>
             </div>
@@ -260,7 +266,9 @@
               <nxt-dropdown
                 formControlName="country"
                 [options]="countryOptions"
-                placeholder="Select your country (required)"
+                [config]="{
+                  placeholder: 'Select your country (required)'
+                }"
                 (selectionChange)="onSelectionChange($event)">
               </nxt-dropdown>
             </div>
@@ -319,8 +327,11 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [options]="options"
-              [disabled]="true"
-              placeholder="Disabled select">
+              [config]="{
+                placeholder: 'Disabled select',
+                disabled: true
+              }"
+              >
             </nxt-dropdown>
           </div>
           <p class="result">This select is disabled</p>
@@ -332,7 +343,9 @@
             <nxt-dropdown
               [(ngModel)]="emptyOptionsValue"
               [options]="[]"
-              placeholder="No options available">
+              [config]="{
+                placeholder: 'No options available'
+              }">
             </nxt-dropdown>
           </div>
           <p class="result">No options to select from</p>
@@ -344,8 +357,10 @@
             <nxt-dropdown
               [(ngModel)]="preSelectedValue"
               [options]="options"
-              [multiple]="true"
-              placeholder="Pre-selected options">
+              [config]="{
+                multiple: true,
+                placeholder: 'Pre-selected options'
+              }">
             </nxt-dropdown>
           </div>
           <p class="result">Pre-selected: {{ preSelectedValue.length }} items</p>
@@ -357,7 +372,9 @@
             <nxt-dropdown
               [(ngModel)]="dynamicValue"
               [options]="dynamicOptions"
-              placeholder="Dynamic options">
+              [config]="{
+                placeholder: 'Dynamic options'
+              }">
             </nxt-dropdown>
           </div>
           <div class="dynamic-controls">
@@ -380,8 +397,10 @@
             <nxt-dropdown
               [(ngModel)]="responsiveValue"
               [options]="options"
-              [multiple]="true"
-              placeholder="This select adapts to container width">
+              [config]="{
+                multiple: true,
+                placeholder: 'This select adapts to container width'
+              }">
             </nxt-dropdown>
           </div>
           <p class="result">Responsive design demo</p>
@@ -395,7 +414,9 @@
             <nxt-dropdown
               [(ngModel)]="compactValue"
               [options]="options.slice(0, 5)"
-              placeholder="Compact">
+              [config]="{
+                placeholder: 'Compact'
+              }">
             </nxt-dropdown>
           </div>
         </div>
@@ -406,7 +427,9 @@
             <nxt-dropdown
               [(ngModel)]="wideValue"
               [options]="options"
-              placeholder="Wide select">
+              [config]="{
+                placeholder: 'Wide select'
+              }">
             </nxt-dropdown>
           </div>
         </div>
@@ -423,9 +446,11 @@
           <h3>Searchable Single Select</h3>
           <nxt-dropdown 
             [options]="countryOptions"
-            placeholder="Search for a country..."
-            [searchable]="true"
-            searchPlaceholder="Type to search countries..."
+            [config]="{
+              placeholder: 'Search for a country...',
+              searchable: true,
+              searchPlaceholder: 'Type to search countries...'
+            }"
             [(ngModel)]="searchableSingleValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
@@ -436,10 +461,12 @@
           <h3>Searchable Multiple Select</h3>
           <nxt-dropdown 
             [options]="categoryOptions"
-            placeholder="Search and select categories..."
-            [multiple]="true"
-            [searchable]="true"
-            searchPlaceholder="Type to search categories..."
+            [config]="{
+              placeholder: 'Search and select categories...',
+              multiple: true,
+              searchable: true,
+              searchPlaceholder: 'Type to search categories...'
+            }"
             [(ngModel)]="searchableMultipleValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
@@ -452,10 +479,12 @@
           <h3>Search with Minimum Length</h3>
           <nxt-dropdown 
             [options]="largeDatasetOptions"
-            placeholder="Search with min 2 characters..."
-            [searchable]="true"
-            [minSearchLength]="2"
-            searchPlaceholder="Type at least 2 characters..."
+            [config]="{
+              placeholder: 'Search with min 2 characters...',
+              searchable: true,
+              minSearchLength: 2,
+              searchPlaceholder: 'Type at least 2 characters...'
+            }"
             [(ngModel)]="searchMinLengthValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
@@ -466,11 +495,13 @@
           <h3>Searchable with Confirmation</h3>
           <nxt-dropdown 
             [options]="searchPerformanceOptions"
-            placeholder="Search and confirm selection..."
-            [multiple]="true"
-            [confirmation]="true"
-            [searchable]="true"
-            searchPlaceholder="Search from 500 options..."
+            [config]="{
+              placeholder: 'Search and confirm selection...',
+              multiple: true,
+              confirmation: true,
+              searchable: true,
+              searchPlaceholder: 'Search from 500 options...'
+            }"
             [(ngModel)]="searchableConfirmationValue"
             (selectionChange)="onSelectionChange($event)">
           </nxt-dropdown>
@@ -490,8 +521,10 @@
             <nxt-dropdown
               [(ngModel)]="caretIconValue"
               [options]="options"
-              [iconType]="'caret'"
-              placeholder="Select with caret icon"
+              [config]="{
+                iconType: 'caret',
+                placeholder: 'Select with caret icon'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -507,8 +540,10 @@
             <nxt-dropdown
               [(ngModel)]="arrowIconValue"
               [options]="options"
-              [iconType]="'arrow'"
-              placeholder="Select with arrow icon"
+              [config]="{
+                iconType: 'arrow',
+                placeholder: 'Select with arrow icon'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -545,8 +580,10 @@
             <nxt-dropdown
               [(ngModel)]="sharpCaretIconValue"
               [options]="options"
-              [iconType]="'sharp-caret'"
-              placeholder="Select with sharp caret icon"
+              [config]="{
+                iconType: 'sharp-caret',
+                placeholder: 'Select with sharp caret icon'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -562,8 +599,10 @@
             <nxt-dropdown
               [(ngModel)]="invertedTriangleIconValue"
               [options]="options"
-              [iconType]="'inverted-triangle'"
-              placeholder="Select with inverted triangle icon"
+              [config]="{
+                iconType: 'inverted-triangle',
+                placeholder: 'Select with inverted triangle icon'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -586,7 +625,9 @@
             <nxt-dropdown
               [(ngModel)]="customTriggerValue"
               [options]="options"
-              placeholder="Select an option">
+              [config]="{
+                placeholder: 'Select an option'
+              }">
               <nxt-dropdown-trigger>
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="color: #1976d2;">🎯</span>
@@ -607,7 +648,9 @@
             <nxt-dropdown
               [(ngModel)]="customTriggerStatusValue"
               [options]="options"
-              placeholder="Select an option">
+              [config]="{
+                placeholder: 'Select an option'
+              }">
               <nxt-dropdown-trigger>
                 <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                   <div style="display: flex; align-items: center; gap: 8px;">
@@ -630,8 +673,10 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="customTriggerMultipleValue"
-              [multiple]="true"
-              placeholder="Select an option">
+              [config]="{
+                multiple: true,
+                placeholder: 'Select an option'
+              }">
               <nxt-dropdown-trigger>
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span>{{customTriggerMultipleValue?.[0] || ''}}</span>
@@ -655,7 +700,9 @@
             <nxt-dropdown
               [(ngModel)]="customTriggerNoArrowValue"
               [options]="options"
-              placeholder="Select an option">
+              [config]="{
+                placeholder: 'Select an option'
+              }">
               <nxt-dropdown-trigger [showArrow]="false">
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="color: #ff9800;">⭐</span>
@@ -676,7 +723,9 @@
             <nxt-dropdown
               [(ngModel)]="customTriggerRichValue"
               [options]="countryOptions"
-              placeholder="Select your country">
+              [config]="{
+                placeholder: 'Select your country'
+              }">
               <nxt-dropdown-trigger>
                 <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                   <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(45deg, #1976d2, #42a5f5); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">
@@ -708,7 +757,9 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="contentProjectionValue"
-              placeholder="Select using content projection">
+              [config]="{
+                placeholder: 'Select using content projection'
+              }">
               <nxt-option value="option1">Option 1</nxt-option>
               <nxt-option value="option2">Option 2</nxt-option>
               <nxt-option value="option3" [disabled]="true">Option 3 (Disabled)</nxt-option>
@@ -727,8 +778,10 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="contentProjectionMultipleValue"
-              [multiple]="true"
-              placeholder="Select multiple options">
+              [config]="{
+                multiple: true,
+                placeholder: 'Select multiple options'
+              }">
               <nxt-option value="fruit1">
                 <span style="font-weight: bold;">🍎 Apple</span>
                 <br><small style="color: #666;">Red and delicious</small>
@@ -762,7 +815,9 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="contentProjectionGroupValue"
-              placeholder="Select from grouped options">
+              [config]="{
+                placeholder: 'Select from grouped options'
+              }">
               <nxt-option-group label="Fruits">
                 <nxt-option value="apple">🍎 Apple</nxt-option>
                 <nxt-option value="banana">🍌 Banana</nxt-option>
@@ -791,9 +846,11 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="contentProjectionSearchValue"
-              [searchable]="true"
-              [multiple]="true"
-              placeholder="Search and select from groups">
+              [config]="{
+                searchable: true,
+                multiple: true,
+                placeholder: 'Search and select from groups'
+              }">
               <nxt-option-group label="Programming Languages">
                 <nxt-option value="js">
                   <div style="display: flex; align-items: center; gap: 8px;">
@@ -880,183 +937,6 @@
       </div>
     </div>
 
-    <!-- Configuration Approaches Demo Section -->
-    <div class="demo-section">
-      <h2>⚙️ Configuration Approaches</h2>
-      
-      <div class="demo-grid">
-        <div class="demo-card">
-          <h3>Direct Input Properties</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="selectedValue"
-              [options]="options"
-              placeholder="Direct properties"
-              [required]="true"
-              [searchable]="true"
-              searchPlaceholder="Search direct options..."
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ selectedValue || 'None' }}</p>
-          <div class="code-example">
-            <small>Using individual &#64;Input properties</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Strict Config Mode (Config Only)</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMixedValue"
-              [config]="multipleSelectConfig"
-              [strictConfigMode]="true"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMixedValue.length }} items</p>
-          <div class="code-example">
-            <small>Config object only (strict mode enabled)</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Configuration Object (Multiple)</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMultipleValue"
-              [config]="multipleSelectConfig"
-              [strictConfigMode]="true"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
-          <div class="code-example">
-            <small>Multiple selection with confirmation</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Config with Custom Buttons</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMultipleValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                multiple: true,
-                confirmation: true,
-                placeholder: 'Select via config with custom buttons',
-                confirmationButtons: {
-                  apply: { text: 'Done', icon: '🎯' },
-                  cancel: { text: 'Reset', icon: '🔄' }
-                }
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
-          <div class="code-example">
-            <small>Custom buttons via configuration object</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Config with Material Icons</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMultipleValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                multiple: true,
-                confirmation: true,
-                placeholder: 'Select via config with Material icons',
-                confirmationButtons: {
-                  apply: { text: 'Confirm', icon: '<span class=&quot;material-icons&quot;>check</span>' },
-                  cancel: { text: 'Cancel', icon: '<span class=&quot;material-icons&quot;>close</span>' }
-                }
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
-          <div class="code-example">
-            <small>Custom buttons with Material Icons</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Config with Font Awesome Icons</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMultipleValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                multiple: true,
-                confirmation: true,
-                placeholder: 'Select via config with Font Awesome icons',
-                confirmationButtons: {
-                  apply: { text: 'Save', icon: '<i class=&quot;fas fa-check&quot;></i>' },
-                  cancel: { text: 'Cancel', icon: '<i class=&quot;fas fa-times&quot;></i>' }
-                }
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
-          <div class="code-example">
-            <small>Custom buttons with Font Awesome Icons</small>
-            <br><small style="color: #666; font-style: italic;">Note: Font Awesome CSS must be loaded in your project</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Config with Unicode Icons (No Dependencies)</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="configBasedMultipleValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                multiple: true,
-                confirmation: true,
-                placeholder: 'Select via config with Unicode icons',
-                confirmationButtons: {
-                  apply: { text: 'Confirm', icon: '✓' },
-                  cancel: { text: 'Cancel', icon: '✗' }
-                }
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ configBasedMultipleValue.length }} items</p>
-          <div class="code-example">
-            <small>Custom buttons with Unicode icons (no external dependencies)</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>⚠️ Invalid Mixed Configuration</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="invalidMixedValue"
-              [config]="singleSelectConfig"
-              [strictConfigMode]="true"
-              [placeholder]="'This will cause an error'"
-              [multiple]="true"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ invalidMixedValue || 'None' }}</p>
-          <div class="code-example">
-            <small>⚠️ Check console for error message</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Performance Demos Section -->
     <div class="demo-section">
       <h2>⚡ Performance Demos</h2>
@@ -1068,7 +948,9 @@
             <nxt-dropdown
               [(ngModel)]="virtualScrollValue"
               [options]="virtualScrollOptions"
-              placeholder="Select from 1000+ items">
+              [config]="{
+                placeholder: 'Select from 1000+ items'
+              }">
             </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ virtualScrollValue || 'None' }}</p>
@@ -1080,8 +962,10 @@
             <nxt-dropdown
               [(ngModel)]="searchPerformanceValue"
               [options]="searchPerformanceOptions"
-              [multiple]="true"
-              placeholder="Search through 500 items">
+              [config]="{
+                multiple: true,
+                placeholder: 'Search through 500 items'
+              }">
             </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ searchPerformanceValue.length }} items</p>
@@ -1101,8 +985,10 @@
             <nxt-dropdown
               [(ngModel)]="infieldLabelValue"
               [options]="options"
-              [infieldLabel]="true"
-              placeholder="Select an option"
+              [config]="{
+                infieldLabel: true,
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1118,9 +1004,11 @@
             <nxt-dropdown
               [(ngModel)]="customInfieldLabelValue"
               [options]="options"
-              [infieldLabel]="true"
-              infieldLabelText="Choose your option"
-              placeholder="Select an option"
+              [config]="{
+                infieldLabel: true,
+                infieldLabelText: 'Choose your option',
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1136,10 +1024,12 @@
             <nxt-dropdown
               [(ngModel)]="infieldLabelMultipleValue"
               [options]="options"
-              [infieldLabel]="true"
-              [multiple]="true"
-              infieldLabelText="Select multiple options"
-              placeholder="Choose options"
+              [config]="{
+                infieldLabel: true,
+                multiple: true,
+                infieldLabelText: 'Select multiple options',
+                placeholder: 'Choose options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1150,36 +1040,17 @@
         </div>
 
         <div class="demo-card">
-          <h3>Infield Label via Config</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="infieldLabelConfigValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                infieldLabel: true,
-                infieldLabelText: 'Configured Label',
-                placeholder: 'Select via config'
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ infieldLabelConfigValue || 'None' }}</p>
-          <div class="code-example">
-            <small>Infield label configured via configuration object</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
           <h3>Infield Label with Search</h3>
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="infieldLabelSearchValue"
               [options]="countryOptions"
-              [infieldLabel]="true"
-              [searchable]="true"
-              infieldLabelText="Search Countries"
-              placeholder="Type to search..."
+              [config]="{
+                infieldLabel: true,
+                searchable: true,
+                infieldLabelText: 'Search Countries',
+                placeholder: 'Type to search...'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1195,11 +1066,13 @@
             <nxt-dropdown
               [(ngModel)]="infieldLabelConfirmationValue"
               [options]="options"
-              [infieldLabel]="true"
-              [multiple]="true"
-              [confirmation]="true"
-              infieldLabelText="Select with confirmation"
-              placeholder="Choose and confirm"
+              [config]="{
+                infieldLabel: true,
+                multiple: true,
+                confirmation: true,
+                infieldLabelText: 'Select with confirmation',
+                placeholder: 'Choose and confirm'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1215,10 +1088,12 @@
             <nxt-dropdown
               [(ngModel)]="onfieldLabelValue"
               [options]="options"
-              [infieldLabel]="true"
-              infieldLabelPosition="onfield"
-              infieldLabelText="Onfield Label"
-              placeholder="Select an option"
+              [config]="{
+                infieldLabel: true,
+                infieldLabelPosition: 'onfield',
+                infieldLabelText: 'Onfield Label',
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1233,7 +1108,6 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="onfieldLabelConfigValue"
-              [strictConfigMode]="true"
               [config]="{
                 options: options,
                 infieldLabel: true,
@@ -1256,12 +1130,14 @@
             <nxt-dropdown
               [(ngModel)]="onfieldLabelMultipleConfirmationValue"
               [options]="options"
-              [infieldLabel]="true"
-              infieldLabelPosition="onfield"
-              [multiple]="true"
-              [confirmation]="true"
-              infieldLabelText="Select multiple with confirmation"
-              placeholder="Choose options and confirm"
+              [config]="{
+                infieldLabel: true,
+                infieldLabelPosition: 'onfield',
+                multiple: true,
+                confirmation: true,
+                infieldLabelText: 'Select multiple with confirmation',
+                placeholder: 'Choose options and confirm'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1284,8 +1160,10 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelValue"
               [options]="options"
-              [floatlabel]="true"
-              placeholder="Select an option"
+              [config]="{
+                floatlabel: true,
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1301,9 +1179,11 @@
             <nxt-dropdown
               [(ngModel)]="customFloatlabelValue"
               [options]="options"
-              [floatlabel]="true"
-              floatlabelText="Choose your option"
-              placeholder="Select an option"
+              [config]="{
+                floatlabel: true,
+                floatlabelText: 'Choose your option',
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1319,10 +1199,12 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelMultipleValue"
               [options]="options"
-              [floatlabel]="true"
-              [multiple]="true"
-              floatlabelText="Select multiple options"
-              placeholder="Choose options"
+              [config]="{
+                floatlabel: true,
+                multiple: true,
+                floatlabelText: 'Select multiple options',
+                placeholder: 'Choose options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1338,10 +1220,12 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelInfieldValue"
               [options]="options"
-              [floatlabel]="true"
-              floatlabelPosition="infield"
-              floatlabelText="Infield Floating Label"
-              placeholder="Select an option"
+              [config]="{
+                floatlabel: true,
+                floatlabelPosition: 'infield',
+                floatlabelText: 'Infield Floating Label',
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1357,10 +1241,12 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelOnfieldValue"
               [options]="options"
-              [floatlabel]="true"
-              floatlabelPosition="onfield"
-              floatlabelText="Onfield Floating Label"
-              placeholder="Select an option"
+              [config]="{
+                floatlabel: true,
+                floatlabelPosition: 'onfield',
+                floatlabelText: 'Onfield Floating Label',
+                placeholder: 'Select an option'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1376,10 +1262,12 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelSearchValue"
               [options]="countryOptions"
-              [floatlabel]="true"
-              [searchable]="true"
-              floatlabelText="Search Countries"
-              placeholder="Type to search..."
+              [config]="{
+                floatlabel: true,
+                searchable: true,
+                floatlabelText: 'Search Countries',
+                placeholder: 'Type to search...'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1395,39 +1283,19 @@
             <nxt-dropdown
               [(ngModel)]="floatlabelConfirmationValue"
               [options]="options"
-              [floatlabel]="true"
-              [multiple]="true"
-              [confirmation]="true"
-              floatlabelText="Select with confirmation"
-              placeholder="Choose options"
+              [config]="{
+                floatlabel: true,
+                multiple: true,
+                confirmation: true,
+                floatlabelText: 'Select with confirmation',
+                placeholder: 'Choose options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ floatlabelConfirmationValue.length }} items</p>
           <div class="code-example">
             <small>Floating label with multiple selection and confirmation mode</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Floating Label via Config</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="floatlabelConfigValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                floatlabel: true,
-                floatlabelText: 'Configured Floating Label',
-                floatlabelPosition: 'infield',
-                placeholder: 'Select via config'
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ floatlabelConfigValue || 'None' }}</p>
-          <div class="code-example">
-            <small>Floating label configured via configuration object</small>
           </div>
         </div>
       </div>
@@ -1445,9 +1313,11 @@
             <nxt-dropdown
               [(ngModel)]="selectAllBelowValue"
               [options]="options"
-              [multiple]="true"
-              [selectAllPosition]="'below'"
-              placeholder="Select all appears below options"
+              [config]="{
+                multiple: true,
+                selectAllPosition: 'below',
+                placeholder: 'Select all appears below options'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1463,37 +1333,18 @@
             <nxt-dropdown
               [(ngModel)]="selectAllBesideValue"
               [options]="options"
-              [multiple]="true"
-              [searchable]="true"
-              [selectAllPosition]="'beside'"
-              placeholder="Select all appears beside search input"
+              [config]="{
+                multiple: true,
+                searchable: true,
+                selectAllPosition: 'beside',
+                placeholder: 'Select all appears beside search input'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
           <p class="result">Selected: {{ selectAllBesideValue.length }} items</p>
           <div class="code-example">
             <small>Select all option positioned beside the search input (requires searchable=true)</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Select All Position via Config - Below</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="selectAllConfigBelowValue"
-              [strictConfigMode]="true"
-              [config]="{
-                options: options,
-                multiple: true,
-                selectAllPosition: 'below',
-                placeholder: 'Select all below via config'
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ selectAllConfigBelowValue.length }} items</p>
-          <div class="code-example">
-            <small>Select all position configured via configuration object - below</small>
           </div>
         </div>
 
@@ -1525,10 +1376,12 @@
             <nxt-dropdown
               [(ngModel)]="selectAllBelowValue"
               [options]="countryOptions"
-              [multiple]="true"
-              [searchable]="true"
-              [selectAllPosition]="'below'"
-              placeholder="Search and select all below"
+              [config]="{
+                multiple: true,
+                searchable: true,
+                selectAllPosition: 'below',
+                placeholder: 'Search and select all below'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1544,11 +1397,13 @@
             <nxt-dropdown
               [(ngModel)]="selectAllBesideValue"
               [options]="options"
-              [multiple]="true"
-              [searchable]="true"
-              [confirmation]="true"
-              [selectAllPosition]="'beside'"
-              placeholder="Select all beside with confirmation"
+              [config]="{
+                multiple: true,
+                searchable: true,
+                confirmation: true,
+                selectAllPosition: 'beside',
+                placeholder: 'Select all beside with confirmation'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
@@ -1564,9 +1419,11 @@
             <nxt-dropdown
               [(ngModel)]="selectAllBelowValue"
               [options]="options"
-              [multiple]="true"
-              [selectAllPosition]="'beside'"
-              placeholder="Beside position without searchable (falls back to below)"
+              [config]="{
+                multiple: true,
+                selectAllPosition: 'beside',
+                placeholder: 'Beside position without searchable (falls back to below)'
+              }"
               (selectionChange)="onSelectionChange($event)">
             </nxt-dropdown>
           </div>
