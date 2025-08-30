@@ -1,14 +1,14 @@
 <div class="nxt-dropdown-container" 
      [class.disabled]="isDisabled"
      [class.open]="isOpen"
-     [class.required]="required"
-     [class.multiple]="multiple"
-     [class.infield-label]="infieldLabel"
-     [class.infield-label-onfield]="infieldLabel && infieldLabelPosition === 'onfield'"
-     [class.infield-label-infield]="infieldLabel && infieldLabelPosition === 'infield'"
-     [class.floatlabel-enabled]="floatlabel"
-     [class.floatlabel-infield-enabled]="floatlabel && floatlabelPosition === 'infield'"
-     [class.floatlabel-onfield-enabled]="floatlabel && floatlabelPosition === 'onfield'">
+     [class.required]="_config.required"
+     [class.multiple]="_config.multiple"
+     [class.infield-label]="_config.infieldLabel"
+     [class.infield-label-onfield]="_config.infieldLabel && _config.infieldLabelPosition === 'onfield'"
+     [class.infield-label-infield]="_config.infieldLabel && _config.infieldLabelPosition === 'infield'"
+     [class.floatlabel-enabled]="_config.floatlabel"
+     [class.floatlabel-infield-enabled]="_config.floatlabel && _config.floatlabelPosition === 'infield'"
+     [class.floatlabel-onfield-enabled]="_config.floatlabel && _config.floatlabelPosition === 'onfield'">
   
   <!-- Custom Trigger -->
   <div *ngIf="hasCustomTrigger" class="nxt-dropdown-custom-trigger-wrapper">
@@ -19,38 +19,38 @@
   <div #dropdownTrigger
        class="nxt-dropdown-trigger" 
        *ngIf="!hasCustomTrigger"
-       [class.infield-label-mode]="infieldLabel"
+       [class.infield-label-mode]="_config.infieldLabel"
        (click)="toggleDropdown()"
        (keydown)="onKeyDown($event)"
        tabindex="0"
        role="combobox"
        [attr.aria-expanded]="isOpen"
        [attr.aria-haspopup]="true"
-       [attr.aria-label]="placeholder">
+       [attr.aria-label]="_config.placeholder">
     
     <!-- Labels -->
-    <ng-container *ngIf="infieldLabel">
+    <ng-container *ngIf="_config.infieldLabel">
       <div class="nxt-dropdown-infield-label" 
-           *ngIf="infieldLabelPosition === 'infield'"
+           *ngIf="_config.infieldLabelPosition === 'infield'"
            [class.active]="isOpen || selectedOptions.length > 0">
         {{ getInfieldLabelText() }}
       </div>
       
       <div class="nxt-dropdown-onfield-label" 
-           *ngIf="infieldLabelPosition === 'onfield'">
+           *ngIf="_config.infieldLabelPosition === 'onfield'">
         {{ getInfieldLabelText() }}
       </div>
     </ng-container>
 
-    <ng-container *ngIf="floatlabel">
+    <ng-container *ngIf="_config.floatlabel">
       <div class="nxt-dropdown-float-infield-label" 
-           *ngIf="floatlabelPosition === 'infield'"
+           *ngIf="_config.floatlabelPosition === 'infield'"
            [class.active]="isOpen || selectedOptions.length > 0">
         {{ getFloatLabelText() }}
       </div>
       
       <div class="nxt-dropdown-float-onfield-label" 
-           *ngIf="floatlabelPosition === 'onfield'"
+           *ngIf="_config.floatlabelPosition === 'onfield'"
            [class.active]="isOpen || selectedOptions.length > 0">
         {{ getFloatLabelText() }}
       </div>
@@ -58,23 +58,23 @@
     
     <!-- Value Display -->
     <div class="nxt-dropdown-value" 
-         [class.infield-label-mode]="infieldLabel"
-         [class.infield-label-infield-mode]="infieldLabel && infieldLabelPosition === 'infield'"
-         [class.floatlabel-infield-mode]="floatlabel && floatlabelPosition === 'infield'"
-         [class.floatlabel-infield-active]="floatlabel && floatlabelPosition === 'infield' && (selectedOptions.length > 0)"
-         [class.no-height]="floatlabel && selectedOptions.length === 0">
+         [class.infield-label-mode]="_config.infieldLabel"
+         [class.infield-label-infield-mode]="_config.infieldLabel && _config.infieldLabelPosition === 'infield'"
+         [class.floatlabel-infield-mode]="_config.floatlabel && _config.floatlabelPosition === 'infield'"
+         [class.floatlabel-infield-active]="_config.floatlabel && _config.floatlabelPosition === 'infield' && (selectedOptions.length > 0)"
+         [class.no-height]="_config.floatlabel && selectedOptions.length === 0">
       
       <ng-container *ngIf="selectedOptions.length === 0; else selectedContent">
-        <div class="nxt-dropdown-placeholder">{{ placeholder }}</div>
+        <div class="nxt-dropdown-placeholder">{{ _config.placeholder }}</div>
       </ng-container>
       
       <ng-template #selectedContent>
         <div class="nxt-dropdown-selected">
-          <div class="nxt-dropdown-single" *ngIf="!multiple">
+          <div class="nxt-dropdown-single" *ngIf="!_config.multiple">
             {{ getDisplayText() }}
           </div>
           
-          <div class="nxt-dropdown-multiple" *ngIf="multiple">
+          <div class="nxt-dropdown-multiple" *ngIf="_config.multiple">
             <div class="nxt-dropdown-text">{{ getDisplayText() }}</div>
           </div>
         </div>
@@ -83,9 +83,9 @@
     
     <!-- Arrow Icon -->
     <div class="nxt-dropdown-arrow">
-      <svg [attr.data-icon-type]="iconType" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <svg [attr.data-icon-type]="_config.iconType" width="12" height="12" viewBox="0 0 12 12" fill="none">
         <!-- Caret -->
-        <path *ngIf="iconType === 'caret'" 
+        <path *ngIf="_config.iconType === 'caret'" 
               d="M3 4.5L6 7.5L9 4.5" 
               stroke="currentColor" 
               stroke-width="1.5" 
@@ -93,7 +93,7 @@
               stroke-linejoin="round"/>
         
         <!-- Arrow -->
-        <path *ngIf="iconType === 'arrow'" 
+        <path *ngIf="_config.iconType === 'arrow'" 
               d="M6 2L6 10M6 10L3 7M6 10L9 7" 
               stroke="currentColor" 
               stroke-width="1.5" 
@@ -101,12 +101,12 @@
               stroke-linejoin="round"/>
         
         <!-- Sharp Caret -->
-        <polygon *ngIf="iconType === 'sharp-caret'" 
+        <polygon *ngIf="_config.iconType === 'sharp-caret'" 
                  points="3,4.5 6,7.5 9,4.5" 
                  fill="currentColor"/>
         
         <!-- Inverted Triangle -->
-        <polygon *ngIf="iconType === 'inverted-triangle'" 
+        <polygon *ngIf="_config.iconType === 'inverted-triangle'" 
                  points="2,3 6,9 10,3" 
                  fill="currentColor"/>
       </svg>
@@ -117,15 +117,15 @@
   <div #dropdownPanel
        class="nxt-dropdown-dropdown" 
        *ngIf="isOpen"
-       [class]="panelClass"
-       [class.confirmation-mode]="confirmation && multiple"
+       [class]="_config.panelClass"
+       [class.confirmation-mode]="_config.confirmation && _config.multiple"
        [class.position-above]="shouldPositionAbove">
     
     <!-- Search Input -->
-    <div class="nxt-dropdown-search" *ngIf="searchable && showSearchInput">
+    <div class="nxt-dropdown-search" *ngIf="_config.searchable && showSearchInput">
       <div class="nxt-dropdown-search-container">
         <div class="nxt-dropdown-option nxt-dropdown-all-option beside-select-all"
-        *ngIf="(selectAllPosition === 'beside') && multiple && options.length > 0"
+        *ngIf="(_config.selectAllPosition === 'beside') && _config.multiple && options.length > 0"
         [class.selected]="isAllAvailableSelected()"
         [class.partially-selected]="isPartiallyAvailableSelected()"
         (click)="selectAll(); $event.stopPropagation()"
@@ -156,7 +156,7 @@
         </div>
         <input #searchInput
                class="nxt-dropdown-search-input"
-               [placeholder]="searchPlaceholder"
+               [placeholder]="_config.searchPlaceholder"
                [value]="searchText"
                (input)="onSearchInput($event)"
                (keydown)="onSearchKeyDown($event)"
@@ -182,7 +182,7 @@
     <div class="nxt-dropdown-options">
       <!-- Select All Option -->
       <div class="nxt-dropdown-option nxt-dropdown-all-option"
-           *ngIf="(selectAllPosition === 'below') && multiple && options.length > 0"
+           *ngIf="(_config.selectAllPosition === 'below') && _config.multiple && options.length > 0"
            [class.selected]="isAllAvailableSelected()"
            [class.partially-selected]="isPartiallyAvailableSelected()"
            (click)="selectAll(); $event.stopPropagation()"
@@ -217,7 +217,7 @@
       </div>
 
       <!-- Divider -->
-      <div class="nxt-dropdown-divider" *ngIf="(selectAllPosition === 'below') && multiple && options.length > 0"></div>
+      <div class="nxt-dropdown-divider" *ngIf="(_config.selectAllPosition === 'below') && _config.multiple && options.length > 0"></div>
       
       <!-- Options -->
       <ng-container *ngFor="let option of filteredOptions; let i = index; trackBy: trackByValue">
@@ -237,7 +237,7 @@
              [attr.aria-selected]="isOptionSelected(option)">
           
           <div class="nxt-dropdown-option-content">
-            <div class="nxt-dropdown-option-checkbox" *ngIf="multiple">
+            <div class="nxt-dropdown-option-checkbox" *ngIf="_config.multiple">
               <div class="nxt-dropdown-checkbox" [class.checked]="isOptionSelected(option)">
                 <svg *ngIf="isOptionSelected(option)" width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M2 6L5 9L10 3" 
@@ -258,40 +258,40 @@
       
       <!-- No Options Message -->
       <div class="nxt-dropdown-no-options" *ngIf="filteredOptions.length === 0">
-        <div *ngIf="searchable && searchText && searchText.length >= minSearchLength">
+        <div *ngIf="_config.searchable && searchText && searchText.length >= _config.minSearchLength">
           No options found for "{{ searchText }}"
         </div>
-        <div *ngIf="!searchable || !searchText || searchText.length < minSearchLength">
+        <div *ngIf="!_config.searchable || !searchText || searchText.length < _config.minSearchLength">
           No options available
         </div>
       </div>
     </div>
 
     <!-- Confirmation Footer -->
-    <div class="nxt-dropdown-footer" *ngIf="confirmation && multiple">
+    <div class="nxt-dropdown-footer" *ngIf="_config.confirmation && _config.multiple">
       <div class="nxt-dropdown-footer-buttons">
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-cancel"
                 (click)="cancelSelection(); $event.stopPropagation()">
-          <span *ngIf="cancelButtonIcon" 
+          <span *ngIf="_config.confirmationButtons?.cancel?.icon" 
                 class="nxt-dropdown-btn-icon" 
-                [innerHTML]="getSanitizedIcon(cancelButtonIcon)"></span>
-          {{ cancelButtonText }}
+                [innerHTML]="getSanitizedIcon(_config.confirmationButtons?.cancel?.icon)"></span>
+          {{ _config.confirmationButtons?.cancel?.text }}
         </button>
         <button type="button" 
                 class="nxt-dropdown-btn nxt-dropdown-btn-apply"
                 (click)="applySelection(); $event.stopPropagation()">
-          <span *ngIf="applyButtonIcon" 
+          <span *ngIf="_config.confirmationButtons?.apply?.icon" 
                 class="nxt-dropdown-btn-icon" 
-                [innerHTML]="getSanitizedIcon(applyButtonIcon)"></span>
-          {{ applyButtonText }}
+                [innerHTML]="getSanitizedIcon(_config.confirmationButtons?.apply?.icon)"></span>
+          {{ _config.confirmationButtons?.apply?.text }}
         </button>
       </div>
     </div>
   </div>
   
   <!-- Error Message -->
-  <div class="nxt-dropdown-error" *ngIf="required && !value">
+  <div class="nxt-dropdown-error" *ngIf="_config.required && !value">
     This field is required
   </div>
 </div> 

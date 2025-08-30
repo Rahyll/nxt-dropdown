@@ -577,6 +577,54 @@ export class NxtDropdownDemoComponent implements OnInit {
     this.selectAllConfigBesideValue = [];
   }
 
+  customConfirmationButtonsConfig: NxtDropdownConfig = {
+    multiple: true,
+    confirmation: true,
+    placeholder: 'Select with custom button text',
+    confirmationButtons: {
+      apply: {
+        text: 'Save Selection',
+        icon: ''
+      },
+      cancel: {
+        text: 'Discard Changes',
+        icon: ''
+      }
+    }
+  }
+
+  confirmationWithIconsConfig: NxtDropdownConfig = {
+    multiple: true,
+    confirmation: true,
+    placeholder: 'Select with icon buttons',
+    confirmationButtons: {
+      apply: {
+        text: 'Confirm',
+        icon: '✅'
+      },
+      cancel: {
+        text: 'Cancel',
+        icon: '❌'
+      }
+    }
+  }
+
+  customConfirmationWithFontIconsConfig: NxtDropdownConfig = {
+    multiple: true,
+    confirmation: true,
+    placeholder: 'Select with font icons',
+    confirmationButtons: {
+      apply: {
+        text: 'Save',
+        icon: '<span class="material-icons">check</span>'
+      },
+      cancel: {
+        text: 'Cancel',
+        icon: '<span class="material-icons">close</span>'
+      }
+    }
+  }
+
   /**
    * Fills the reactive form with sample values
    * Demonstrates programmatic form control

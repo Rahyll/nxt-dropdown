@@ -558,7 +558,6 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="configIconValue"
-              [strictConfigMode]="true"
               [config]="{
                 options: options,
                 placeholder: 'Select via config',
@@ -987,6 +986,7 @@
               [options]="options"
               [config]="{
                 infieldLabel: true,
+                infieldLabelText: 'Select an option',
                 placeholder: 'Select an option'
               }"
               (selectionChange)="onSelectionChange($event)">
@@ -1100,27 +1100,6 @@
           <p class="result">Selected: {{ onfieldLabelValue || 'None' }}</p>
           <div class="code-example">
             <small>Label positioned on the field (static position)</small>
-          </div>
-        </div>
-
-        <div class="demo-card">
-          <h3>Onfield Label via Config</h3>
-          <div class="select-wrapper">
-            <nxt-dropdown
-              [(ngModel)]="onfieldLabelConfigValue"
-              [config]="{
-                options: options,
-                infieldLabel: true,
-                infieldLabelPosition: 'onfield',
-                infieldLabelText: 'Onfield Label via Config',
-                placeholder: 'Select via config'
-              }"
-              (selectionChange)="onSelectionChange($event)">
-            </nxt-dropdown>
-          </div>
-          <p class="result">Selected: {{ onfieldLabelConfigValue || 'None' }}</p>
-          <div class="code-example">
-            <small>Onfield label configured via configuration object</small>
           </div>
         </div>
 
@@ -1353,7 +1332,7 @@
           <div class="select-wrapper">
             <nxt-dropdown
               [(ngModel)]="selectAllConfigBesideValue"
-              [strictConfigMode]="true"
+              [options]="options"
               [config]="{
                 options: options,
                 multiple: true,
